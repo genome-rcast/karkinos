@@ -1,0 +1,128 @@
+package jp.ac.utokyo.rcast.karkinos.annotation.loadsave;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
+import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
+
+import net.sf.samtools.SAMSequenceRecord;
+
+//to separate bam pileup and reads counting process to
+//later analysis process;
+public class LoadSave {
+
+	public static void save(SaveBean sbean, String outputsave)
+			throws IOException {
+
+		// Write to disk with FileOutputStream
+		FileOutputStream f_out = new FileOutputStream(outputsave);
+
+		// Write object with ObjectOutputStream
+		ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
+
+		// Write object out to disk
+		obj_out.writeObject(sbean);
+
+	}
+
+	public static SaveBean load(String s, List<SAMSequenceRecord> ssrList,
+			TwoBitGenomeReader tgr) throws IOException, ClassNotFoundException {
+
+		File f = new File(s);
+		if (f.isFile()) {
+			return _load(s);
+		}
+		//
+		if (f.isDirectory()) {
+			//
+			List<File> flist = new ArrayList<File>();
+			for (File fa : f.listFiles()) {
+				if (fa.getName().endsWith(".obj")) {
+					flist.add(fa);
+				}
+			}
+
+			SaveBean sb = new SaveBean(null, null);
+			sort(flist, ssrList);
+			for (File ff : flist) {
+
+				System.out.println("reading " + ff.getName());
+				SaveBean sbeach = _load(ff);
+				// debug
+				// for(SNVHolder snv:sbeach.dataset.getSnvlist()){
+				// if(snv.getPos()==1418474){
+				// System.out.println(snv.getChr()+"\t"+snv.getPos()+"\t"+snv.getFlg());
+				// }
+				// }
+				//List<SNVHolder> list = sbeach.dataset.getSnvlist();
+				//if (list != null && list.size() > 0) {
+					//String chr = list.get(0).getChr();
+					//if (tgr.isRefExsist(chr)||tgr.isRefExsist(chr.replaceAll("chr",""))) {
+					//	System.out.println(chr);
+					LoadUtils.merge(sb, sbeach);
+					//}
+				//}
+				//
+
+			}
+			return sb;
+
+		}
+		return null;
+
+	}
+
+	private static void sort(List<File> flist, List<SAMSequenceRecord> ssrList) {
+
+		Collections.sort(flist, new FileComparator(ssrList));
+
+	}
+
+	public static SaveBean _load(File f) throws IOException,
+			ClassNotFoundException {
+
+		// Read from disk using FileInputStream
+		FileInputStream f_in = new FileInputStream(f);
+
+		// Read object using ObjectInputStream
+		ObjectInputStream obj_in = new ObjectInputStream(f_in);
+
+		// Read an object
+		Object obj = obj_in.readObject();
+		SaveBean saveBean = null;
+		if (obj instanceof SaveBean) {
+			saveBean = (SaveBean) obj;
+		}
+		return saveBean;
+
+	}
+
+	public static SaveBean _load(String f) throws IOException,
+			ClassNotFoundException {
+
+		// Read from disk using FileInputStream
+		FileInputStream f_in = new FileInputStream(f);
+
+		// Read object using ObjectInputStream
+		ObjectInputStream obj_in = new ObjectInputStream(f_in);
+
+		// Read an object
+		Object obj = obj_in.readObject();
+		SaveBean saveBean = null;
+		if (obj instanceof SaveBean) {
+			saveBean = (SaveBean) obj;
+		}
+		return saveBean;
+
+	}
+
+}

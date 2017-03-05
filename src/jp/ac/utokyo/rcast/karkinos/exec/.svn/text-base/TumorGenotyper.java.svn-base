@@ -1,0 +1,844 @@
+package jp.ac.utokyo.rcast.karkinos.exec;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+
+import net.sf.samtools.SAMFileReader;
+import net.sf.samtools.SAMRecord;
+import net.sf.samtools.SAMSequenceDictionary;
+import net.sf.samtools.SAMSequenceRecord;
+import net.sf.samtools.util.CloseableIterator;
+import jp.ac.utokyo.karkinos.noisefilter.NoiseAnalysis;
+import jp.ac.utokyo.karkinos.ploidy.MatchMatrixBean;
+import jp.ac.utokyo.karkinos.ploidy.PloidyResolve;
+import jp.ac.utokyo.rcast.karkinos.alleliccnv.AllelicCNV;
+import jp.ac.utokyo.rcast.karkinos.alleliccnv.CNVUtils;
+import jp.ac.utokyo.rcast.karkinos.alleliccnv.CheckPossibleHDAmp;
+import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
+import jp.ac.utokyo.rcast.karkinos.annotation.loadsave.LoadSave;
+import jp.ac.utokyo.rcast.karkinos.annotation.loadsave.SaveBean;
+import jp.ac.utokyo.rcast.karkinos.distribution.AnalyseDist;
+import jp.ac.utokyo.rcast.karkinos.exec.Coverage.IntervalCov;
+import jp.ac.utokyo.rcast.karkinos.filter.FilterAnnotation;
+import jp.ac.utokyo.rcast.karkinos.graph.output.CNVVcf;
+import jp.ac.utokyo.rcast.karkinos.graph.output.FileOutPut;
+import jp.ac.utokyo.rcast.karkinos.graph.output.PdfReport;
+import jp.ac.utokyo.rcast.karkinos.graph.output.TextSummary;
+import jp.ac.utokyo.rcast.karkinos.hmm.AdjustBetweenState;
+import jp.ac.utokyo.rcast.karkinos.hmm.CountCNV;
+import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysis;
+import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysisFromEM;
+import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
+import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
+import jp.ac.utokyo.rcast.karkinos.utils.CorrelVaridate;
+import jp.ac.utokyo.rcast.karkinos.utils.Interval;
+import jp.ac.utokyo.rcast.karkinos.utils.ListUtils;
+import jp.ac.utokyo.rcast.karkinos.utils.OptionComparator;
+import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
+import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
+import jp.ac.utokyo.rcast.karkinos.wavelet.EMMethod;
+import jp.ac.utokyo.rcast.karkinos.wavelet.GCParcentAdjust;
+import jp.ac.utokyo.rcast.karkinos.wavelet.MovingAverage;
+import jp.ac.utokyo.rcast.karkinos.wavelet.Peak;
+import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
+import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletDenoize;
+import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
+
+public class TumorGenotyper extends ReadWriteBase {
+
+	public static void main(String[] arg) {
+
+		BasicParser parcer = new BasicParser();
+		List<Option> optionList = getOptionListForKarkinos();
+		Options opts = new Options();
+		for (Option opt : optionList) {
+			opts.addOption(opt);
+		}
+
+		CommandLine cl = null;
+		try {
+			cl = parcer.parse(opts, arg);
+		} catch (ParseException e1) {
+			System.out.println(e1.getMessage());
+			HelpFormatter help = new HelpFormatter();
+			help.setOptionComparator(new OptionComparator(optionList));
+			help.printHelp("karkinos.jar analysis", opts, true);
+			return;
+		}
+
+		TumorGenotyper tg = new TumorGenotyper();
+		try {
+			tg.exec(cl);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private static List<Option> getOptionListForKarkinos() {
+
+		List<Option> optionlist = new ArrayList<Option>();
+		optionlist.add(getOption("n", "normalBam", true, "normal bam file",
+				true));
+		optionlist
+				.add(getOption("t", "tumorBam", true, "tumor bam file", true));
+		optionlist.add(getOption("r", "reference", true,
+				"2 bit genome reference file", true));
+		optionlist.add(getOption("snp", "dbSNP", true,
+				"dbSNP list from annover sites,(bin,chr,start,end)", true));
+		optionlist.add(getOption("ct", "captureTarget", true,
+				"Capture target regions(bed format)", false));
+
+		optionlist
+				.add(getOption("o", "outdir", true, "output directory", true));
+		optionlist.add(getOption("id", "uniqueid", true,
+				"unique id for this sample", true));
+		optionlist.add(getOption("prop", "property", true,
+				"path to property file( otherwise default val)", false));
+		optionlist.add(getOption("mp", "mappability", true,
+				"optional,mappability from ucsc (bw, big wig format)", false));
+		optionlist
+				.add(getOption(
+						"g1000",
+						"1000genome",
+						true,
+						"optional,1000 genome list from annover sites,(chr,pos,ref,alt,freq,id)",
+						false));
+
+		optionlist.add(getOption("cosmic", "cosmicSNV", true,
+				"cosmic snv vcf format", false));
+
+		optionlist.add(getOption("g1000freq", "1000genomefreq", true,
+				"optional,1000 genome frequency threshold to use", false));
+
+		optionlist.add(getOption("chr", "chrom", true, "chromosome to analyze",
+				false));
+
+		optionlist.add(getOption("rs", "readsStats", true,
+				"optional,reads stats files(normal,tumor)", false));
+
+		optionlist.add(getOption("rg", "refFlatGenes", true,
+				"optional,gene reference for depth stats", false));
+
+		optionlist.add(getOption("exonSNP", "exonSNP", true,
+				"additional Exon SNP", false));
+
+		optionlist.add(getOption("nopdf", "nopdf", false,
+				"no graphic summary pdf output", false));
+
+		// optionlist.add(getOption("cb", "chrBands", true,
+		// "Chromosome Band",false));
+
+		return optionlist;
+
+	}
+
+	public static Option getOption(String opt, String longOpt, boolean hasArg,
+			String description, boolean required) {
+		Option option = new Option(opt, longOpt, hasArg, description);
+		option.setRequired(required);
+		return option;
+	}
+
+	public void exec(CommandLine cl) throws Exception {
+
+		// String mappability =
+		// "/GLUSTER_DIST/data/users/ueda/SNVtest/wgEncodeCrgMapabilityAlign100mer.bw";
+
+		List<String> files = new ArrayList<String>();
+		String id = cl.getOptionValue("id");
+		String normalbamf = cl.getOptionValue("n");
+		String tumorbamf = cl.getOptionValue("t");
+		String twobitref = cl.getOptionValue("r");
+		String dbSNP = cl.getOptionValue("snp");
+		String targetRegion = null;
+		if (cl.hasOption("ct")) {
+			targetRegion = cl.getOptionValue("ct");
+		}
+		String outdir = cl.getOptionValue("o");
+		if (!outdir.endsWith("/")) {
+			outdir = outdir + "/";
+			File f = new File(outdir);
+			if (!f.exists()) {
+				boolean suc = false;
+				try {
+					suc = f.mkdirs();
+				} catch (Exception ex) {
+					System.out.println("could not make directory " + outdir);
+					return;
+				}
+				if (suc == false) {
+					System.out.println("could not make directory " + outdir);
+					return;
+				}
+			}
+		}
+		//
+		files.add(normalbamf);
+		files.add(tumorbamf);
+		files.add(twobitref);
+		files.add(dbSNP);
+		if(targetRegion!=null){
+			files.add(targetRegion);
+		}
+		// files.add(outdir);
+
+		boolean nopdf = cl.hasOption("nopdf");
+
+		String mappability = null;
+		if (cl.hasOption("mp")) {
+			mappability = cl.getOptionValue("mp");
+			files.add(mappability);
+		}
+		String prop = null;
+		if (cl.hasOption("prop")) {
+			prop = cl.getOptionValue("prop");
+			files.add(prop);
+		}
+		String g1000 = null;
+		if (cl.hasOption("g1000")) {
+			g1000 = cl.getOptionValue("g1000");
+			files.add(g1000);
+		}
+		String cosmic = null;
+		if (cl.hasOption("cosmic")) {
+			cosmic = cl.getOptionValue("cosmic");
+			files.add(cosmic);
+		}
+
+		String exonSNP = null;
+		if (cl.hasOption("exonSNP")) {
+			exonSNP = cl.getOptionValue("exonSNP");
+			files.add(exonSNP);
+		}
+
+		float g1000thres = 0f;
+		if (cl.hasOption("g1000freq")) {
+			g1000thres = Float.parseFloat(cl.getOptionValue("g1000freq"));
+		}
+
+		String readsStat = null;
+		if (cl.hasOption("rs")) {
+			readsStat = cl.getOptionValue("rs");
+			String[] sa = readsStat.split(",");
+			files.add(sa[0]);
+			files.add(sa[1]);
+		}
+
+		String refflat = null;
+		if (cl.hasOption("rg")) {
+			refflat = cl.getOptionValue("rg");
+			files.add(refflat);
+		}
+
+		String band = null;
+		if (cl.hasOption("cb")) {
+			band = cl.getOptionValue("cb");
+			files.add(band);
+		}
+
+		String targetChr = null;
+		boolean fullanalysis = true;
+		if (cl.hasOption("chr")) {
+			fullanalysis = false;
+			targetChr = cl.getOptionValue("chr");
+		}
+
+		boolean useAvearageNormal = false;
+		if (cl.hasOption("nd")) {
+			useAvearageNormal = cl.getOptionValue("ng")
+					.equalsIgnoreCase("true");
+		}
+
+		boolean allfileexsist = fileExsistanceCheck(files);
+		if (!allfileexsist) {
+			return;
+		}
+		// load property from file
+		KarkinosProp.load(prop);
+		String outobjdir = outdir + "sobj/";
+		File fd = new File(outobjdir);
+		fd.mkdirs();
+		String outputsave = outobjdir + id + "saveobj.obj";
+
+		SaveBean bean = null;
+		File f = new File(outputsave);
+		boolean loadFromSaved = f.exists();
+		TwoBitGenomeReader tgr = new TwoBitGenomeReader(new File(twobitref));
+		if (targetChr != null) {
+			if (!targetChr.contains("chr")) {
+
+				String s = "chr" + targetChr;
+				if (tgr.isRefExsist(s)) {
+					targetChr = s;
+				} else {
+					String idxChr = targetChr;
+					if (targetChr.contains("chr")) {
+						idxChr = targetChr.replace("chr", "");
+					}
+					try {
+						int chridxn = Integer.parseInt(idxChr);
+						SAMFileReader normalbamr = getReader(normalbamf);
+						targetChr = normalbamr.getFileHeader()
+								.getSequence(chridxn - 1).getSequenceName();
+						normalbamr.close();
+					} catch (Exception ex) {
+					}
+					// try{
+					// int chridxn = Integer.parseInt(idxChr);
+					// targetChr = tgr.getChromString(chridxn);
+					// }catch(Exception ex){
+					// }
+				}
+			}
+			outputsave = outobjdir + targetChr + "_" + id + "_"
+					+ "_saveobj.obj";
+		}
+
+		if (loadFromSaved) {
+			System.out.println("load date from pileuped middel file");
+			bean = getReadsAndPileupDataFromFile(outputsave, tumorbamf, tgr);
+		} else {
+			System.out.println("load date from bam files");
+			bean = getReadsAndPileupDataFromBam(normalbamf, tumorbamf, tgr,
+					targetRegion, outputsave, targetChr, refflat);
+		}
+		// debug
+		// fullanalysis=true;
+		if (fullanalysis) {
+			// analysis
+			GeneExons ge = new GeneExons(refflat);
+			// analysis(bean, dbSNP, mappability, tgr, tumorbamf, g1000,
+			// g1000thres,cosmic, -1,exonSNP,ge);
+			analysisNew(bean, dbSNP, mappability, tgr, tumorbamf, g1000,
+					g1000thres, cosmic, -1, exonSNP, ge, useAvearageNormal);
+			// output
+			output(bean, outdir, tgr, id, readsStat, alCNV, ge, na, pi,
+					baseploidy, nopdf);
+		}
+	}
+
+	protected boolean fileExsistanceCheck(List<String> files) {
+
+		for (String s : files) {
+
+			File f = new File(s);
+			if (!f.exists()) {
+				System.out.println("file does not exsist " + s);
+				return false;
+			}
+
+		}
+		return true;
+	}
+
+	protected SaveBean getReadsAndPileupDataFromFile(String outputsave,
+			String tumorbamf, TwoBitGenomeReader tgr) throws IOException,
+			ClassNotFoundException {
+
+		SAMFileReader tumorbamr = getReader(tumorbamf);
+		List<SAMSequenceRecord> ssrList = tumorbamr.getFileHeader()
+				.getSequenceDictionary().getSequences();
+		tumorbamr.close();
+		SaveBean sb = LoadSave.load(outputsave, ssrList, tgr);
+		return sb;
+
+	}
+
+	AllelicCNV alCNV;
+	NoiseAnalysis na;
+	PeaksInfo pi;
+
+	protected void analysis(SaveBean bean, String dbSNP, String mappability,
+			TwoBitGenomeReader tgr, String tumorbamf, String g1000,
+			float g1000thres, String cosmic, double fixtumorratio,
+			String exonSNP, GeneExons ge) throws IOException {
+
+		System.out.println("analysis start");
+		DataSet dataset = bean.getDataset();
+		ReadsSummary readsSummary = bean.getReadsSummary();
+		// Excute CNV analysis using wavelet transform
+		System.out.println("CNV analysis 1 start");
+		GCParcentAdjust.calc(dataset);
+		denoizeAndHMM(dataset);
+		// if CNV exceed max num 25 denoize more
+		if (CountCNV.count(dataset) > 25) {
+			KarkinosProp.maxdenoiseLevel = KarkinosProp.maxdenoiseLevel + 1;
+			denoizeAndHMM(dataset);
+		}
+
+		// annotate datalist by CNV value
+		dataset.assginCaptureInterval();
+		// add betwwen states for poor fit chromosome
+		AdjustBetweenState.calc(dataset);
+
+		System.out.println("assgin dbSNP start");
+		// annotate datalist by dbSNP
+		DbSNPAnnotation dbAnno = new DbSNPAnnotation(dbSNP, g1000, g1000thres,
+				cosmic, exonSNP);
+		dataset.assgindbSNP(dbAnno);
+
+		// try to find allelic CNV
+		alCNV = new AllelicCNV(dataset, readsSummary);
+
+		// find hetro SNP correlation in each CMV interval
+		// reject if correration is high
+		CorrelVaridate.varidate(dataset, alCNV);
+		// CheckPossibleHDAmp.check(dataset);
+		// ///
+		CNVUtils.reflectToSNV(dataset, alCNV.getAllelicLOHLow(),
+				alCNV.getAllelicLOHhigh());
+
+		System.out.println("tumor ratio");
+		// calculate tumor ratio
+		dataset.getAnalyseDist();
+		if (fixtumorratio > 0) {
+			dataset.setFixtc((float) fixtumorratio);
+		}
+
+		// support reads,entropy,mappability check
+		System.out.println("filter annotation");
+		FilterAnnotation fa = new FilterAnnotation(mappability, tgr, tumorbamf,
+				dbAnno, ge);
+		// set filter1
+		float tc1 = dataset.getTumorRatio();
+		fa.filterAnnotation(dataset, readsSummary, 2);
+		// tcontents from somatic val
+		dataset.getAnalyseDist().reanalyseTC(dataset);
+
+		//
+		float tc2 = dataset.getTumorRatio();
+		if (tc1 != tc2) {
+			fa.filterAnnotation(dataset, readsSummary, 2);
+		}
+		// set filter stat
+		dataset.getAnalyseDist().analyseDist(dataset);
+		//
+
+		dataset.bailAnalysis();
+		System.out.println("analysis done");
+		na = fa.getNa();
+
+	}
+
+	private void _denoizeAndHMM(DataSet dataset) throws IOException {
+		System.out.println("CNV analysis 2 start");
+		WaveletDenoize.calc(dataset);
+
+		System.out.println("CNV analysis 3 start");
+		// HMM call for CNV
+		HMMCNVAnalysis.calc(dataset);
+	}
+
+	// for future use
+	private void denoizeAndHMM(DataSet dataset) throws IOException {
+		System.out.println("CNV analysis 2 start");
+		// MovingAverage.calc(dataset);
+		double baselineLOHEstimate = WaveletDenoize.calc(dataset);
+		// EMMethod to calc distribution
+		System.out.println("CNV analysis 3 start");
+		pi = EMMethod.calc(dataset, baselineLOHEstimate);
+		System.out.println("CNV analysis 4 start");
+		// HMM call for CNV
+		HMMCNVAnalysis.calc(dataset);
+
+	}
+
+	int baseploidy = 2;
+
+	protected void analysisNew(SaveBean bean, String dbSNP, String mappability,
+			TwoBitGenomeReader tgr, String tumorbamf, String g1000,
+			float g1000thres, String cosmic, double fixtumorratio,
+			String exonSNP, GeneExons ge, boolean useAvearageNormal)
+			throws IOException, ClassNotFoundException {
+
+		System.out.println("analysis start");
+
+		DataSet dataset = bean.getDataset();
+		//debug
+
+		
+		
+		dataset.setUseAvearageNormal(useAvearageNormal);
+		ReadsSummary readsSummary = bean.getReadsSummary();
+
+		// // Excute CNV analysis using wavelet transform
+		// System.out.println("CNV analysis 1 start");
+		GCParcentAdjust.calc(dataset);
+		denoizeWTAndHMM(dataset);
+		// if CNV exceed max num 50 denoize more
+		if (CountCNV.count(dataset) > 100) {
+			KarkinosProp.maxdenoiseLevel = KarkinosProp.maxdenoiseLevel + 1;
+			denoizeWTAndHMM(dataset);
+		}
+		// annotate datalist by CNV value
+		// annotate datalist by CNV value
+		dataset.assginCaptureInterval();
+
+		int cnvcount = CountCNV.count(dataset);
+
+		System.out.println("assgin dbSNP start");
+		// // annotate datalist by dbSNP
+		DbSNPAnnotation dbAnno = new DbSNPAnnotation(dbSNP, g1000, g1000thres,
+				cosmic, exonSNP);
+		bean.getDataset().assgindbSNP(dbAnno);
+		// try to find allelic CNV
+		alCNV = new AllelicCNV(dataset, readsSummary);
+		//
+		MatchMatrixBean matchmatrix = resolvePloidy(dataset, alCNV, pi,
+				cnvcount);
+		pi.setMatchmatrix(matchmatrix);
+		double interval = matchmatrix.getInterval();
+		if (interval > 0) {
+			dataset.setBaselineLOHEstimate(interval);
+		}
+		//
+		
+
+		FilterAnnotation fa = new FilterAnnotation(mappability, tgr, tumorbamf,
+				dbAnno, ge);
+		// //find hetro SNP correlation in each CNV interval
+		// //reject if correration is high
+		CorrelVaridate.varidate(dataset, alCNV);
+		if (cnvcount < 300) {
+			CheckPossibleHDAmp.check(dataset, pi, matchmatrix.getPloidyflg(),
+					matchmatrix.getpEvenMax());
+		}
+		// /////
+		baseploidy = matchmatrix.getPloidyflg();
+		CNVUtils.reflectToSNV(dataset, alCNV.getAllelicLOHLow(),
+				alCNV.getAllelicLOHhigh());
+		CorrelVaridate.recheck(dataset);
+		//
+		dataset.getAnalyseDist();
+		if (fixtumorratio > 0) {
+			dataset.setFixtc((float) fixtumorratio);
+		}
+
+		// // support reads,entropy,mappability check
+		System.out.println("filter annotation");
+		//
+		// //set filter1
+		float tc1 = dataset.getTumorRatio();
+		fa.filterAnnotation(dataset, readsSummary, matchmatrix.getPloidyflg());
+		// tcontents from somatic val
+		dataset.getAnalyseDist().reanalyseTC(dataset);
+		dataset.setBaseploidy(baseploidy);
+		//
+		// //
+		float tc2 = dataset.getTumorRatio();
+		if (tc1 != tc2) {
+			fa.filterAnnotation(dataset, readsSummary,
+					matchmatrix.getPloidyflg());
+		}
+		// // set filter stat
+		dataset.getAnalyseDist().analyseDist(dataset);
+		// //
+		//
+		dataset.bailAnalysis();
+		System.out.println("analysis done");
+		na = fa.getNa();
+
+	}
+
+	private MatchMatrixBean resolvePloidy(DataSet dataset, AllelicCNV alCNV2,
+			PeaksInfo pi2, int cnvcount) {
+		//
+		PloidyResolve pr = new PloidyResolve();
+		pr.resolve(dataset, alCNV2, pi2, cnvcount);
+		return pr.getMmb1();
+
+	}
+
+	private void denoizeWTAndHMM(DataSet dataset) throws IOException {
+
+		System.out.println("CNV analysis 2 start");
+		// MovingAverage.calc(dataset);
+		double baselineLOHEstimate = WaveletDenoize.calc(dataset);
+		// EMMethod to calc distribution
+		System.out.println("CNV analysis 3 start");
+		pi = EMMethod.calc(dataset, baselineLOHEstimate);
+		HMMCNVAnalysisFromEM.calc(dataset, pi);
+
+	}
+
+	private String info(SummaryStatistics ss) {
+
+		return ss.getMean() + "\t" + ss.getStandardDeviation() + "\t"
+				+ ss.getN();
+	}
+
+	protected void output(SaveBean bean, String outdir, TwoBitGenomeReader tgr,
+			String id, String readsStat, AllelicCNV alCNV, GeneExons ge,
+			NoiseAnalysis na2, PeaksInfo pi, int baseploidy, boolean nopdf)
+			throws Exception {
+
+		DataSet dataset = bean.getDataset();
+		float purity = dataset.getTumorRatio();
+		ReadsSummary readsSummary = bean.getReadsSummary();
+		// FileOutPut.outPutCNVData(outdir + id + "_cnvdata.txt", dataset);
+
+		FileOutPut.lowcovBed(outdir + id + "_normal_lowcov.bed", outdir + id
+				+ "_tumor_lowcov.bed", readsSummary);
+
+		TextSummary.outTextData(outdir + id + "_textdata.txt", readsSummary,
+				readsStat, dataset, pi.getPloidy());
+		CNVVcf.outData(outdir + id + "_cnvdata.vcf", dataset);
+		FileOutPut.outPutSNVDataVCF(outdir + id + "_snvdata.vcf", dataset, tgr,
+				na2);
+		FileOutPut.outPutSNVDataForAnnover(outdir + id + "_annover_input.txt",
+				dataset, tgr);
+
+		FileOutPut.outputSNP(outdir + id + "_normalsnp.vcf", dataset, tgr, ge);
+
+		if (!nopdf) {
+			PdfReport.report(readsSummary, readsStat, dataset, alCNV, na2, pi,
+					id, outdir + id + "_pdfdata.pdf");
+		}
+		try {
+			FileOutPut.outputDepth(dataset, outdir + id + "_cnvdepth.txt",purity);
+		} catch (Exception ex) {
+		}
+
+		try {
+			FileOutPut.outputAlleleDepth(alCNV, outdir + id
+					+ "_cnvAllelicDepth.txt",purity);
+		} catch (Exception ex) {
+		}
+
+	}
+
+	public SaveBean getReadsAndPileupDataFromBam(String normalbamf,
+			String tumorbamf, TwoBitGenomeReader tgr, String targetRegion,
+			String outputsave, String targetChr, String refflat)
+			throws Exception {
+
+		//
+		DataSet dataset = new DataSet(tgr.readIndex());
+		dataset.loadTargetBed(targetRegion, tgr);
+		
+		
+		// Iterate by Chromosome
+		SAMFileReader normalbamr = getReader(normalbamf);
+		SAMFileReader tumorbamr = getReader(tumorbamf);
+
+		ReadsSummary readsSummary = new ReadsSummary();
+		readsSummary.setNormalbam(normalbamf);
+		readsSummary.setTumorbam(tumorbamf);
+		readsSummary.setRefFlat(refflat);
+
+		List<SAMSequenceRecord> ssrList = normalbamr.getFileHeader()
+				.getSequenceDictionary().getSequences();
+		int chromcnt = 0;
+
+		System.out.println("start pileup " + targetChr);
+		int cnt = 0;
+		for (SAMSequenceRecord ssr : ssrList) {
+
+			String chrom = ssr.getSequenceName();
+			if (notEquals(targetChr, chrom)) {
+				continue;
+			}
+
+			int length = ssr.getSequenceLength();
+			if (tgr.isRefExsist(chrom)) {
+				readsSummary.resetAlreadyregset();
+				execChrom(dataset, chrom, length, normalbamr, tumorbamr, tgr,
+						readsSummary);
+				cnt++;
+			} else {
+				execChromOnlyForReadsStats(chrom, normalbamr, tumorbamr,
+						readsSummary);
+			}
+			chromcnt++;
+			System.gc();
+
+		}
+		if (cnt == 0) {
+			System.out
+					.println("no chromosome match bam to reference. check reference name");
+		} else {
+			System.out.println(cnt + " reference were processes");
+		}
+
+		// Basyan scoring
+		// 1. collect LOH Hetero SNP
+
+		// 2. collect 2N hetro
+
+		// assgin by mappability
+
+		// assgin neighbor indel and mutation check
+
+		// output VCF, excel file
+
+		// output graph
+
+		// Save to Obj
+		// no need to serialize
+		readsSummary.clearGeneExon();
+		SaveBean sbean = new SaveBean(dataset, readsSummary);
+		LoadSave.save(sbean, outputsave);
+		return sbean;
+
+	}
+
+	private boolean notEquals(String targetChr, String chrom) {
+
+		if (targetChr == null) {
+			return false;
+		}
+		String s1 = targetChr.replaceAll("chr", "");
+		String s2 = chrom.replaceAll("chr", "");
+		if (s1.equals(s2)) {
+			return false;
+		}
+		return true;
+	}
+
+	private void execChromOnlyForReadsStats(String chrom,
+			SAMFileReader normalbamr, SAMFileReader tumorbamr,
+			ReadsSummary readsSummary) {
+		CloseableIterator<SAMRecord> normarIte = null;
+
+		try {
+			normarIte = normalbamr.query(chrom, 0, 0, false);
+		} catch (Exception ex) {
+			return;
+		}
+		while (normarIte.hasNext()) {
+
+			SAMRecord sam = normarIte.next();
+			if (sam.getReadUnmappedFlag())
+				continue;
+			readsSummary.regN(sam, false, null);
+
+		}
+		normarIte.close();
+		CloseableIterator<SAMRecord> tumorIte = tumorbamr.query(chrom, 0, 0,
+				false);
+		while (tumorIte.hasNext()) {
+
+			SAMRecord sam = tumorIte.next();
+			if (sam.getReadUnmappedFlag())
+				continue;
+			readsSummary.regT(sam, false, null);
+		}
+		tumorIte.close();
+
+	}
+
+	private void execChrom(DataSet dataset, String chrom, int length,
+			SAMFileReader normalbamr, SAMFileReader tumorbamr,
+			TwoBitGenomeReader tgr, ReadsSummary readsSummary)
+			throws IOException {
+
+		//
+		List<Interval> ivlist = ListUtils.getIntervalList(chrom, length,
+				KarkinosProp.BINBITSIZE);
+
+		// debug
+//		int debugpos = 179604901;
+//		boolean debug = true;
+		//
+
+		int n = 0;
+		for (Interval iv : ivlist) {
+			n++;
+
+//			if(debug){
+//				if(iv.getStart()< debugpos && debugpos<iv.getEnd()){
+//					
+//				}else{
+//					continue;
+//				}
+//			}
+			
+			CloseableIterator<SAMRecord> normarIte = normalbamr.query(chrom,
+					iv.getStart(), iv.getEnd(), false);
+			CloseableIterator<SAMRecord> tumorIte = tumorbamr.query(chrom,
+					iv.getStart(), iv.getEnd(), false);
+
+			int normalcnt = 0;
+			int readslenn = 0;
+			List<SAMRecord> normalList = new ArrayList<SAMRecord>();
+			while (normarIte.hasNext()) {
+
+				SAMRecord sam = normarIte.next();
+				if (sam.getReadUnmappedFlag())
+					continue;
+				if (qualityCheck(sam)) {
+
+					boolean onTarget = dataset.setNomalCoverageInfo(sam);
+					boolean dupli = sam.getDuplicateReadFlag();
+					if (onTarget && !dupli) {
+						normalList.add(sam);
+					}
+					readsSummary.regN(sam, onTarget, iv);
+				}
+				normalcnt++;
+				readslenn = sam.getReadLength();
+			}
+			System.out.println(iv.getStr() + " normal reads " + normalcnt
+					+ " has been reads");
+
+			List<SAMRecord> tumorList = new ArrayList<SAMRecord>();
+			int tumorcnt = 0;
+			int readslent = 0;
+			while (tumorIte.hasNext()) {
+
+				SAMRecord sam = tumorIte.next();
+				if (sam.getReadUnmappedFlag())
+					continue;
+				if (qualityCheck(sam)) {
+
+					boolean onTarget = dataset.setTumorCoverageInfo(sam);
+					boolean dupli = sam.getDuplicateReadFlag();
+					if (onTarget && !dupli) {
+						tumorList.add(sam);
+					}
+					readsSummary.regT(sam, onTarget, iv);
+				}
+				tumorcnt++;
+				readslent = sam.getReadLength();
+			}
+			System.out.println(iv.getStr() + " tumor reads " + tumorcnt
+					+ " has been reads");
+
+			dataset.setBinReads(iv, normalcnt, tumorcnt);
+			System.out.println(Calendar.getInstance().getTime());
+			PileUP.pileup(iv, dataset, normalList, tumorList, tgr, readsSummary);
+			System.out.println(Calendar.getInstance().getTime());
+			readsSummary.setReadslent(readslent);
+			readsSummary.setReadslenn(readslenn);
+			normalList = null;
+			tumorList = null;
+			normarIte.close();
+			tumorIte.close();
+			System.gc();
+
+		}
+
+	}
+
+	private boolean qualityCheck(SAMRecord sam) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+}

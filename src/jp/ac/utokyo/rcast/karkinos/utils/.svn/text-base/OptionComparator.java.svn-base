@@ -1,0 +1,22 @@
+package jp.ac.utokyo.rcast.karkinos.utils;
+
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.commons.cli.Option;
+
+public class OptionComparator implements Comparator<Option> {
+
+
+	List<Option> optionList = null;
+	public OptionComparator(List<Option> _optionList) {
+		optionList = _optionList;
+	}
+
+	public int compare(Option o1, Option o2) {
+		int idx1 = optionList.lastIndexOf(o1);
+		int idx2 = optionList.lastIndexOf(o2);
+		return idx1-idx2;
+	}
+
+}

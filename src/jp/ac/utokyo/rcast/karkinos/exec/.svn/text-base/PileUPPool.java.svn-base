@@ -1,0 +1,25 @@
+package jp.ac.utokyo.rcast.karkinos.exec;
+
+import java.util.Stack;
+
+public class PileUPPool {
+
+	
+	static Stack<PileUPResult> stack = new Stack<PileUPResult>();
+	public static PileUPResult borrowObject(){
+		
+		if(stack.isEmpty()){
+			return new PileUPResult();
+		}else{
+			return stack.pop();
+		}		
+	}
+	public static void returnObject(PileUPResult r){
+		
+		r.clear();
+		stack.add(r);
+		
+	}
+	
+	
+}

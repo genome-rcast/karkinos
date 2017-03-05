@@ -1,0 +1,68 @@
+/*
+ * @author Hiroki Ueda
+ * ueda[at]genome.rcast.u-tokyo.ac.jp
+ * @version 1.0
+ * @since 1.0
+ */
+package jp.ac.utokyo.rcast.karkinos.filter;
+
+import net.sf.samtools.util.StringUtil;
+
+public class Entropy {
+
+	public static void main(String[] arg){
+		
+		System.out.println(entropy("Ttaaaaaaaaaa"));
+		System.out.println(entropy("ATGC"));
+	}
+	public static double entropy(String seq){
+		
+		
+		seq = seq.toUpperCase();
+		double[] rcounter = countRatio(seq);
+		double s = 0;
+		for(double d:rcounter){
+			
+			if(d==0)continue;
+			double sn = -1*d*log2(d);
+			s = s+ sn;
+		}
+		return s;
+		
+	}
+
+	private static double log2(double d) {
+		
+		return Math.log(d)/Math.log(2);
+	}
+
+	private static double[] countRatio(String s) {
+		
+		double[] da = new double[4];
+		int a=0,t=0,g=0,c=0,n=0;
+		int len = s.length();
+		for(char ca:s.toCharArray()){
+			
+			if(ca=='A'){
+				a++;
+			}else if(ca=='T'){
+				t++;
+			}else if(ca=='C'){
+				c++;
+			}else if(ca=='G'){
+				g++;
+			}else if(ca=='N'){
+				n++;
+			}
+			
+		}
+		len = len-n;
+		da[0]=(double)a/(double)len;
+		da[1]=(double)t/(double)len;
+		da[2]=(double)c/(double)len;
+		da[3]=(double)g/(double)len;
+		
+		return da;
+	}
+	
+}
