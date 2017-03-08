@@ -287,7 +287,7 @@ public class FileOutPut {
 
 			DefinedSites ds = new DefinedSites(sites);
 
-			bw.append("#CHROM	POS	ID	REF	ALT_N	QUAL_N	REFCNT_N	ALTCNT_N 	FEEQ_N	"
+			bw.write("#CHROM	POS	ID	REF	ALT_N	QUAL_N	REFCNT_N	ALTCNT_N 	FEEQ_N	"
 					+ "ALT_T	QUAL_T	REFCNT_T	ALTCNT_T 	FEEQ_T	INFO	TNRATIO"
 					+ "\n");
 

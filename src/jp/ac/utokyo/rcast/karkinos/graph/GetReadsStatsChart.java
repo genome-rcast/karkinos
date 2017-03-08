@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -409,6 +410,9 @@ public class GetReadsStatsChart {
 			for (Entry<String, ReadsCounter> entry : datamap.entrySet()) {
 
 				String chrom = entry.getKey();
+				//
+				boolean usualchrom = usualChrom(chrom);
+				
 				ReadsCounter rc = entry.getValue();
 				int target = rc.getTotalOnTarget();
 				int total = rc.getTotalmap();
@@ -446,6 +450,27 @@ public class GetReadsStatsChart {
 			e.printStackTrace();
 		}
 		return null;
+
+	}
+	
+	private static boolean usualChrom(String chrom) {
+
+		String chromnum = chrom;
+		if (chromnum.contains("chr")) {
+			chromnum = chromnum.replaceAll("chr", "");
+		}
+		if (StringUtils.isNumeric(chromnum))
+			return true;
+		if (chromnum.equalsIgnoreCase("X"))
+			return true;
+		if (chromnum.equalsIgnoreCase("Y"))
+			return true;
+		if (chromnum.equalsIgnoreCase("M"))
+			return true;
+		if (chromnum.equalsIgnoreCase("mt"))
+			return true;
+
+		return false;
 
 	}
 

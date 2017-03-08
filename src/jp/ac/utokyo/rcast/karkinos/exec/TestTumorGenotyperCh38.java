@@ -26,21 +26,21 @@ public class TestTumorGenotyperCh38 {
 	public static void main(String[] arg){
 		
 		
-		String normalbamf = "/data/users/yamamoto/TodaiPanel/bam/PLC-TK-3N_TDv3_genome.bam";
-		String tumorbamf = "/data/users/yamamoto/TodaiPanel/bam/PLC-TK-3TA_TDv3_genome.bam";
+		String normalbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_0_2_4sort.bam";
+		String tumorbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_6_12sort.bam";
 		
-		String twobitref = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/hg38.2bit";
+		String twobitref = "/home/spark/todaitoptest/ref/hg38.2bit";
 		//String dbSNP = "/GLUSTER_DIST/data/users/ueda/SNVtest/hg19_ALL.sites.2012_02.txt";
-		String dbSNP = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/snp147Common_hg38_ontarget.txt";
-		String g1000 = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/1000g_phase3_ontarget_trim.vcf";
+		String dbSNP = "/home/spark/todaitoptest/ref/snp147Common_hg38_ontarget.txt";
+		String g1000 = "/home/spark/todaitoptest/ref/1000g_phase3_ontarget_trim.vcf";
 		
-		String cosmic = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/CosmicCodingMuts.vcf";
-		String refflat = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/refFlat_panel_sort.txt";
+		String cosmic = "/home/spark/todaitoptest/ref/CosmicCodingMuts.vcf";
+		String refflat = "/home/spark/todaitoptest/ref/refFlat_panel_sort.txt";
 		
 		//String exomesnp = "/usr/local/karkinos/karkinos/genome/exomeSNP.vcf";
 		
 		//String targetRegion = "/data/users/ueda/project/TodaiPanel/S3035822_Covered.bed_test";
-		String targetRegion = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/S3035822_Covered_sm_lift_hg38.bed";
+		String targetRegion = "/home/spark/todaitoptest/ref/S3035822_Covered_sm_lift_hg38.bed";
 		
 		//String targetRegion = "/GLUSTER_DIST/data/Genomes/hg19capv4/captureregionv4all.bed";
 		//String targetRegion ="/GLUSTER_DIST/data/Genomes/karkinos/genome/vcrome2.1.bed";
@@ -51,10 +51,10 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/GLUSTER_DIST/data/users/ueda/project/gotoh/S1-S7";
 		
 		//String outdir = "/GLUSTER_DIST/data/users/ueda/test2";
-		String outdir = "/GLUSTER_DIST/data/users/ueda/toptesthg38";
-		String propfile = "/usr/local/karkinos/karkinos4.0/karkinos.properties";
+		String outdir = "/home/spark/todaitoptest/output/tp0";
+		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
-		String definedList = "/GLUSTER_DIST/data/users/ueda/project/TodaiPanel/Grch38/ref_for_panel/hotspot.txt";
+		String definedList = "/home/spark/todaitoptest/ref/hotspot.txt";
 		
 		//
 		List<String> l = new ArrayList<String>();
@@ -69,7 +69,7 @@ public class TestTumorGenotyperCh38 {
 		add(l,"-ct",targetRegion);
 		//add(l,"-mp",mappability);
 		//add(l,"-id","CRC_107_T-CRC_107_N");
-		add(l,"-id","TK-3");
+		add(l,"-id","LUAD-311_tc0");
 		add(l,"-o",outdir);
 		add(l,"-prop",propfile);
 		add(l,"-g1000",g1000);
