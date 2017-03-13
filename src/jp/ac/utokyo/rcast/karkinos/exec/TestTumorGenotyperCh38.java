@@ -26,8 +26,15 @@ public class TestTumorGenotyperCh38 {
 	public static void main(String[] arg){
 		
 		
-		String normalbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_0_2_4sort.bam";
-		String tumorbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_6_12sort.bam";
+
+		//String normalbamf = "/home/spark/todaitoptest/testdata0308/LUAD-311-N_TDv3_genome.bam";
+		//String tumorbamf = "/home/spark/todaitoptest/testdata0308/LUAD-311-T_TDv3_genome.bam";
+		
+		String normalbamf ="/home/spark/todaitoptest/testdata0308/realign/LUAD-311-N_TDv3_genome.bam_realign.bam";
+		String tumorbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-T_TDv3_genome.bam_realign.bam";
+		
+//		String normalbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_0_2_4sort.bam";
+//		String tumorbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_6_12sort.bam";
 		
 		String twobitref = "/home/spark/todaitoptest/ref/hg38.2bit";
 		//String dbSNP = "/GLUSTER_DIST/data/users/ueda/SNVtest/hg19_ALL.sites.2012_02.txt";
@@ -51,7 +58,11 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/GLUSTER_DIST/data/users/ueda/project/gotoh/S1-S7";
 		
 		//String outdir = "/GLUSTER_DIST/data/users/ueda/test2";
-		String outdir = "/home/spark/todaitoptest/output/tp0";
+		//String outdir = "/home/spark/todaitoptest/output/tp0";
+		//String outdir = "/home/spark/todaitoptest/karkinos";
+		
+		//String outdir = "/home/spark/todaitoptest/testdata0308/similate/tp0";
+		String outdir = "/home/spark/todaitoptest/testdata0308/realign/test";
 		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
 		String definedList = "/home/spark/todaitoptest/ref/hotspot.txt";

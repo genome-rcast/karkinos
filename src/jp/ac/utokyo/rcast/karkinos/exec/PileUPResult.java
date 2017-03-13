@@ -182,6 +182,9 @@ public class PileUPResult implements java.io.Serializable {
 	public int getRefCnt() {
 		
 		int gidx = seqALL.indexOf(genomeR);
+		
+		if(gidx<0)return 0;
+		
 		return seqCounter[gidx];
 		
 	}
