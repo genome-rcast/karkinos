@@ -422,7 +422,7 @@ public class FilterAnnotation {
 			if(pos==9710663){
 				System.out.println("debug");
 			}
-			if (del.length() >= 3) {
+			if (del.length() >= 3 && del.length() <=5) {
 				if (after10.toUpperCase().contains(del.toUpperCase())) {
 					indelinrepeat = true;
 				}
@@ -476,7 +476,7 @@ public class FilterAnnotation {
 			// 20170317 todai
 			if(indelinrepeat){
 				
-				if((normalTotal<snv.getTumor().getTotalcnt()*0.5) && (normalTotal<50)){
+				if((normalTotal<snv.getTumor().getTotalcnt()*0.5) && (normalTotal<50) && snv.getTumor().getAltCnt()<=12){
 				  supportReadsFlgs.add(FilterResult.Low_complexty);
 				}
 			}
