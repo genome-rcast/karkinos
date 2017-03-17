@@ -346,10 +346,10 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 
 		if (loadFromSaved) {
-			System.out.println("load date from pileuped middel file");
+			System.out.println("load data from pileuped middel file");
 			bean = getReadsAndPileupDataFromFile(outputsave, tumorbamf, tgr);
 		} else {
-			System.out.println("load date from bam files");
+			System.out.println("load data from bam files");
 			bean = getReadsAndPileupDataFromBam(normalbamf, tumorbamf, tgr,
 					targetRegion, outputsave, targetChr,startend, refflat,sites);
 		}

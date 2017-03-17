@@ -105,6 +105,11 @@ public class KarkinosProp implements java.io.Serializable {
 	
 	public static float mintumorpurity = 0.12f;
 	
+	public static float falseReadMismatchratio = 0.03f;
+	public static float falseReadratio = 0.3f;
+	public static float falseReadratio2 = 0.2f;
+	
+	
 	public static String KEY_BINBITSIZE = "BINBITSIZE";
 	public static String KEY_denozeToSD = "denozeToSD";
 	public static String KEY_minsupport = "minsupportreads";
@@ -133,6 +138,8 @@ public class KarkinosProp implements java.io.Serializable {
 	public static String KEY_LogtThres  ="LogtThres";
 	public static String KEY_nearindelbt  ="nearindelbt";
 	public static String KEY_baysianFilterdepth  ="baysianFilterdepth";
+
+	
 
 
 	private static void loadEach() {

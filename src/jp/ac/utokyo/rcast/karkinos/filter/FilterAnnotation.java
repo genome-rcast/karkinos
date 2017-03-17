@@ -56,9 +56,8 @@ public class FilterAnnotation {
 	GeneExons ge = null;
 	NoiseAnalysis na = null;
 
-	public FilterAnnotation(String mappability, TwoBitGenomeReader tgr,
-			String normalbamf, String tumorbamf, DbSNPAnnotation dbAnno, GeneExons ge)
-			throws IOException {
+	public FilterAnnotation(String mappability, TwoBitGenomeReader tgr, String normalbamf, String tumorbamf,
+			DbSNPAnnotation dbAnno, GeneExons ge) throws IOException {
 		this.mappability = mappability;
 		mappabilityanno = new MappabilityAnnotation(mappability);
 		checkMappability = mappabilityanno.isInit();
@@ -73,8 +72,7 @@ public class FilterAnnotation {
 	public static int debugpos = 195507053;
 
 	// 20130403 first filter just to use to find peak pulidity
-	public void filterAnnotation1(DataSet dataset, ReadsSummary readsSummary)
-			throws IOException {
+	public void filterAnnotation1(DataSet dataset, ReadsSummary readsSummary) throws IOException {
 
 		NormalSNPCounter nsnpC = new NormalSNPCounter(dataset);
 
@@ -84,16 +82,14 @@ public class FilterAnnotation {
 
 			int flg = snv.getFlg();
 			boolean check = (flg == PileUP.SomaticMutation || snv.getFlg() == PileUP.TumorINDEL);
-			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP
-					|| flg == PileUP.BothINDEL || flg == PileUP.NormalINDEL) {
+			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP || flg == PileUP.BothINDEL
+					|| flg == PileUP.NormalINDEL) {
 				String snpposS = snv.getChr() + "-" + snv.getPos();
 				snppos.put(snpposS, flg);
 			}
 			if (!check)
 				continue;
 
-		
-			
 			// add filter after adjustment 20120912
 			float originalTratio = snv.getTumor().getRatio();
 
@@ -118,8 +114,8 @@ public class FilterAnnotation {
 			//
 			String chrom = snv.getChr();
 			int pos = snv.getPos();
-			
-			if(pos==debugpos){
+
+			if (pos == debugpos) {
 				System.out.println("here");
 			}
 
@@ -148,11 +144,34 @@ public class FilterAnnotation {
 			}
 			// 2.entropy check
 			String before10 = tgr.getGenomicSeq(chrom, pos - 10, pos - 1, true);
-			String neighbor10 = tgr
-					.getGenomicSeq(chrom, pos - 5, pos - 1, true)
+			String neighbor10 = tgr.getGenomicSeq(chrom, pos - 5, pos - 1, true)
 					+ tgr.getGenomicSeq(chrom, pos + 1, pos + 5, true);
 
-			String after10 = tgr.getGenomicSeq(chrom, pos + 1, pos + 10, true);
+			// 20170317
+			boolean indelinrepeat = false;
+			int start = pos + 1;
+			int end = pos + 10;
+			String del = "";
+			if (isindel) {
+				try {
+					if (!snv.getTumor().isInsersion()) {
+						del = snv.getTumor().getIndelStr().split("\t")[0];
+						start = pos + del.length() + 1;
+						end = pos + del.length() + 10;
+
+					}
+				} catch (Exception ex) {
+
+				}
+			}
+
+			String after10 = tgr.getGenomicSeq(chrom, start, end, true);
+			if (del.length() >= 3) {
+				if (after10.toUpperCase().contains(del)) {
+					indelinrepeat = true;
+				}
+			}
+
 			double s_b4 = Entropy.entropy(before10);
 			double s_mid = Entropy.entropy(neighbor10);
 			double s_after = Entropy.entropy(after10);
@@ -216,55 +235,51 @@ public class FilterAnnotation {
 
 	}
 
-	public void filterAnnotation(DataSet dataset, ReadsSummary readsSummary,
-			int ploidy) throws IOException {
+	public void filterAnnotation(DataSet dataset, ReadsSummary readsSummary, int ploidy) throws IOException {
 
 		// BayesianFilter bfilter = new
 		// BayesianFilter(dataset.getAnalyseDist());
 		NormalSNPCounter nsnpC = new NormalSNPCounter(dataset);
 
 		Map<String, Integer> snppos = new HashMap<String, Integer>();
-		//float tumorContentsRatio = dataset.getAnalyseDist().getTumorratio();
-		//fix 2013/07/24
-		
-	
-		
+		// float tumorContentsRatio = dataset.getAnalyseDist().getTumorratio();
+		// fix 2013/07/24
+
 		float tumorContentsRatio = dataset.getTumorRatio();
 
 		int allcount = 0;
 		int oxoGcnt = 0;
 		int ffpecnt = 0;
-		
-		
+
 		for (SNVHolder snv : dataset.getSnvlist()) {
 			//
 			//
 			allcount++;
 			boolean oxoGCand = SupportReadsCheck.oxoG(snv.getTumor().getGenomeR(), snv.getTumor().getALT());
 			boolean ffpeCand = SupportReadsCheck.ffpe(snv.getTumor().getGenomeR(), snv.getTumor().getALT());
-			if(oxoGCand){
+			if (oxoGCand) {
 				oxoGcnt++;
 			}
-			if(ffpeCand){
+			if (ffpeCand) {
 				ffpecnt++;
 			}
-			
+
 		}
-		float oxoGratio =  (float)((double)oxoGcnt/(double)allcount) ;
-		float ffpeRatio =  (float)((double)ffpecnt/(double)allcount) ;
-		
-		System.out.println("oxoGratio ="+oxoGratio +" ffpe="+ffpeRatio);
-		
+		float oxoGratio = (float) ((double) oxoGcnt / (double) allcount);
+		float ffpeRatio = (float) ((double) ffpecnt / (double) allcount);
+
+		System.out.println("oxoGratio =" + oxoGratio + " ffpe=" + ffpeRatio);
+
 		for (SNVHolder snv : dataset.getSnvlist()) {
 
-//			if(snv.getPos()==debugpos){
-//				System.out.println("here");
-//			}
-			
+			// if(snv.getPos()==debugpos){
+			// System.out.println("here");
+			// }
+
 			int flg = snv.getFlg();
 			boolean check = (flg == PileUP.SomaticMutation || snv.getFlg() == PileUP.TumorINDEL);
-			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP
-					|| flg == PileUP.BothINDEL || flg == PileUP.NormalINDEL) {
+			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP || flg == PileUP.BothINDEL
+					|| flg == PileUP.NormalINDEL) {
 				String snpposS = snv.getChr() + "-" + snv.getPos();
 				snppos.put(snpposS, flg);
 			}
@@ -273,10 +288,8 @@ public class FilterAnnotation {
 
 			// add filter after adjustment 20120912
 			float originalTratio = snv.getTumor().getRatio();
-			float adjustedTumorAllereFreq = CalcUtils
-					.getTumorrateAdjustedRatio(snv, tumorContentsRatio);
-			int adjustedtumortotalreads = Math.round(snv.getTumor()
-					.getTotalcnt() * tumorContentsRatio);
+			float adjustedTumorAllereFreq = CalcUtils.getTumorrateAdjustedRatio(snv, tumorContentsRatio);
+			int adjustedtumortotalreads = Math.round(snv.getTumor().getTotalcnt() * tumorContentsRatio);
 
 			boolean initFilterFalse = originalTratio < KarkinosProp.mintumorratio;
 			boolean highnormalAfterTCadjust = false;
@@ -294,19 +307,14 @@ public class FilterAnnotation {
 			int normalTotal = snv.getNormal().getTotalcnt();
 			boolean isindel = snv.getFlg() == PileUP.TumorINDEL;
 
-			
 			String chrom = snv.getChr();
 			int pos = snv.getPos();
 
 			char altTumor = snv.getTumor().getALT();
-			String neighbor60 = tgr.getGenomicSeq(chrom, pos - 30, pos + 30,
-					true);
-			boolean typicalSysErr = IlluminaSysError.checkTypicalError(snv.getTumor()
-					.getGenomeR(), altTumor, neighbor60, numSupportRead);
-			
+			String neighbor60 = tgr.getGenomicSeq(chrom, pos - 30, pos + 30, true);
+			boolean typicalSysErr = IlluminaSysError.checkTypicalError(snv.getTumor().getGenomeR(), altTumor,
+					neighbor60, numSupportRead);
 
-			
-			
 			if (initFilterFalse) {
 
 				// read is resqued by low initial thres
@@ -325,26 +333,21 @@ public class FilterAnnotation {
 				}
 
 				int readspenalty = 1;
-//				if (isindel) {
-//					readspenalty = 1;
-//				}
-				if (numSupportRead < KarkinosProp.minsupportreads
-						+ readspenalty) {
-					//lowdepthafterTCadjust = true;
-					//mod 20130710 change to 2nd filter
+				// if (isindel) {
+				// readspenalty = 1;
+				// }
+				if (numSupportRead < KarkinosProp.minsupportreads + readspenalty) {
+					// lowdepthafterTCadjust = true;
+					// mod 20130710 change to 2nd filter
 					lowdepthafterTCadjustInfo = true;
-					
+
 				}
-				if (numSupportRead == KarkinosProp.minsupportreads
-						+ readspenalty) {
-					
-					if(snv.getTumor().getRatio()
-							<(KarkinosProp.min_initial_tumorratio+0.02)){
+				if (numSupportRead == KarkinosProp.minsupportreads + readspenalty) {
+
+					if (snv.getTumor().getRatio() < (KarkinosProp.min_initial_tumorratio + 0.02)) {
 						lowdepthafterTCadjustInfo = true;
 					}
 				}
-
-	
 
 			}
 
@@ -355,8 +358,7 @@ public class FilterAnnotation {
 			int[] tumora = snv.getTumor().getRefAltCnt();
 			// adjusted by tumor rate add 20120804
 			int tumorref = Math.round(tumora[0] * tumorContentsRatio);
-			double pvalFisher = Fisher.calcPValue(normala[0], normala[1],
-					tumorref, tumora[1]);
+			double pvalFisher = Fisher.calcPValue(normala[0], normala[1], tumorref, tumora[1]);
 			boolean fisherTestSignif = pvalFisher <= KarkinosProp.Fisher_Thres_For_SNV_Detection;
 			snv.setFisherTestSignif(fisherTestSignif);
 			snv.setPvalFisher(pvalFisher);
@@ -365,7 +367,6 @@ public class FilterAnnotation {
 			double logt = snv.getTumor().getMutateLogLikeHoodAmongMutation();
 
 			//
-
 
 			FilterResult fr = new FilterResult();
 
@@ -392,11 +393,41 @@ public class FilterAnnotation {
 			}
 			// 2.entropy check
 			String before10 = tgr.getGenomicSeq(chrom, pos - 10, pos - 1, true);
-			String neighbor10 = tgr
-					.getGenomicSeq(chrom, pos - 5, pos - 1, true)
+			String neighbor10 = tgr.getGenomicSeq(chrom, pos - 5, pos - 1, true)
 					+ tgr.getGenomicSeq(chrom, pos + 1, pos + 5, true);
 
-			String after10 = tgr.getGenomicSeq(chrom, pos + 1, pos + 10, true);
+			// 20170317 todai
+			boolean indelinrepeat = false;
+			int start = pos + 1;
+			int end = pos + 10;
+			
+			int dellenn = 0;
+			String del="";
+			if (isindel) {
+				try {
+					if (!snv.getTumor().isInsersion()) {
+						String dellens = snv.getTumor().getIndelStr().split("\t")[0];
+						dellenn = Integer.parseInt(dellens);
+						start = pos + dellenn;
+						end = pos + dellenn + 10;
+						del = tgr.getGenomicSeq(chrom, pos+1,pos+dellenn, true);
+						
+					}
+				} catch (Exception ex) {
+
+				}
+			}
+
+			String after10 = tgr.getGenomicSeq(chrom, start, end, true);
+			if(pos==9710663){
+				System.out.println("debug");
+			}
+			if (del.length() >= 3) {
+				if (after10.toUpperCase().contains(del.toUpperCase())) {
+					indelinrepeat = true;
+				}
+			}
+
 			double s_b4 = Entropy.entropy(before10);
 			double s_mid = Entropy.entropy(neighbor10);
 			double s_after = Entropy.entropy(after10);
@@ -422,7 +453,6 @@ public class FilterAnnotation {
 				fr.setHighisoform(highisoform);
 			}
 
-			
 			int cntalt = countAltOrder(sseq, altTumor);
 			if (cntalt >= 2) {
 				fr.setIgnoreEntroptCheck(true);
@@ -433,22 +463,25 @@ public class FilterAnnotation {
 
 			// 3.5 check typical illumina error
 
-
 			// 4. support reads check
-			SupportReadsCheckResult srr = srCheck.checkSupportReads(chrom, pos,
-					snv.getTumor(), snv.getFlg(), dataset.getAnalyseDist()
-							.getTumorratio(),
-					(snv.getCi().getVaridateVal() * 2), highisoform,
-					normalTotal, snppos, adjustedTumorAllereFreq, snv
-							.getNormal().getRatio(),oxoGratio,ffpeRatio);
+			SupportReadsCheckResult srr = srCheck.checkSupportReads(chrom, pos, snv.getTumor(), snv.getFlg(),
+					dataset.getAnalyseDist().getTumorratio(), (snv.getCi().getVaridateVal() * 2), highisoform,
+					normalTotal, snppos, adjustedTumorAllereFreq, snv.getNormal().getRatio(), oxoGratio, ffpeRatio);
 
 			Set<Integer> supportReadsFlgs = srr.getFilter();
 			fr.setPval4FiserDirectional(srr.getPval4directionCheck());
 			if (repeat) {
-				supportReadsFlgs
-						.add(FilterResult.INFO_Maskedrepeat_BY_RepeatMasker);
+				supportReadsFlgs.add(FilterResult.INFO_Maskedrepeat_BY_RepeatMasker);
 			}
-
+			// 20170317 todai
+			if(indelinrepeat){
+				
+				if((normalTotal<snv.getTumor().getTotalcnt()*0.5) && (normalTotal<50)){
+				  supportReadsFlgs.add(FilterResult.Low_complexty);
+				}
+			}
+			
+			
 			// not indel case, filter out
 			// where normal low quality reads are rich
 			if (!snv.getTumor().isIndel()) {
@@ -465,9 +498,9 @@ public class FilterAnnotation {
 			// =
 			// nsnpC.getLogRefHetroSNPRatio(key,readsSummary.getNucCountRef(ref));
 
-			//double snpratio = nsnpC.getHetroSNPRatio(key);
+			// double snpratio = nsnpC.getHetroSNPRatio(key);
 			// System.out.println("snpratio="+snpratio);
-			//double adjustratio = Math.log10(snpratio / 0.1666);
+			// double adjustratio = Math.log10(snpratio / 0.1666);
 			// double adjustratio = Math.log10(1-snpratio);
 			// double adjustedLogn = adjustratio + logn;
 			// 20130322 kill snp prior adjustment. no good effect
@@ -476,8 +509,7 @@ public class FilterAnnotation {
 			// double ar = nsnpC.getHetroSNPRatioRemain(key);
 			// double adjustedLogn = ar*logn;
 			double[] afs = RatioUtils.getRatio(snv, ref, alt);
-			fr.setSupportreadsBAlleleFeqquency(srr
-					.getSupportreadsBAlleleFeqquency());
+			fr.setSupportreadsBAlleleFeqquency(srr.getSupportreadsBAlleleFeqquency());
 			fr.setRefreadsBAlleleFeqquency(srr.getRefreadsBAlleleFeqquency());
 			fr.setTumorAF(afs[0]);
 			fr.setNormalAF(afs[1]);
@@ -516,7 +548,7 @@ public class FilterAnnotation {
 			fr.setAfter10(after10);
 			fr.setBefore10(before10);
 			fr.setTypicalSysErr(typicalSysErr);
-			
+
 			snv.setFilterResult(fr);
 
 		}
@@ -525,8 +557,7 @@ public class FilterAnnotation {
 		SNVHighDepthCounter snvc = new SNVHighDepthCounter(dataset);
 		na = new NoiseAnalysis();
 		na.analysisNoiseRegion(dataset, ploidy);
-		
-		
+
 		for (SNVHolder snv : dataset.getSnvlist()) {
 
 			int flg = snv.getFlg();
@@ -553,8 +584,9 @@ public class FilterAnnotation {
 						reject = true;
 						fr.setLowtumorAfterTCadjust(true);
 					}
-					System.out.println(snv.getChr()+"\t"+snv.getPos()+"\t"+snv.getTumor().getRatio() +"\t"+ reject);
-					
+					System.out.println(
+							snv.getChr() + "\t" + snv.getPos() + "\t" + snv.getTumor().getRatio() + "\t" + reject);
+
 				}
 				// 20130322 kill snv prior adjustment. no good effect
 				// double adjustratio = Math.log10(snvratio);
@@ -562,13 +594,12 @@ public class FilterAnnotation {
 				// double adjustedLogt = adjustratio + fr.getLogtAjusted();
 				// fr.setLogtAjusted(adjustedLogt);
 				fr.getPassFilterFlgForce();
-				
+
 			}
 
 		}
 
 	}
-
 
 	public NoiseAnalysis getNa() {
 		return na;

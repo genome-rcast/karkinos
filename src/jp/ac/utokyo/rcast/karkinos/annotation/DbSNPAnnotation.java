@@ -552,8 +552,10 @@ public class DbSNPAnnotation implements java.io.Serializable {
 						validated = false;
 						try {
 
-							validated = sa[8].equalsIgnoreCase("true");
-
+							if(sa.length>8){
+							 validated = sa[8].equalsIgnoreCase("true");
+							}
+							
 						} catch (Exception ex) {
 
 						}
