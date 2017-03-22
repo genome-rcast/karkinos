@@ -69,7 +69,7 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/home/spark/todaitoptest/output/tp0";
 		//String outdir = "/home/spark/todaitoptest/karkinos";
 		
-		String outdir = "/home/spark/todaitoptest/To_Xcoo/snvFPTest/AfterFilterling";
+		String outdir = "/home/spark/todaitoptest/To_Xcoo/realignmentTest/AfterRealignment";
 		//String outdir = "/home/spark/todaitoptest/testdata0308/realign/tp0_re";
 		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
