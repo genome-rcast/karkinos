@@ -106,6 +106,7 @@ public class AFDepthMatrix {
 
 			boolean firstBin = (idx == 0);
 			boolean lastBin = (idx >= getMaxBinIdx(tratio));
+			//boolean lastBin = false;
 			boolean lowdepthbin = (bd.getLdepth() < 20);
 
 			if (firstBin || lastBin || lowdepthbin) {

@@ -497,6 +497,12 @@ public class FormatHelper {
 
 		boolean minsupport = snv.getFilterResult().getInfoFlg()
 				.contains(FilterResult.INFO_minimumSupportReads);
+		
+		boolean ffpe = snv.getFilterResult().getInfoFlg()
+				.contains(FilterResult.INFO_ffpe);
+		
+		boolean oxoG = snv.getFilterResult().getInfoFlg()
+				.contains(FilterResult.INFO_oxoG);
 
 		if ((snv.getDbSNPbean() != null) && snv.getDbSNPbean().isCosmicvalid()) {
 			// if filter 1 pass and cosmic then pass
@@ -506,7 +512,7 @@ public class FormatHelper {
 		}
 
 		//
-		if (reff || trf || low || lowd || minsupport) {
+		if (reff || trf || low || lowd || minsupport || ffpe ||  oxoG) {
 			StringBuffer sb = new StringBuffer();
 			if (!fs.equals("PASS")) {
 				sb.append(fs);
@@ -540,6 +546,18 @@ public class FormatHelper {
 					sb.append(",");
 				}
 				sb.append("lowsupportreads");
+			}
+			if (ffpe) {
+				if (sb.length() > 0) {
+					sb.append(",");
+				}
+				sb.append("ffpe");
+			}
+			if (oxoG) {
+				if (sb.length() > 0) {
+					sb.append(",");
+				}
+				sb.append("oxoG");
 			}
 			return sb.toString();
 		} else {

@@ -82,7 +82,7 @@ public class PdfReport {
 		
 		//
 		try{
-		 chartList.addAll(NoisePeakChart .getChartLists(na,dataset.getTumorRatio()));
+		 chartList.addAll(NoisePeakChart.getChartLists(na,dataset.getTumorRatio()));
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

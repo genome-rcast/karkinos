@@ -29,6 +29,9 @@ import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TNQualityDiff;
 import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TooManyMismatchReads;
 import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.noStrandSpecific;
 import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.softClip;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_ffpe;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_oxoG;
+
 import htsjdk.samtools.CigarElement;
 import htsjdk.samtools.CigarOperator;
 import htsjdk.samtools.SAMFileReader;
@@ -375,6 +378,8 @@ public class SupportReadsCheck extends ReadWriteBase {
 						thres = KarkinosProp.Fisher_Thres_For_Reads_Direction3;
 					}
 				}
+				
+				
 				// if (f1r2support >= 6 || f2r1support >= 6) {
 				// thres = 1;
 				// }
@@ -388,7 +393,14 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 			boolean fisherSignif = (fisherP2 <= thres);
 			if (fisherSignif) {
-				filter.add(SUPPORTED_BY_ONEDirection);
+				
+				if (ffpeCand) {
+					filter.add(INFO_ffpe);
+				}else if(oxoGCand){
+					filter.add(INFO_oxoG);
+				}else{
+					filter.add(SUPPORTED_BY_ONEDirection);
+				}
 			}
 		}
 
@@ -436,6 +448,10 @@ public class SupportReadsCheck extends ReadWriteBase {
 			if (falseReadRatio >= readratiothres) {
 				filter.add(TooManyMismatchReads);
 			}			
+			
+			if (ffpeRatio > 0.2 && supportreads.size() <= 4 && ffpeCand) {
+				filter.add(INFO_ffpe);			
+			}
 			
 		}
 

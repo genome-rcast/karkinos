@@ -25,14 +25,21 @@ public class TestTumorGenotyperCh38 {
 	
 	public static void main(String[] arg){
 		
-		//String normalbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_0.bam_realign.bam";
-		//String tumorbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_1_2.bam_realign.bam";
+		//String normalbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_0.bam";
+		//String tumorbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_1_2.bam";
 
+		
+		String normalbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-N_TDv3_genome.bam_realign.bam";
+		String tumorbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-T_TDv3_genome.bam_realign.bam";
+		
+		//String normalbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_1.bam";
+		//String tumorbamf ="";
+				
 		//String normalbamf = "/home/spark/todaitoptest/testdata0308/LUAD-311-N_TDv3_genome.bam";
 		//String tumorbamf = "/home/spark/todaitoptest/testdata0308/LUAD-311-T_TDv3_genome.bam";
 		
-		String normalbamf ="/home/spark/todaitoptest/testdata0308/LUAD-311-N_TDv3_genome.bam";
-		String tumorbamf = "/home/spark/todaitoptest/testdata0308/LUAD-311-T_TDv3_genome.bam";
+//		String normalbamf ="/home/spark/todaitoptest/testdata0308/LUAD-311-N_TDv3_genome.bam";
+//		String tumorbamf = "/home/spark/todaitoptest/testdata0308/LUAD-311-T_TDv3_genome.bam";
 		
 //		String normalbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_0_2_4sort.bam";
 //		String tumorbamf = "/home/spark/todaitoptest/testdata/LUAD-311N_6_12sort.bam";
@@ -62,7 +69,7 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/home/spark/todaitoptest/output/tp0";
 		//String outdir = "/home/spark/todaitoptest/karkinos";
 		
-		String outdir = "/home/spark/todaitoptest/testdata0308/realign/test";
+		String outdir = "/home/spark/todaitoptest/To_Xcoo/snvFPTest/AfterFilterling";
 		//String outdir = "/home/spark/todaitoptest/testdata0308/realign/tp0_re";
 		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
@@ -81,7 +88,7 @@ public class TestTumorGenotyperCh38 {
 		add(l,"-ct",targetRegion);
 		//add(l,"-mp",mappability);
 		//add(l,"-id","CRC_107_T-CRC_107_N");
-		add(l,"-id","LUAD-311_tc0");
+		add(l,"-id","LUAD-311_sim_tc0_after");
 		add(l,"-o",outdir);
 		add(l,"-prop",propfile);
 		add(l,"-g1000",g1000);

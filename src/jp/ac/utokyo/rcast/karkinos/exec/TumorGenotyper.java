@@ -645,6 +645,8 @@ public class TumorGenotyper extends ReadWriteBase {
 		
 		FileOutPut.outPutSNVDataVCF(outdir + id + "_snvdata.vcf", dataset, tgr,
 				na2);
+		
+				
 		FileOutPut.outPutSNVDataForAnnover(outdir + id + "_annover_input.txt",
 				dataset, tgr);
 

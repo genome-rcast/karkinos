@@ -72,6 +72,9 @@ public class FilterResult implements java.io.Serializable {
 
 	public static final int LOGn = 31;
 	public static final int LOGt = 32;
+	
+	public static final int INFO_ffpe = 135;
+	public static final int INFO_oxoG = 136;
 
 	public static final int INFO_SUPPORTED_BY_ONEDirection = 101;
 	public static final int INFO_Maskedrepeat_BY_RepeatMasker = 102;
@@ -218,7 +221,7 @@ public class FilterResult implements java.io.Serializable {
 			return "lowProper";
 		case NOISE_IN_NORMAL:
 			return "noise_in_normal";
-
+		
 			// High_normal_adjustedRatio
 			// Low_tumor_adjustedRatio
 			// Low_tumor_adjustedReads
