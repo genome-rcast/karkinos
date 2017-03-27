@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'karkinos'
-version = '0.0.1-SNAPSHOT'
+version = '2.0.4-SNAPSHOT'
 
 description = """"""
 

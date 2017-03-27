@@ -321,7 +321,7 @@ public class GetReadsStatsChart {
 	private static void addFileInfoStr(List olist1, ReadsSummary readsSummary) {
 
 		olist1.add("");
-		olist1.add(KarkinosCmd.version);
+		olist1.add(KarkinosCmd.getVersion().orElse(""));
 		Date date = new Date();
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
 		olist1.add(df.format(date));
