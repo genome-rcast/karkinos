@@ -4,3 +4,4 @@ jdk:
 script:
   - ./gradlew --info check
   - ./gradlew uberjar
+  - ./gradlew utilsJar

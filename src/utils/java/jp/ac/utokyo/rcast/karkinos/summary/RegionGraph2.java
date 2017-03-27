@@ -1,18 +1,20 @@
 /*
-Copyright Hiroki Ueda
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Copyright Hiroki Ueda
 
-    http://www.apache.org/licenses/LICENSE-2.0
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ */
 package jp.ac.utokyo.rcast.karkinos.summary;
 
 import java.awt.Color;
@@ -56,7 +58,7 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class RegionGraph {
+public class RegionGraph2 {
 
 	/**
 	 * @param args
@@ -69,11 +71,13 @@ public class RegionGraph {
 			+ "/GLUSTER_DIST/data/users/ueda/ICGC/bcmtest/tcga,"
 			+ "/GLUSTER_DIST/data/users/ueda/ICGC/bcmtest/goss,";
 
+
 		//
 		// String indir =
 		// "/GLUSTER_DIST/data/users/ueda/ICGC/ICGCkarkinos4.0/HCC_exome_rcast/THCC_167T-THCC_167N/THCC_167T-THCC_167N/";
-		String out = "/GLUSTER_DIST/data/users/ueda/ICGC/ICGCkarkinos4.0/chr5Graprh.pdf";
-		String outpng = "/GLUSTER_DIST/data/users/ueda/ICGC/ICGCkarkinos4.0/chr1Graprh.jpeg";
+		String out = "/GLUSTER_DIST/data/users/ueda/ICGC/ICGCkarkinos4.0/chr4allelicGraprh.pdf";
+		// String outpng =
+		// "/GLUSTER_DIST/data/users/ueda/ICGC/ICGCkarkinos4.0/chr1Graprh.jpeg";
 
 		List<File> list = new ArrayList<File>();
 
@@ -83,18 +87,18 @@ public class RegionGraph {
 			searchRecursive(f, list);
 		}
 
-		 String chr = "chr5";
-		 int start = 0;
-		 int end = 50000000;
+		// String chr = "chr5";
+		// int start = 0;
+		// int end = 300000;
 
 		// String chr = "chr11";
 		// int start = 0;
 		// int end = 135000000;
 
-//		String chr = "chr1";
-//		int start = 0;
-//		int end = 247000000;
-		int[][] target = new int[][] { { 1278756,1295162 } };
+		String chr = "chr4";
+		int start = 0;
+		int end = 247000000;
+		int[][] target = new int[][] {{190328975,190903950}};
 
 		Document document = null;
 		PdfWriter writer = null;
@@ -112,7 +116,7 @@ public class RegionGraph {
 			for (File f : list) {
 
 				document.add(new Paragraph(String.valueOf(f.getName())));
-				Object[] obj = getChart(f, chr, start, end, target);
+				Object[] obj = getChart(f, chr, start, end, target, 1);
 				document.add(new Paragraph("mean=" + toStr(obj[1])
 						+ "\t mean original=" + toStr(obj[2])));
 				JFreeChart chart = (JFreeChart) obj[0];
@@ -128,6 +132,23 @@ public class RegionGraph {
 				BufferedImage bufferedImage = chart.createBufferedImage(width
 						* size, hight * size);
 				Image image = Image.getInstance(writer, bufferedImage, 1.0f);
+				image.scalePercent(20);
+				document.add(image);
+
+				obj = getChart(f, chr, start, end, target, 2);
+				chart = (JFreeChart) obj[0];
+
+				// try {
+				// File jpn = new File(outpng);
+				// ChartUtilities.saveChartAsJPEG(jpn, chart, 300, 300);
+				//
+				// } catch (Exception ex) {
+				//
+				// }
+
+				bufferedImage = chart.createBufferedImage(width * size, hight
+						* size);
+				image = Image.getInstance(writer, bufferedImage, 1.0f);
 				image.scalePercent(20);
 				document.add(image);
 
@@ -172,7 +193,7 @@ public class RegionGraph {
 				if (name.startsWith("."))
 					return false;
 				boolean target = dir.isDirectory()
-						|| name.contains("cnvdepth.txt");
+						|| name.contains("cnvAllelicDepth.txt");
 				if (!target)
 					return false;
 				//
@@ -189,7 +210,7 @@ public class RegionGraph {
 		if (listFiles == null)
 			return false;
 		for (File ff : listFiles) {
-			if (ff.isFile() && ff.getName().contains("cnvdepth.txt")) {
+			if (ff.isFile() && ff.getName().contains("cnvAllelicDepth.txt")) {
 
 				System.out.println(ff.getName());
 				list.add(ff);
@@ -201,11 +222,13 @@ public class RegionGraph {
 	}
 
 	private static Object[] getChart(File f, String chr, int start, int end,
-			int[][] target) throws NumberFormatException, IOException {
+			int[][] target, int i) throws NumberFormatException, IOException {
 
 		int tsize = 0;
 		int cnt = 0;
-		XYSeries series1 = new XYSeries("row");
+		XYSeries series1 = new XYSeries("high");
+		XYSeries series2 = new XYSeries("low");
+
 		BufferedReader br = new BufferedReader(new FileReader(f));
 
 		SummaryStatistics ss0 = new SummaryStatistics();
@@ -220,22 +243,24 @@ public class RegionGraph {
 			String[] sa = s.split("\t");
 			String chr0 = sa[0];
 			int start0 = Integer.parseInt(sa[1]);
-			int end0 = Integer.parseInt(sa[2]);
-			if(!chr0.contains("chr")){
-				chr0 = "chr"+chr0;
-			}
-			
+			// int end0 = Integer.parseInt(sa[2]);
+
 			if (chr.equals(chr0)) {
 
 				count++;
-				series1.add(start0, Double.parseDouble(sa[5]));
-
-				boolean intarget = interget(start0, end0, target);
-				if (intarget) {
-					//
-					ss0.addValue(Double.parseDouble(sa[5]));
-					ss1.addValue(Double.parseDouble(sa[6]));
+				if (i == 1) {
+					series1.add(start0, Double.parseDouble(sa[5]));
+					series2.add(start0, Double.parseDouble(sa[6]));
+				} else {
+					series1.add(start0, Double.parseDouble(sa[7]));
+					series2.add(start0, Double.parseDouble(sa[8]));
 				}
+				boolean intarget = interget(start0, target);
+				// if (intarget) {
+				// //
+				// ss0.addValue(Double.parseDouble(sa[5]));
+				// ss1.addValue(Double.parseDouble(sa[6]));
+				// }
 
 			}
 
@@ -256,6 +281,7 @@ public class RegionGraph {
 
 		XYSeriesCollection data0 = new XYSeriesCollection();
 		data0.addSeries(series1); // add subplot 1...
+		data0.addSeries(series2); // add subplot 1...
 		XYPlot subplot1 = new XYPlot(data0, xAxis, yAxis, renderer0);
 		subplot1.setDomainCrosshairVisible(true);
 		subplot1.setRangeCrosshairVisible(true);
@@ -271,15 +297,15 @@ public class RegionGraph {
 
 	}
 
-	private static boolean interget(int start0, int end, int[][] target) {
-		
-		for(int[] tg:target){
-			
-			if(tg[0]<end && tg[1] >start0){
+	private static boolean interget(int start0, int[][] target) {
+
+		for (int[] tg : target) {
+
+			if (tg[0] < start0 && tg[1] > start0) {
 				return true;
 			}
-			
-		}		
+
+		}
 		return false;
 	}
 
@@ -305,7 +331,7 @@ public class RegionGraph {
 		// TERT
 		for (int[] tg : target) {
 			Marker marker = new IntervalMarker(tg[0], tg[1]);
-			marker.setOutlinePaint(Color.RED);
+			marker.setOutlinePaint(Color.GRAY);
 			plot.addDomainMarker(marker, Layer.BACKGROUND);
 		}
 

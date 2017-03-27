@@ -48,39 +48,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 	public static final int MODEexonSNP = 3;
 	public static final int MODEdbSNPVCF = 4;
 
-	public static void main(String[] arg) throws IOException {
-
-		String dbSNP = "/GLUSTER_DIST/data/users/ueda/SNVtest/hg19_ALL.sites.2012_02.txt";
-		FileInputStream fis = new FileInputStream(dbSNP);
-		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-
-		try {
-
-			int totalcnt = 0;
-			int init = fis.available();
-			String chr = "";
-			for (;;) {
-				int point = init - fis.available();
-				String line = br.readLine();
-				if (line == null)
-					break;
-				totalcnt++;
-				String[] sa = line.split("\t");
-				String _chr = sa[0];
-				if (!chr.equals(_chr)) {
-					System.out.println(_chr + "\t" + totalcnt + "\t" + point);
-				}
-				chr = _chr;
-				int pos = Integer.parseInt(sa[1]);
-
-			}
-
-		} finally {
-			br.close();
-		}
-
-	}
-
 	String file = null;
 	String g1000 = null;
 	String cosmic = null;

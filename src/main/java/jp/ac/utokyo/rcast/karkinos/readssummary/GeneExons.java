@@ -31,16 +31,6 @@ import jp.ac.utokyo.rcast.karkinos.utils.DataHolder;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class GeneExons implements java.io.Serializable {
-	
-	public static void main(String[] arg){
-		
-		String ref ="/GLUSTER_DIST/data/Genomes/ucscgene_hg19/totoki_hg19/refFlat_120402.txt";
-		GeneExons ex = new GeneExons(ref);
-		
-		
-	}
-	
-
 	public GeneExons(String refflat) {
 
 		//

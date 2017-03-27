@@ -13,6 +13,24 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 
+sourceSets {
+    utils {
+        compileClasspath += sourceSets.main.output
+        java {
+            srcDirs = ['src/utils/java']
+        }
+        resources {
+            srcDirs = ['src/utils/resources']
+        }
+    }
+}
+
+configurations {
+    utilsCompile {
+        extendsFrom compile
+    }
+}
+
 dependencies {
     compile group: 'de.sciss', name: 'jwave', version:'1.0.3'
     compile group: 'com.github.samtools', name: 'htsjdk', version:'1.129'
@@ -37,6 +55,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-math3', version:'3.6'
     compile fileTree(dir: "dependencies", include: ["*.jar"])
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    utilsCompile sourceSets.test.output
 }
 
 task uberjar(type: Jar) {
@@ -51,4 +70,8 @@ task uberjar(type: Jar) {
   exclude "META-INF/*.RSA"
   exclude "META-INF/*.DSA"
   exclude "META-INF/*.SF"
+}
+
+task utilsJar(type: Jar) {
+    from sourceSets.utils.output
 }

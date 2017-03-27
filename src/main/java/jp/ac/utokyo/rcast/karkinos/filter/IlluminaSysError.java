@@ -22,39 +22,6 @@ import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 public class IlluminaSysError {
-
-	public static void main(String[] arg) throws IOException {
-
-		String twobitref = "/GLUSTER_DIST/data/Genomes/hg19_all/hg19.2bit";
-		// String str
-		// ="ATAAATTTAAAAGGGAAACTAATTTGGAAATCAGAAAACCACTAAGGAATTTGGGAATTAGGCTTCTGCTGCCCTCTCTGC";
-		// boolean b = checkTypicalError('A','C',str);
-		TwoBitGenomeReader tgr = new TwoBitGenomeReader(new File(twobitref));
-		String chrom = "chr1";
-		int pos = 155287631;
-		String before10 = tgr.getGenomicSeq(chrom, pos - 11, pos - 1, true);
-		String after10 = tgr.getGenomicSeq(chrom, pos + 1, pos + 11, true);
-		System.out.println(before10 + "\t" + after10);
-		String str = tgr.getGenomicSeq(chrom, pos - 40, pos + 40, true);
-
-		String before2 = getBf(before10, 2);
-		String after2 = getAfter(after10, 2);
-		System.out.println(before2 + "\t" + after2);
-
-		int polynuc = polynuc('G', before10, after10);
-		System.out.println(polynuc);
-		
-		boolean pa1 = polyAorT(before10,6);
-		boolean pa2 = polyAorT(after10,6);
-
-		if (pa1 || pa2) {
-			System.out.println("true");
-		}
-
-		// boolean b = checkTypicalError('A','C',str);
-
-	}
-
 	public static boolean checkTypicalError(char genomeR, char altTumor,
 			String neighbor60, int numsupportreads) {
 
@@ -229,7 +196,7 @@ public class IlluminaSysError {
 		return n>0;
 	}
 
-	private static int polynuc(char genomeR, String before, String after) {
+	static int polynuc(char genomeR, String before, String after) {
 
 		int cnt = 1;
 		before = before.toUpperCase();
@@ -255,7 +222,7 @@ public class IlluminaSysError {
 		return cnt;
 	}
 
-	private static boolean polyAorT(String s,int n) {
+	static boolean polyAorT(String s, int n) {
 
 		int macp = Math.max(poly(s, 'A'), poly(s, 'T'));
 		return macp >= n;
@@ -363,13 +330,13 @@ public class IlluminaSysError {
 		return maxmatch;
 	}
 
-	private static String getAfter(String s, int n) {
+	static String getAfter(String s, int n) {
 
 		return s.substring(0, n);
 
 	}
 
-	private static String getBf(String s, int n) {
+	static String getBf(String s, int n) {
 		if (s.length() >= n)
 			return s.substring(s.length() - n);
 		return "";

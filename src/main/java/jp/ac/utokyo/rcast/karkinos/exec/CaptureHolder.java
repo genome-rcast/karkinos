@@ -46,23 +46,6 @@ public class CaptureHolder implements java.io.Serializable {
 	long totalcnt = 0;
 	long totallen = 0;
 
-	public static void main(String[] arg) {
-
-		CaptureHolder inst = new CaptureHolder();
-		//String bed = "/GLUSTER_DIST/data/users/ueda/testframework/script/vcrome2.1.bed";
-		String bed = "/GLUSTER_DIST/data/Genomes/karkinos/genome/SureSelectV5plusLincRNA_Regions.bed";
-		String tb = "/GLUSTER_DIST/data/Genomes/hg19_all/hg19.2bit";
-		TwoBitGenomeReader tgr = new TwoBitGenomeReader(new File(tb));
-
-		try {
-			inst.loadTargetBed(bed, tgr);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	public SortedMap<Integer, CapInterval> getIntersectCapinterval(Interval iv) {
 
 		//

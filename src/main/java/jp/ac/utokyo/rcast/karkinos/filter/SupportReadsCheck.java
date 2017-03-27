@@ -91,47 +91,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 		}
 	}
 
-	public static void main(String[] arg) {
-
-		//
-		// String bam =
-		// "/GLUSTER_DIST/data/users/yamamoto/exome/OvCa/karkinos4.1.8/summary_cfDNA1/bam/Se-67-tumor25-Se-67_b-DNA_tumor_genome.bam";
-		// String nbam =
-		// "/GLUSTER_DIST/data/users/yamamoto/exome/Glioma/MT/MT30-2-MT30N/normal/MT30-2-MT30N_normal_genome.bam";
-		// String bam =
-		// "/GLUSTER_DIST/data/users/yamamoto/exome/Glioma/MT/MT30-2-MT30N/tumor/MT30-2-MT30N_tumor_genome.bam";
-		String twobitref = "/GLUSTER_DIST/data/Genomes/hg19_all/hg19.2bit";
-
-		String nbam = "/data3/users/yamamoto/exome/CRC/karkinos4.1.11/summary_CRC_all_samples/bam/CRC107_T-CRC107_N_normal_genome.bam";
-		String bam = "/data3/users/yamamoto/exome/CRC/karkinos4.1.11/summary_CRC_all_samples/bam/CRC107_T-CRC107_N_tumor_genome.bam";
-		String middelfile = "/GLUSTER_DIST/data/users/yamamoto/exome/CRC/karkinos2.0.3/CRC_107_T-CRC_107_N/sobj";
-
-		TwoBitGenomeReader tgr = new TwoBitGenomeReader(new File(twobitref));
-		DbSNPAnnotation dbAnno = null;
-
-		SupportReadsCheck inst = new SupportReadsCheck(nbam, bam, tgr, dbAnno);
-		//
-		PileUPResult pileUPResult = new PileUPResult();
-		pileUPResult.setGenomeRef('C');
-
-		IndelInfo ii = new IndelInfo();
-		// ii.indel = true;
-		// ii.length = 17;
-		// ii.cnt = 13;
-		// // ii.insersion = "G";
-
-		pileUPResult.setBaseAndQual('A', (byte) 50, 1, ii);
-		Map<String, Integer> snppos = new HashMap<String, Integer>();
-		try {
-			inst.checkSupportReads("chr12", 25398284, pileUPResult, PileUP.SomaticMutation, 0.2f,
-					PileUP.SomaticMutation, false, 10, snppos, 0.2f, 0.2f, 0f, 0f);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	public SupportReadsCheckResult checkSupportReads(String chr, int pos, PileUPResult pileUPResult, int pileupFlg,
 			float tumorratioss, double copynumber, boolean highisoform, int normalTotal, Map<String, Integer> snppos,
 			float adjustedTumorAllereFreq, float normalAF, float oxoGratio, float ffpeRatio) throws IOException {
