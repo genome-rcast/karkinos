@@ -109,8 +109,11 @@ public class AnnoverOutputJoin {
 				String pos = data[getIndex(csvtitle, "Start")].trim();
 				String end = data[getIndex(csvtitle, "End")].trim();
 				String ref = data[getIndex(csvtitle, "Ref")].trim();
-				String alt = data[getIndex(csvtitle, "Obs")].trim();
-
+				
+				int altidx = getIndex(csvtitle, "Obs");
+				if(altidx<0)altidx = getIndex(csvtitle, "Alt");
+				String alt = data[altidx].trim();
+				
 				int npos = 0;
 				try {
 					npos = Integer.parseInt(pos);
@@ -288,7 +291,7 @@ public class AnnoverOutputJoin {
 			idx++;
 
 		}
-		return idx;
+		return -1;
 	}
 
 	static final String[] infotitle = new String[] { "SNV pval", "chr_a",
