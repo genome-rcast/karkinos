@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/genome-rcast/karkinos.svg?branch=master)](https://travis-ci.org/genome-rcast/karkinos)
-
 # About
 
 karkinos is tumor genotyper which detects single nucleotide variation (SNV),
