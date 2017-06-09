@@ -30,3 +30,5 @@
 .svn
 /bin/
 *.capregion
+.classpath
+.project
