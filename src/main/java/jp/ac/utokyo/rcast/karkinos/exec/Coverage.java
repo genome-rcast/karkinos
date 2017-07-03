@@ -273,4 +273,11 @@ public class Coverage implements Serializable {
 
 	}
 
+	public void clearmap() {
+		
+		map = null;
+		b4sam = null;
+		
+	}
+
 }

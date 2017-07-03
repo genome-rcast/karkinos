@@ -33,7 +33,7 @@ import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 public class PileUP implements java.io.Serializable {
 	static boolean debug = false;
-	public static int debugpos = 179604901;
+	static final int debugpos = 18640448;
 
 	public static void pileup(Interval iv, DataSet dataset,
 			List<SamHolder> normalList, List<SamHolder> tumorList,
@@ -85,8 +85,8 @@ public class PileUP implements java.io.Serializable {
 
 //					if (n == debugpos) {
 //						System.out.println("here");
-//						indexes = _pileup(chr, n, dataset, normalList,
-//								tumorList, tgr, readsSummary, indexes, true);
+//						indexes = _pileup(chr, n, dataset, normalList, tumorList,
+//								tgr, readsSummary, indexes, false,definedpos,ontag);
 //					}
 
 					lastpileup = n;
@@ -454,7 +454,8 @@ public class PileUP implements java.io.Serializable {
 
 		float lowqualratio = getRatio(lowqual, (lowqual + depth));
 		ret.setLowqualratio(lowqualratio);
-
+		ret.checkIndel();
+		
 		ret.setDiff(diff);
 		reta[0] = depth;
 		reta[1] = retindex;

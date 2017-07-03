@@ -723,9 +723,14 @@ public class TumorGenotyper extends ReadWriteBase {
 						readsSummary);
 			}
 			chromcnt++;
+			readsSummary.resetAlreadyregset();
 			System.gc();
 
 		}
+		dataset.getNormal().clearmap();
+		dataset.getTumor().clearmap();
+		
+		
 		if (cnt == 0) {
 			System.out
 					.println("no chromosome match bam to reference. check reference name");
@@ -821,8 +826,8 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 
 		// debug
-//		int debugpos = 179604901;
-//		boolean debug = true;
+		int debugpos = 18640448;
+		boolean debug = true;
 		//
 
 		int n = 0;
@@ -830,6 +835,14 @@ public class TumorGenotyper extends ReadWriteBase {
 			n++;
 			//debug
 			//if(n==2)break;
+			
+//			if((iv.getStart() < debugpos) && (debugpos<iv.getEnd())){
+//				
+//			}else{
+//				continue;
+//			}
+				
+			
 			
 			CloseableIterator<SAMRecord> normarIte = normalbamr.query(chrom,
 					iv.getStart(), iv.getEnd(), false);
@@ -864,6 +877,7 @@ public class TumorGenotyper extends ReadWriteBase {
 				normalcnt++;
 				readslenn = sam.getReadLength();
 			}
+			
 			System.out.println(iv.getStr() + " normal reads " + normalcnt
 					+ " has been reads");
 
@@ -896,6 +910,8 @@ public class TumorGenotyper extends ReadWriteBase {
 				tumorcnt++;
 				readslent = sam.getReadLength();
 			}
+			
+			
 			System.out.println(iv.getStr() + " tumor reads " + tumorcnt
 					+ " has been reads");
 

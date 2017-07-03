@@ -13,7 +13,18 @@
         </excludes>
       </resource>
     </resources>
+    <plugins>
+     <plugin>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <configuration>
+       <source>1.8</source>
+       <target>1.8</target>
+      </configuration>
+     </plugin>
+    </plugins>
   </build>
+  
+  
   <dependencies>
   	<dependency>
   		<groupId>de.sciss</groupId>
@@ -113,6 +124,31 @@
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-math3</artifactId>
   </dependency>	
+   
+  <dependency>
+    <groupId>my-gropup1</groupId>
+    <artifactId>myartifact1</artifactId>
+    <version>0.1</version>
+    <scope>system</scope>
+    <systemPath>/home/spark/workspace/karkinos/dependencies/BigWig.jar</systemPath>
+  </dependency>	
+  
+  <dependency>
+    <groupId>my-gropup2</groupId>
+    <artifactId>myartifact2</artifactId>
+    <version>0.1</version>
+    <scope>system</scope>
+    <systemPath>/home/spark/workspace/karkinos/dependencies/jahmm-0.6.1.jar</systemPath>
+  </dependency>	
+  
+  <dependency>
+    <groupId>my-gropup3</groupId>
+    <artifactId>myartifact3</artifactId>
+    <version>0.1</version>
+    <scope>system</scope>
+    <systemPath>/home/spark/workspace/karkinos/dependencies/jheatchart-0.6.jar</systemPath>
+  </dependency>	
+    
    
   	
  </dependencies>

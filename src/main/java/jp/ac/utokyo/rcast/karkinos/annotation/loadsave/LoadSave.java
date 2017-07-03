@@ -42,7 +42,7 @@ public class LoadSave {
 		// Write object with ObjectOutputStream
 		ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
 
-		// Write object out to disk
+		// Write object out to disk			
 		obj_out.writeObject(sbean);
 
 	}

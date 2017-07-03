@@ -25,12 +25,23 @@ public class TestTumorGenotyperCh38 {
 	
 	public static void main(String[] arg){
 		
+		
+		
 		//String normalbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_0.bam";
 		//String tumorbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_1_2.bam";
 
 		
-		String normalbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-N_TDv3_genome.bam_realign.bam";
-		String tumorbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-T_TDv3_genome.bam_realign.bam";
+		//String normalbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-N_TDv3_genome.bam_realign.bam";
+		//String tumorbamf = "/home/spark/todaitoptest/testdata0308/realign/LUAD-311-T_TDv3_genome.bam_realign.bam";
+		
+		System.out.println("test start");
+		
+		//String normalbamf = "/home/spark/todaitoptest/test/664-9136-6-N_TDv3-NS_H17-3266-T_TDv3-NS/realign/664-9136-6-N_TDv3-NS_bwa.sorted.dedup.bam_realign.bam";
+		//String tumorbamf = "/home/spark/todaitoptest/test/664-9136-6-N_TDv3-NS_H17-3266-T_TDv3-NS/realign/H17-3266-T_TDv3-NS_bwa.sorted.dedup.bam_realign.bam";
+		
+
+		String normalbamf = "/home/spark/todaitoptest/test/Sample_LUAD-6881-N_TDv3_bwa.sorted.dedup.bam_realign.bam";
+		String tumorbamf = "/home/spark/todaitoptest/test/Sample_LUAD-6881-T_TDv3_bwa.sorted.dedup.bam_realign.bam";
 		
 		//String normalbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_1.bam";
 		//String tumorbamf ="";
@@ -69,7 +80,7 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/home/spark/todaitoptest/output/tp0";
 		//String outdir = "/home/spark/todaitoptest/karkinos";
 		
-		String outdir = "/home/spark/todaitoptest/To_Xcoo/realignmentTest/AfterRealignment";
+		String outdir = "/home/spark/todaitoptest/To_Xcoo/test2";
 		//String outdir = "/home/spark/todaitoptest/testdata0308/realign/tp0_re";
 		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
@@ -81,14 +92,14 @@ public class TestTumorGenotyperCh38 {
 		//add(l,"-md",middelfile);
 		add(l,"-n",normalbamf);
 		add(l,"-t",tumorbamf);
-		//add(l,"-chr","chr1");
+		add(l,"-chr","chr22");
 		//add(l,"-startend","2");
 		add(l,"-r",twobitref);
 		add(l,"-snp",dbSNP);
 		add(l,"-ct",targetRegion);
 		//add(l,"-mp",mappability);
 		//add(l,"-id","CRC_107_T-CRC_107_N");
-		add(l,"-id","LUAD-311_sim_tc0_after");
+		add(l,"-id","LUAD-6881_T");
 		add(l,"-o",outdir);
 		add(l,"-prop",propfile);
 		add(l,"-g1000",g1000);
@@ -105,8 +116,7 @@ public class TestTumorGenotyperCh38 {
 		//add(l,"-nd","true");
 		
 		//add(l,"-rs","/GLUSTER_DIST/data/users/ueda/karkinostest2/C39/total_reads_stats_n.txt," +
-		//		"/GLUSTER_DIST/data/users/ueda/karkinostest2/C39/total_reads_stats_t.txt");
-		
+		//		"/GLUSTER_DIST/data/users/ueda/karkinostest2/C39/total_reads_stats_t.txt");		
 		String[] ar = l.toArray(new String[l.size()]);
 		//TumorGenotyperReanalysis.main(ar);
 		TumorGenotyper.main(ar);

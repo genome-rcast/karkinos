@@ -145,14 +145,14 @@ public class PileUPResult implements java.io.Serializable {
 		return maxidx;
 	}
 
-	private int getSecondMutationidx(){
-		
+	private int getSecondMutationidx() {
+
 		int gidx = seqALL.indexOf(genomeR);
 		int maxidx = getMaxidx();
-		if(indel){
+		if (indel) {
 			return maxidx;
 		}
-		
+
 		int sndidx = 0;
 		double maxdd = 0;
 		int idx = 0;
@@ -170,29 +170,29 @@ public class PileUPResult implements java.io.Serializable {
 			idx++;
 		}
 		return sndidx;
-		
+
 	}
-	
+
 	public void setIndel(boolean indel) {
 		this.indel = indel;
 		ratiocalclated = false;
 	}
 
-	
 	public int getRefCnt() {
-		
+
 		int gidx = seqALL.indexOf(genomeR);
-		
-		if(gidx<0)return 0;
-		
+
+		if (gidx < 0)
+			return 0;
+
 		return seqCounter[gidx];
-		
+
 	}
 
 	public int getAltCnt() {
 		if (indel) {
 			return indelcnt();
-		}else{
+		} else {
 			return seqCounter[getMaxidx()];
 		}
 	}
@@ -204,7 +204,8 @@ public class PileUPResult implements java.io.Serializable {
 		}
 		if (insersionmap != null) {
 			int indelcnt2 = getMax(insersionmap);
-			if(indelcnt2>indelcnt)indelcnt = indelcnt2;
+			if (indelcnt2 > indelcnt)
+				indelcnt = indelcnt2;
 		}
 		return indelcnt;
 	}
@@ -214,11 +215,11 @@ public class PileUPResult implements java.io.Serializable {
 		return seqALL.charAt(getMaxidx());
 
 	}
-	
-	public char getSecondALT(){
-		
+
+	public char getSecondALT() {
+
 		return seqALL.charAt(getSecondMutationidx());
-		
+
 	}
 
 	public float getPhred() {
@@ -252,8 +253,7 @@ public class PileUPResult implements java.io.Serializable {
 		return (float) Math.sqrt(d);
 	}
 
-	private static double getBinomial(double p_hat, int cnt, int total)
-			throws MathException {
+	private static double getBinomial(double p_hat, int cnt, int total) throws MathException {
 
 		BinomialDistribution bd = new BinomialDistributionImpl(total, p_hat);
 		double p = bd.cumulativeProbability(cnt);
@@ -337,8 +337,7 @@ public class PileUPResult implements java.io.Serializable {
 
 					} else {
 						expected[n] = expected[n] + (pNomatch / (double) 3);
-						likehoodp2x[idx][n] = likehoodp2x[idx][n]
-								+ (pNomatch / (double) 3);
+						likehoodp2x[idx][n] = likehoodp2x[idx][n] + (pNomatch / (double) 3);
 						// double logpunmatch =Math.log10(pNomatch/(double)3);
 						// likehood[n] = likehood[n] +logpunmatch;
 
@@ -361,9 +360,9 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public boolean isInsersion() {
-		
+
 		return getMax(insersionmap) > getMax(delmap);
-		
+
 	}
 
 	public boolean isIndel() {
@@ -405,20 +404,36 @@ public class PileUPResult implements java.io.Serializable {
 
 			double indelr = calcRatio_Indel();
 			double snvr = calcRatio_SNV();
-//			if (snvr > indelr) {
-//				ratio = (float) snvr;
-//				indel = false;
-//			} else {
-				ratio = (float) indelr;
-//			}
+			// if (snvr > indelr) {
+			// ratio = (float) snvr;
+			// indel = false;
+			// } else {
+			ratio = (float) indelr;
+			// }
 		} else {
 			calcRatio_SNV();
 		}
 	}
 
+	public void checkIndel() {
+
+		if (indel) {
+
+			double indelr = calcRatio_Indel();
+			if (indelr < 0.05) {
+				double snvr = calcRatio_SNV();
+				if (snvr > indelr) {
+					indel = false;
+				}
+			}
+
+		}
+
+	}
+
 	private double calcRatio_Indel() {
 
-		int indelcnt = indelcnt();		
+		int indelcnt = indelcnt();
 		ratio = (float) ((double) indelcnt / (double) (indelcnt + noindelcnt));
 		return ratio;
 	}
@@ -536,13 +551,13 @@ public class PileUPResult implements java.io.Serializable {
 		double second = 0;
 		double l_total = 0;
 		double l_ratio = 0;
-		
+
 		for (double d : expected) {
 
 			if (idx == idxsecond) {
 				second = d;
 			}
-			l_total = l_total+ d;
+			l_total = l_total + d;
 			idx++;
 		}
 		if (l_total != 0) {
@@ -552,40 +567,40 @@ public class PileUPResult implements java.io.Serializable {
 		}
 		return l_ratio;
 	}
-	
+
 	public boolean haveLowerRatio(float _ratio) {
 		double ratio = getRatio();
 		return ratio <= _ratio;
 	}
 
-//	public boolean haveLowerRatio(float _ratio, char alt) {
-//		double ratio = calcRatio_SNV(alt);
-//		return ratio <= _ratio;
-//	}
-//
-//	private double calcRatio_SNV(char alt) {
-//		try {
-//			int idxref = seqALL.indexOf(genomeR);
-//			int idxalt = seqALL.indexOf(alt);
-//			if ((idxref < 0) || (idxalt < 0)) {
-//				return getRatio();
-//			}
-//			double totall = 0;
-//			double ratiol = 0;
-//			for (double d : expected) {
-//				totall  = totall + d;
-//			}
-//
-//			if (totall!= 0) {
-//				ratiol = (float) ((double) expected[idxalt] / (double) total);
-//			} else {
-//				ratiol = 0;
-//			}
-//			return ratiol;
-//		} catch (Exception ex) {
-//			return getRatio();
-//		}
-//	}
+	// public boolean haveLowerRatio(float _ratio, char alt) {
+	// double ratio = calcRatio_SNV(alt);
+	// return ratio <= _ratio;
+	// }
+	//
+	// private double calcRatio_SNV(char alt) {
+	// try {
+	// int idxref = seqALL.indexOf(genomeR);
+	// int idxalt = seqALL.indexOf(alt);
+	// if ((idxref < 0) || (idxalt < 0)) {
+	// return getRatio();
+	// }
+	// double totall = 0;
+	// double ratiol = 0;
+	// for (double d : expected) {
+	// totall = totall + d;
+	// }
+	//
+	// if (totall!= 0) {
+	// ratiol = (float) ((double) expected[idxalt] / (double) total);
+	// } else {
+	// ratiol = 0;
+	// }
+	// return ratiol;
+	// } catch (Exception ex) {
+	// return getRatio();
+	// }
+	// }
 
 	public boolean haveHigherRatio(float _ratio) {
 		double ratio = getRatio();
@@ -599,7 +614,7 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public PileUPResult getIndelCopy() {
-		
+
 		PileUPResult ret = new PileUPResult();
 		ret.totalcnt = totalcnt;
 		ret.indel = indel;
@@ -629,7 +644,8 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	private int getMax(Map m) {
-		if(m==null)return 0;
+		if (m == null)
+			return 0;
 		Set<Entry> es = m.entrySet();
 		int max = 0;
 		for (Entry e : es) {
