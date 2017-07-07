@@ -104,12 +104,14 @@ public class GaussianWavelet {
 				maxfit = data2;
 				maxsd = sd;
 				double mostfittingvariance = Math.pow(sd, 2);
-				bean.setMostfittingvariance(mostfittingvariance);
+				bean.setMostfittingvariance(mostfittingvariance);				
+				sumval = 0;
 				System.out.println("sum="+sumval+"\t"+sd);
 				bean.setData(data2);
 				bean.setSd(sd);
-				sumval = 0;
-			}
+				
+			}			
+	
 			
 			m++;
 

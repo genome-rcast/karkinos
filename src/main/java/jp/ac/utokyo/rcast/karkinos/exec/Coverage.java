@@ -171,7 +171,7 @@ public class Coverage implements Serializable {
 	private int matchedlength(SAMRecord sam, Map<String, SAMRecord> map) {
 
 		int dlen = mlen(sam); 
-		int len = 0;
+		int len = dlen;
 		if(map.containsKey(sam.getReadName())){
 			
 			SAMRecord pair = map.get(sam.getReadName());
@@ -188,6 +188,7 @@ public class Coverage implements Serializable {
 			
 		}else{
 			map.put(sam.getReadName(), sam);
+			
 		}
 		return len;
 		

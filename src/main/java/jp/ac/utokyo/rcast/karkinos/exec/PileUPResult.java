@@ -422,7 +422,7 @@ public class PileUPResult implements java.io.Serializable {
 			double indelr = calcRatio_Indel();
 			if (indelr < 0.05) {
 				double snvr = calcRatio_SNV();
-				if (snvr > indelr) {
+				if (snvr > (indelr*2)) {
 					indel = false;
 				}
 			}

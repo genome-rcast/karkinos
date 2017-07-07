@@ -92,7 +92,7 @@ public class TestTumorGenotyperCh38 {
 		//add(l,"-md",middelfile);
 		add(l,"-n",normalbamf);
 		add(l,"-t",tumorbamf);
-		add(l,"-chr","chr22");
+		add(l,"-chr","chrX");
 		//add(l,"-startend","2");
 		add(l,"-r",twobitref);
 		add(l,"-snp",dbSNP);

@@ -32,9 +32,13 @@ import jp.ac.utokyo.rcast.karkinos.utils.Interval;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 public class PileUP implements java.io.Serializable {
-	static boolean debug = false;
-	static final int debugpos = 18640448;
+	//static boolean debug = false;
+	//static final int debugpos = 18640448;
 
+	static int debugpos = 118507275;
+	//static boolean debug = true;
+	static boolean debug = false;
+	
 	public static void pileup(Interval iv, DataSet dataset,
 			List<SamHolder> normalList, List<SamHolder> tumorList,
 			TwoBitGenomeReader tgr, ReadsSummary readsSummary, DefinedSites ds)
@@ -222,7 +226,7 @@ public class PileUP implements java.io.Serializable {
 			PileUPResult normal2 = normal.getIndelCopy();
 			normal2.setDiff(true);
 			int flg2 = checkReg(normal2, tumor2,targetSeq);
-			
+					
 			if(definedpos&&flg2 == NONSignif){
 				flg2 = DISIGNATE;
 			}			

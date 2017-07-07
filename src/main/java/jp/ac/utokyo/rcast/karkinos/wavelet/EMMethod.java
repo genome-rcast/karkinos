@@ -60,6 +60,8 @@ public class EMMethod {
 				total++;
 				WaveletIF wif = dlist.get(n);
 				double val = wif.getDenioseValue();
+				//System.out.println("denoise " + val);
+				if(Double.isNaN(val))val=1.0d;
 				int idx = getIdx(val);
 				bininit[idx] = bininit[idx] + 1;
 				if (Math.abs(1 - val) < 0.25) {

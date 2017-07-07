@@ -354,7 +354,7 @@ public class TumorGenotyper extends ReadWriteBase {
 					targetRegion, outputsave, targetChr,startend, refflat,sites);
 		}
 		// debug
-		// fullanalysis=true;
+		fullanalysis=true;
 		if (fullanalysis) {
 			// analysis
 			GeneExons ge = new GeneExons(refflat);
@@ -612,7 +612,7 @@ public class TumorGenotyper extends ReadWriteBase {
 		try{
 			pi = EMMethod.calc(dataset, baselineLOHEstimate);
 		}catch(Exception ex){
-			
+			ex.printStackTrace();
 		}
 		HMMCNVAnalysisFromEM.calc(dataset, pi);
 
@@ -826,15 +826,16 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 
 		// debug
-		int debugpos = 18640448;
-		boolean debug = true;
+		//int debugpos = 118507275;
+		//boolean debug = true;
+		boolean debug = false;
 		//
 
 		int n = 0;
 		for (Interval iv : ivlist) {
 			n++;
 			//debug
-			//if(n==2)break;
+			//if(n==10)break;
 			
 //			if((iv.getStart() < debugpos) && (debugpos<iv.getEnd())){
 //				
