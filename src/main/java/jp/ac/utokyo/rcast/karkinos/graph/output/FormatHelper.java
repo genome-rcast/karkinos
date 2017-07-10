@@ -141,9 +141,14 @@ public class FormatHelper {
 		try {
 
 			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP
-					|| flg == PileUP.NONSignif || flg == PileUP.SomaticMutation) {
+					|| flg == PileUP.NONSignif || flg == PileUP.SomaticMutation) {							
+				
+							
 				String[] data = FormatHelper.getVCFCol4Normal(snv, ge);
-				return FormatHelper.tabDelimated(data);
+				if(validate(data)){
+				 return FormatHelper.tabDelimated(data);
+				}
+				
 			} else if (flg == PileUP.BothINDEL || flg == PileUP.NormalINDEL
 					|| flg == PileUP.TumorINDEL) {
 				String[] data = FormatHelper
@@ -155,6 +160,12 @@ public class FormatHelper {
 
 		}
 		return null;
+	}
+
+	private static boolean validate(String[] data) {
+		
+		return !data[3].equals(data[4]);
+		
 	}
 
 	public static String getVCFLine4SNP(SNVHolder snv, TwoBitGenomeReader tgr,
