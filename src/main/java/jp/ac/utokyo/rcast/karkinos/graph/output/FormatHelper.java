@@ -34,29 +34,38 @@ public class FormatHelper {
 
 	// bw.append("##fileformat=VCFv4.1"+ "\n");
 	//
-	// bw.append("##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Total Depth\">");
-	// bw.append("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Allele Frequency adjusted by tumor ratio\">");
-	// bw.append("##INFO=<ID=AFO,Number=A,Type=Float,Description=\"Allele Frequency original\">");
-	// bw.append("##INFO=<ID=CN,Number=A,Type=Float,Description=\"Copy Number\">");
-	// bw.append("##INFO=<ID=DB,Number=0,Type=Flag,Description=\"dbSNP membership\">");
+	// bw.append("##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Total
+	// Depth\">");
+	// bw.append("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Allele
+	// Frequency adjusted by tumor ratio\">");
+	// bw.append("##INFO=<ID=AFO,Number=A,Type=Float,Description=\"Allele
+	// Frequency original\">");
+	// bw.append("##INFO=<ID=CN,Number=A,Type=Float,Description=\"Copy
+	// Number\">");
+	// bw.append("##INFO=<ID=DB,Number=0,Type=Flag,Description=\"dbSNP
+	// membership\">");
 	// "##INFO=<ID=pval,Number=0,Type=Float,Description=\"Fisher test pval\">"
 	// bw.append("##FILTER=<ID=qf,Description=\"Quality below threshold\">");
 	// bw.append("##FILTER=<ID=snp,Description=\"dbSNP snp\">");
 	// bw.append("##FILTER=<ID=ma,Description=\"Low mappability < 0.5\">");
 	// bw.append("##FILTER=<ID=entropy,Description=\"Low complexty\">");
-	// bw.append("##FILTER=<ID=srd,Description=\"Support reads have only one direction\">");
-	// bw.append("##FILTER=<ID=srm,Description=\"Only support reads have another mismatch\">");
+	// bw.append("##FILTER=<ID=srd,Description=\"Support reads have only one
+	// direction\">");
+	// bw.append("##FILTER=<ID=srm,Description=\"Only support reads have another
+	// mismatch\">");
 	// bw.append("##FILTER=<ID=sre,Description=\"mutation at reads ends\">");
 	//
 	// bw.append("##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">");
-	// bw.append("##FORMAT=<ID=GQ,Number=1,Type=Integer,Description=\"Genotype Quality\">");
-	// bw.append("##FORMAT=<ID=DP,Number=1,Type=Integer,Description=\"Read Depth\">");
+	// bw.append("##FORMAT=<ID=GQ,Number=1,Type=Integer,Description=\"Genotype
+	// Quality\">");
+	// bw.append("##FORMAT=<ID=DP,Number=1,Type=Integer,Description=\"Read
+	// Depth\">");
 	//
-	// bw.append("#CHROM POS     ID        REF    ALT     QUAL FILTER INFO FILTER2");
+	// bw.append("#CHROM POS ID REF ALT QUAL FILTER INFO FILTER2");
 	//
 
-	public static String getVCFLine(SNVHolder snv, TwoBitGenomeReader tgr,
-			float tumorRratio, NoiseAnalysis na) throws IOException {
+	public static String getVCFLine(SNVHolder snv, TwoBitGenomeReader tgr, float tumorRratio, NoiseAnalysis na)
+			throws IOException {
 
 		int flg = snv.getFlg();
 		// boolean reg = (flg == PileUP.SomaticMutation || flg ==
@@ -69,16 +78,14 @@ public class FormatHelper {
 			String[] data = FormatHelper.getVCFCol(snv, tumorRratio, na);
 			return FormatHelper.tabDelimated(data);
 		} else if (flg == PileUP.TumorINDEL) {
-			String[] data = FormatHelper.getVCFColIndel(snv, tgr, tumorRratio,
-					na);
+			String[] data = FormatHelper.getVCFColIndel(snv, tgr, tumorRratio, na);
 			return FormatHelper.tabDelimated(data);
 		}
 		return null;
 
 	}
 
-	public static String[] getLine(SNVHolder snv, TwoBitGenomeReader tgr,
-			GeneExons ge) {
+	public static String[] getLine(SNVHolder snv, TwoBitGenomeReader tgr, GeneExons ge) {
 
 		String[] data = new String[16];
 		// chr
@@ -134,26 +141,24 @@ public class FormatHelper {
 
 	}
 
-	public static String getVCFLineAllDiff(SNVHolder snv,
-			TwoBitGenomeReader tgr, GeneExons ge) {
+	public static String getVCFLineAllDiff(SNVHolder snv, TwoBitGenomeReader tgr, GeneExons ge) {
 
 		int flg = snv.getFlg();
 		try {
 
-			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP
-					|| flg == PileUP.NONSignif || flg == PileUP.SomaticMutation) {							
-				
-							
+			if (flg == PileUP.REGBOTH || flg == PileUP.NormalSNP || flg == PileUP.NONSignif
+					|| flg == PileUP.SomaticMutation) {
+
 				String[] data = FormatHelper.getVCFCol4Normal(snv, ge);
-				if(validate(data)){
-				 return FormatHelper.tabDelimated(data);
+				if (validate(data)) {
+					return FormatHelper.tabDelimated(data);
 				}
-				
-			} else if (flg == PileUP.BothINDEL || flg == PileUP.NormalINDEL
-					|| flg == PileUP.TumorINDEL) {
-				String[] data = FormatHelper
-						.getVCFColIndel4Normal(snv, tgr, ge);
-				return FormatHelper.tabDelimated(data);
+
+			} else if (flg == PileUP.BothINDEL || flg == PileUP.NormalINDEL || flg == PileUP.TumorINDEL) {
+				String[] data = FormatHelper.getVCFColIndel4Normal(snv, tgr, ge);
+				if (validate(data)) {
+					return FormatHelper.tabDelimated(data);
+				}
 			}
 
 		} catch (Exception ex) {
@@ -163,13 +168,12 @@ public class FormatHelper {
 	}
 
 	private static boolean validate(String[] data) {
-		
+
 		return !data[3].equals(data[4]);
-		
+
 	}
 
-	public static String getVCFLine4SNP(SNVHolder snv, TwoBitGenomeReader tgr,
-			GeneExons ge) throws IOException {
+	public static String getVCFLine4SNP(SNVHolder snv, TwoBitGenomeReader tgr, GeneExons ge) throws IOException {
 
 		int flg = snv.getFlg();
 
@@ -219,8 +223,7 @@ public class FormatHelper {
 		return data;
 	}
 
-	public static String[] getVCFCol(SNVHolder snv, float tumorRratio,
-			NoiseAnalysis na) {
+	public static String[] getVCFCol(SNVHolder snv, float tumorRratio, NoiseAnalysis na) {
 
 		String[] data = new String[13];
 		// chr
@@ -321,8 +324,7 @@ public class FormatHelper {
 		return refalt[0] + ";" + refalt[1];
 	}
 
-	public static String[] getVCFColIndel(SNVHolder snv,
-			TwoBitGenomeReader tgr, float tumorRratio, NoiseAnalysis na)
+	public static String[] getVCFColIndel(SNVHolder snv, TwoBitGenomeReader tgr, float tumorRratio, NoiseAnalysis na)
 			throws IOException {
 		String[] data = new String[13];
 		data[0] = snv.getChr().replace("chr", "");
@@ -339,8 +341,7 @@ public class FormatHelper {
 
 		if (pir.isInsersion()) {
 			//
-			genome.append(tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1,
-					snv.getPos() - 1, true));
+			genome.append(tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1, snv.getPos() - 1, true));
 			String[] insersions = pir.getIndelStr().split("\t");
 			for (String s : insersions) {
 				if (alt.length() > 0) {
@@ -366,11 +367,9 @@ public class FormatHelper {
 
 				}
 				if (alt.length() == 0) {
-					alt.append(tgr.getGenomicSeq(snv.getChr(),
-							snv.getPos() - 1, snv.getPos() - 1, true));
+					alt.append(tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1, snv.getPos() - 1, true));
 				}
-				String ss = tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1,
-						snv.getPos() - 1 + n, true);
+				String ss = tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1, snv.getPos() - 1 + n, true);
 				genome.append(ss);
 
 				data[1] = String.valueOf(adjustedpos);
@@ -420,8 +419,8 @@ public class FormatHelper {
 		return data;
 	}
 
-	public static String[] getVCFColIndel4Normal(SNVHolder snv,
-			TwoBitGenomeReader tgr, GeneExons ge) throws IOException {
+	public static String[] getVCFColIndel4Normal(SNVHolder snv, TwoBitGenomeReader tgr, GeneExons ge)
+			throws IOException {
 		String[] data = new String[9];
 		data[0] = snv.getChr().replace("chr", "");
 		data[1] = String.valueOf(snv.getPos());
@@ -442,8 +441,7 @@ public class FormatHelper {
 
 		if (pir.isInsersion()) {
 			//
-			genome.append(tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1,
-					snv.getPos() - 1, true));
+			genome.append(tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1, snv.getPos() - 1, true));
 			String[] insersions = pir.getIndelStr().split("\t");
 			for (String s : insersions) {
 				if (alt.length() > 0) {
@@ -464,11 +462,9 @@ public class FormatHelper {
 				}
 				int n = Integer.parseInt(s);
 				if (alt.length() == 0) {
-					alt.append(tgr.getGenomicSeq(snv.getChr(),
-							snv.getPos() - 1, snv.getPos() - 1, true));
+					alt.append(tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1, snv.getPos() - 1, true));
 				}
-				String ss = tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1,
-						snv.getPos() + Math.abs(n - 1), true);
+				String ss = tgr.getGenomicSeq(snv.getChr(), snv.getPos() - 1, snv.getPos() + Math.abs(n - 1), true);
 				genome.append(ss);
 
 			}
@@ -496,24 +492,17 @@ public class FormatHelper {
 
 	private static String getFilter2Str(SNVHolder snv, String fs) {
 
-		boolean reff = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_LOW_refOddsRatio);
-		boolean trf = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_LOW_tumorOddsRatio);
-		boolean low = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_adjustAlleleFreq);
+		boolean reff = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_LOW_refOddsRatio);
+		boolean trf = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_LOW_tumorOddsRatio);
+		boolean low = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_adjustAlleleFreq);
 
-		boolean lowd = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_adjustLowdepth);
+		boolean lowd = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_adjustLowdepth);
 
-		boolean minsupport = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_minimumSupportReads);
-		
-		boolean ffpe = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_ffpe);
-		
-		boolean oxoG = snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_oxoG);
+		boolean minsupport = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_minimumSupportReads);
+
+		boolean ffpe = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_ffpe);
+
+		boolean oxoG = snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_oxoG);
 
 		if ((snv.getDbSNPbean() != null) && snv.getDbSNPbean().isCosmicvalid()) {
 			// if filter 1 pass and cosmic then pass
@@ -523,7 +512,7 @@ public class FormatHelper {
 		}
 
 		//
-		if (reff || trf || low || lowd || minsupport || ffpe ||  oxoG) {
+		if (reff || trf || low || lowd || minsupport || ffpe || oxoG) {
 			StringBuffer sb = new StringBuffer();
 			if (!fs.equals("PASS")) {
 				sb.append(fs);
@@ -577,24 +566,25 @@ public class FormatHelper {
 
 	}
 
-	// bw.append("##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Total Depth\">");
-	// bw.append("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Allele Frequency adjusted by tumor ratio\">");
-	// bw.append("##INFO=<ID=AFO,Number=A,Type=Float,Description=\"Allele Frequency original\">");
-	// bw.append("##INFO=<ID=CN,Number=A,Type=Float,Description=\"Copy Number\">");
-	// bw.append("##INFO=<ID=DB,Number=0,Type=Flag,Description=\"dbSNP membership\">");
-	private static String getInfoStr(SNVHolder snv, float tumorRratio,
-			NoiseAnalysis na, float score) {
+	// bw.append("##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Total
+	// Depth\">");
+	// bw.append("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Allele
+	// Frequency adjusted by tumor ratio\">");
+	// bw.append("##INFO=<ID=AFO,Number=A,Type=Float,Description=\"Allele
+	// Frequency original\">");
+	// bw.append("##INFO=<ID=CN,Number=A,Type=Float,Description=\"Copy
+	// Number\">");
+	// bw.append("##INFO=<ID=DB,Number=0,Type=Flag,Description=\"dbSNP
+	// membership\">");
+	private static String getInfoStr(SNVHolder snv, float tumorRratio, NoiseAnalysis na, float score) {
 
 		StringBuffer is = new StringBuffer();
 		//
 		PileUPResult pir = snv.getTumor();
 
 		is.append("DP=" + pir.getTotalcnt());
-		float adjustedratio = CalcUtils.getTumorrateAdjustedRatio(snv,
-				tumorRratio);
-		is.append(",pvSNV="
-				+ na.getPval(adjustedratio,
-						(snv.getTumor().getTotalcnt() * tumorRratio)));
+		float adjustedratio = CalcUtils.getTumorrateAdjustedRatio(snv, tumorRratio);
+		is.append(",pvSNV=" + na.getPval(adjustedratio, (snv.getTumor().getTotalcnt() * tumorRratio)));
 		is.append(",AF=" + adjustedratio);
 		is.append(",AFO=" + pir.getRatio());
 		is.append(",CN=" + (float) (snv.getCi().getVaridateVal() * 2));
@@ -604,16 +594,13 @@ public class FormatHelper {
 		is.append(",MQ=" + (float) pir.getMQrms());
 		is.append(",S=" + (float) snv.getFilterResult().getSeqEntropy());
 		is.append(",MP=" + (float) snv.getFilterResult().getMappability());
-		is.append(",pD="
-				+ (float) snv.getFilterResult().getPval4FiserDirectional());
+		is.append(",pD=" + (float) snv.getFilterResult().getPval4FiserDirectional());
 		is.append(",ND=" + (float) snv.getNormal().getTotalcnt());
 		is.append(",NR=" + (float) snv.getNormal().getRatio());
 		is.append(",logn=" + (float) snv.getFilterResult().getLogn());
 		is.append(",logt=" + (float) snv.getFilterResult().getLogt());
-		is.append(",lognAdjuated="
-				+ (float) snv.getFilterResult().getLognAjusted());
-		is.append(",logtAdjuated="
-				+ (float) snv.getFilterResult().getLogtAjusted());
+		is.append(",lognAdjuated=" + (float) snv.getFilterResult().getLognAjusted());
+		is.append(",logtAdjuated=" + (float) snv.getFilterResult().getLogtAjusted());
 		is.append(",pval=" + (float) snv.getPvalFisher());
 		is.append(",SA=" + snv.getTumor().getSecondALT());
 		is.append(",SAF=" + (float) snv.getTumor().getSecondRatio());
@@ -627,33 +614,24 @@ public class FormatHelper {
 				is.append(",DBv=" + snv.getDbSNPbean().getVaridationStr());
 			}
 		}
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_AllelicInfoAvailable)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_AllelicInfoAvailable)) {
 
-			is.append(",mBAF="
-					+ (float) snv.getFilterResult()
-							.getSupportreadsBAlleleFeqquency());
-			is.append(",sBAF="
-					+ (float) snv.getFilterResult()
-							.getRefreadsBAlleleFeqquency());
+			is.append(",mBAF=" + (float) snv.getFilterResult().getSupportreadsBAlleleFeqquency());
+			is.append(",sBAF=" + (float) snv.getFilterResult().getRefreadsBAlleleFeqquency());
 			is.append(";AIA");
 
 		}
 
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_SUPPORTED_BY_ONEDirection)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_SUPPORTED_BY_ONEDirection)) {
 			is.append(";OD");
 		}
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_Maskedrepeat_BY_RepeatMasker)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_Maskedrepeat_BY_RepeatMasker)) {
 			is.append(";RP");
 		}
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_LOW_refOddsRatio)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_LOW_refOddsRatio)) {
 			is.append(";LowRefFilter");
 		}
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_LOW_tumorOddsRatio)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_LOW_tumorOddsRatio)) {
 			is.append(";LowTumorFilter");
 		}
 		if (snv.getDbSNPbean() != null) {
@@ -666,12 +644,10 @@ public class FormatHelper {
 				is.append(";DB");
 			}
 		}
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_INIT_Filter_FAIL)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_INIT_Filter_FAIL)) {
 			is.append(";initfail");
 		}
-		if (snv.getFilterResult().getInfoFlg()
-				.contains(FilterResult.INFO_SNP_flg)) {
+		if (snv.getFilterResult().getInfoFlg().contains(FilterResult.INFO_SNP_flg)) {
 			is.append(";validateSNP");
 		}
 		return is.toString();
@@ -692,8 +668,7 @@ public class FormatHelper {
 		return r;
 	}
 
-	private static String getInfoStr4Normal(SNVHolder snv, GeneExons ge,
-			String freq) {
+	private static String getInfoStr4Normal(SNVHolder snv, GeneExons ge, String freq) {
 
 		StringBuffer is = new StringBuffer();
 		//
@@ -747,16 +722,14 @@ public class FormatHelper {
 		return sb.toString();
 	}
 
-	public static String getAnnoverInputLine(SNVHolder snv,
-			TwoBitGenomeReader tgr, float tumorRratio) {
+	public static String getAnnoverInputLine(SNVHolder snv, TwoBitGenomeReader tgr, float tumorRratio) {
 		int flg = snv.getFlg();
 
 		if (flg == PileUP.SomaticMutation) {
 			String[] data = FormatHelper.getAnnoverInputCol(snv, tumorRratio);
 			return FormatHelper.tabDelimated(data);
 		} else if (flg == PileUP.TumorINDEL) {
-			String[] data = FormatHelper.getAnnoverInputColIndel(snv, tgr,
-					tumorRratio);
+			String[] data = FormatHelper.getAnnoverInputColIndel(snv, tgr, tumorRratio);
 			return FormatHelper.tabDelimated(data);
 		}
 		return null;
@@ -784,8 +757,7 @@ public class FormatHelper {
 		return data;
 	}
 
-	private static String[] getAnnoverInputColIndel(SNVHolder snv,
-			TwoBitGenomeReader tgr, float tumorRratio) {
+	private static String[] getAnnoverInputColIndel(SNVHolder snv, TwoBitGenomeReader tgr, float tumorRratio) {
 		String[] data = new String[9];
 		// chr
 		data[0] = snv.getChr().replace("chr", "");
@@ -817,8 +789,7 @@ public class FormatHelper {
 			}
 			String ss = "";
 			try {
-				ss = tgr.getGenomicSeq(snv.getChr(), snv.getPos(), snv.getPos()
-						+ Math.abs(n - 1), true);
+				ss = tgr.getGenomicSeq(snv.getChr(), snv.getPos(), snv.getPos() + Math.abs(n - 1), true);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

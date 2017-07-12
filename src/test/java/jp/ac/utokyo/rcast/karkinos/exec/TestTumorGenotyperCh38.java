@@ -80,7 +80,7 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/home/spark/todaitoptest/output/tp0";
 		//String outdir = "/home/spark/todaitoptest/karkinos";
 		
-		String outdir = "/home/spark/todaitoptest/To_Xcoo/test2";
+		String outdir = "/home/spark/todaitoptest/To_Xcoo/test4";
 		//String outdir = "/home/spark/todaitoptest/testdata0308/realign/tp0_re";
 		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
@@ -92,7 +92,7 @@ public class TestTumorGenotyperCh38 {
 		//add(l,"-md",middelfile);
 		add(l,"-n",normalbamf);
 		add(l,"-t",tumorbamf);
-		add(l,"-chr","chrX");
+		//add(l,"-chr","chrX");
 		//add(l,"-startend","2");
 		add(l,"-r",twobitref);
 		add(l,"-snp",dbSNP);
