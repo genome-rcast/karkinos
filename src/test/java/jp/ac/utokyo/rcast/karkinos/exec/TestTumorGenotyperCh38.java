@@ -40,8 +40,8 @@ public class TestTumorGenotyperCh38 {
 		//String tumorbamf = "/home/spark/todaitoptest/test/664-9136-6-N_TDv3-NS_H17-3266-T_TDv3-NS/realign/H17-3266-T_TDv3-NS_bwa.sorted.dedup.bam_realign.bam";
 		
 
-		String normalbamf = "/home/spark/todaitoptest/test/Sample_LUAD-6881-N_TDv3_bwa.sorted.dedup.bam_realign.bam";
-		String tumorbamf = "/home/spark/todaitoptest/test/Sample_LUAD-6881-T_TDv3_bwa.sorted.dedup.bam_realign.bam";
+		String normalbamf = "/home/spark/todaitoptest/testdata/7564429-N_TDv3-NS_bwa.sorted.dedup.bam_realign.bam";
+		String tumorbamf = "/home/spark/todaitoptest/testdata/H15-14183-23-T_TDv3-NS_bwa.sorted.dedup.bam_realign.bam";
 		
 		//String normalbamf ="/home/spark/todaitoptest/testdata0308/similate/LUAD-311-N_TDv3_genome_1.bam";
 		//String tumorbamf ="";
@@ -80,7 +80,7 @@ public class TestTumorGenotyperCh38 {
 		//String outdir = "/home/spark/todaitoptest/output/tp0";
 		//String outdir = "/home/spark/todaitoptest/karkinos";
 		
-		String outdir = "/home/spark/todaitoptest/To_Xcoo/test4";
+		String outdir = "/home/spark/todaitoptest/To_Xcoo/test5";
 		//String outdir = "/home/spark/todaitoptest/testdata0308/realign/tp0_re";
 		String propfile = "/home/spark/todaitoptest/ref/karkinos.properties";
 		
@@ -92,14 +92,14 @@ public class TestTumorGenotyperCh38 {
 		//add(l,"-md",middelfile);
 		add(l,"-n",normalbamf);
 		add(l,"-t",tumorbamf);
-		//add(l,"-chr","chrX");
+		//add(l,"-chr","chr3");
 		//add(l,"-startend","2");
 		add(l,"-r",twobitref);
 		add(l,"-snp",dbSNP);
 		add(l,"-ct",targetRegion);
 		//add(l,"-mp",mappability);
 		//add(l,"-id","CRC_107_T-CRC_107_N");
-		add(l,"-id","LUAD-6881_T");
+		add(l,"-id","TOPTest");
 		add(l,"-o",outdir);
 		add(l,"-prop",propfile);
 		add(l,"-g1000",g1000);

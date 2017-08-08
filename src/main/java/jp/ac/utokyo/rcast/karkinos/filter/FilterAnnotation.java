@@ -69,7 +69,7 @@ public class FilterAnnotation {
 
 	}
 
-	public static int debugpos = 195507053;
+	public static int debugpos = 189868614;
 
 	// 20130403 first filter just to use to find peak pulidity
 	public void filterAnnotation1(DataSet dataset, ReadsSummary readsSummary) throws IOException {
@@ -272,9 +272,9 @@ public class FilterAnnotation {
 
 		for (SNVHolder snv : dataset.getSnvlist()) {
 
-			// if(snv.getPos()==debugpos){
-			// System.out.println("here");
-			// }
+			 if(snv.getPos()==debugpos){
+			 System.out.println("here");
+			 }
 
 			int flg = snv.getFlg();
 			boolean check = (flg == PileUP.SomaticMutation || snv.getFlg() == PileUP.TumorINDEL);

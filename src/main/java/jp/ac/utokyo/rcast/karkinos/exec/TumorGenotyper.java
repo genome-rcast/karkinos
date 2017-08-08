@@ -354,7 +354,7 @@ public class TumorGenotyper extends ReadWriteBase {
 					targetRegion, outputsave, targetChr,startend, refflat,sites);
 		}
 		// debug
-		fullanalysis=true;
+		//fullanalysis=true;
 		if (fullanalysis) {
 			// analysis
 			GeneExons ge = new GeneExons(refflat);

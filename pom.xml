@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>karkinos</groupId>
   <artifactId>karkinos</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>2.5.0</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -152,6 +152,7 @@
    
   	
  </dependencies>
+ 
 
   <dependencyManagement>
   	<dependencies>

@@ -54,9 +54,11 @@ public class CalcUtils {
 		} else {
 
 			float f = (float) ((tAF - nAF)*((tratio*taf)+(2*nontumorr)))/(tratio*taf);
-			if (f > 1) {
-				f = 1;
+			if (f > 1 || f<= tAF) {
+				// something wrong
+				return (float) tAF;
 			}
+			
 			return f;
 
 		}
