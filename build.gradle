@@ -59,13 +59,22 @@ dependencies {
     utilsCompile sourceSets.test.output
 }
 
+def commitHash = { ->
+    def baos = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = baos
+    }
+    return baos.toString().trim()
+}
+
 task uberjar(type: Jar) {
   baseName = project.name + '-standalone'
   from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
   with jar
   manifest {
     attributes 'Implementation-Title': project.name
-    attributes 'Implementation-Version': project.version
+    attributes 'Implementation-Version': project.version + '_' + commitHash()
     attributes 'Main-Class': 'jp.ac.utokyo.rcast.karkinos.cmd.KarkinosCmd'
   }
   exclude "META-INF/*.RSA"
