@@ -514,7 +514,8 @@ public class PileUPResult implements java.io.Serializable {
 		int idx = 0;
 		int idxref = seqALL.indexOf(genomeR);
 		double max = 0;
-
+		ratio=0;
+		total=0;
 		for (double d : expected) {
 
 			if (idx != idxref) {

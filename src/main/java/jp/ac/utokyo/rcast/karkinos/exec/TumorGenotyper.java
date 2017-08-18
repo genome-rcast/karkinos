@@ -826,9 +826,9 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 
 		// debug
-		//int debugpos = 118507275;
-		//boolean debug = true;
-		boolean debug = false;
+		int debugpos = 309750;
+		boolean debug = true;
+		//boolean debug = false;
 		//
 
 		int n = 0;
