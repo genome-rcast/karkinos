@@ -55,6 +55,7 @@ public class KarkinosProp implements java.io.Serializable {
 	public static int mindepthNormal = 5;
 	
 	public static float maxnormalratio = 0.025f;
+	public static float minNormalRatioForRegNormal = 0.20f;
 	public static float min_initial_tumorratio = 0.05f;
 	
 	public static float mintumorratioForFilter1 = 0.1f;
@@ -122,6 +123,7 @@ public class KarkinosProp implements java.io.Serializable {
 	public static String KEY_mintumorratio = "mintumorratio";
 	public static String KEY_min_initial_tumorratio = "min_initial_tumorratio";
 	public static String KEY_maxnormalratio = "maxnormalratio";
+	public static String KEY_minNormalRatioForRegNormal = "minNormalRatioForRegNormal";
 	public static String KEY_normalSNPthres = "normalSNPthres";
 
 	public static String KEY_hetroSNPMin = "hetroSNPMin";
@@ -161,6 +163,7 @@ public class KarkinosProp implements java.io.Serializable {
 		
 		maxnormalratio = getFloatProperty(KEY_maxnormalratio,maxnormalratio);
 		normalSNPthres = getFloatProperty(KEY_normalSNPthres,normalSNPthres);
+		minNormalRatioForRegNormal = getFloatProperty(KEY_minNormalRatioForRegNormal, minNormalRatioForRegNormal);
 
 		hetroSNPMin = getFloatProperty(KEY_hetroSNPMin,hetroSNPMin);
 		hetroSNPMax = getFloatProperty(KEY_hetroSNPMax,hetroSNPMax);

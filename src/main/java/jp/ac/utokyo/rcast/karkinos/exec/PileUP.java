@@ -345,7 +345,7 @@ public class PileUP implements java.io.Serializable {
 
 			if (targetSeq) {
 
-				if (normal.getRatio() < 0.35) {
+				if (normal.getRatio() < KarkinosProp.minNormalRatioForRegNormal) {
 					return NONSignif;
 				}
 			}
