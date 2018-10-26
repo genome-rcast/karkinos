@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
@@ -56,6 +57,10 @@ public class DataSet implements java.io.Serializable {
 
 	public List<SNVHolder> getSnvlist() {
 		return snvlist;
+	}
+
+	public List<SNVHolder> getSnvlistWithoutHLA() {
+		return snvlist.stream().filter(s -> !s.getCi().isHLA()).collect(Collectors.toList());
 	}
 
 	Coverage normal = new Coverage();
@@ -190,6 +195,15 @@ public class DataSet implements java.io.Serializable {
 			return capinterval;
 		}
 
+	}
+
+	public List<WaveletIF> getCapIntervalsWithoutHLA() {
+		return this.getCapInterval()
+				.stream()
+				.flatMap(List::stream)
+				.filter(i -> !(i instanceof CapInterval) ||
+						!((CapInterval) i).isHLA())
+				.collect(Collectors.toList());
 	}
 
 	List<CopyNumberInterval> copyNumberIntervalList = null;

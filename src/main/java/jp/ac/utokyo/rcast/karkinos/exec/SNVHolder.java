@@ -83,7 +83,7 @@ public class SNVHolder implements java.io.Serializable{
 	}
 	public CapInterval getCi() {
 		if(ci==null){
-			return new CapInterval("chr0", 0, 0, false);
+			return new CapInterval("chr0", 0, 0, null);
 		}
 		return ci;
 	}

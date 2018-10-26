@@ -50,26 +50,17 @@ public class EMMethod {
 		List<Peak> peaklist = new ArrayList<Peak>();
 
 		SummaryStatistics ss = new SummaryStatistics();
-
-		List<List<WaveletIF>> plist = dataset.getCapInterval();
-		long total = 0;
-		for (List<WaveletIF> dlist : plist) {
-
-			for (int n = 0; n < dlist.size(); n++) {
-
-				total++;
-				WaveletIF wif = dlist.get(n);
-				double val = wif.getDenioseValue();
-				//System.out.println("denoise " + val);
-				if(Double.isNaN(val))val=1.0d;
-				int idx = getIdx(val);
-				bininit[idx] = bininit[idx] + 1;
-				if (Math.abs(1 - val) < 0.25) {
-					ss.addValue(val);
-				}
-
+		final List<WaveletIF> plist = dataset.getCapIntervalsWithoutHLA();
+		final long total = plist.size();
+		for (final WaveletIF wif : plist) {
+			double val = wif.getDenioseValue();
+			//System.out.println("denoise " + val);
+			if (Double.isNaN(val))val=1.0d;
+			int idx = getIdx(val);
+			bininit[idx] = bininit[idx] + 1;
+			if (Math.abs(1 - val) < 0.25) {
+				ss.addValue(val);
 			}
-
 		}
 		double aved = total / 4000;
 		// remove unexcepted leap in data
@@ -178,16 +169,10 @@ public class EMMethod {
 		// /
 		int cntflg = 0;
 		List<EMval> list = new ArrayList<EMval>();
-		for (List<WaveletIF> dlist : plist) {
-
-			for (int n = 0; n < dlist.size(); n++) {
-
-				WaveletIF wif = dlist.get(n);
-				EMval emval = new EMval();
-				emval.setValue(wif.getValue());
-				list.add(emval);
-			}
-
+		for (final WaveletIF wif : plist) {
+			EMval emval = new EMval();
+			emval.setValue(wif.getValue());
+			list.add(emval);
 		}
 
 		// EM not working well

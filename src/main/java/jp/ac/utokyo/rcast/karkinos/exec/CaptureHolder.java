@@ -110,7 +110,7 @@ public class CaptureHolder implements java.io.Serializable {
 				float cgParcent = tgr.getCGParcent(chr, start, end);
 				//debug
 				//float cgParcent = 0.5f;
-				CapInterval iv = new CapInterval(chr, start, end, false, cgParcent,
+				final CapInterval iv = new CapInterval(chr, start, end, null, cgParcent,
 						1);			
 				tm.put(start, iv);
 				start = start + unit;
@@ -147,7 +147,7 @@ public class CaptureHolder implements java.io.Serializable {
 				int length = end - start;
 				float cgp = Float.parseFloat(sa[4]);
 				float duality = Float.parseFloat(sa[5]);
-				boolean gene = sa[6].equals("gene");
+				final String gene = sa[6];
 				CapInterval iv = new CapInterval(chr, start, end, gene, cgp,
 						duality);
 				TreeMap<Integer, CapInterval> tm = map.get(chr);
@@ -160,7 +160,7 @@ public class CaptureHolder implements java.io.Serializable {
 					float normaldepth = Float.parseFloat(sa[7]);
 					iv.setNormalAveDepth(normaldepth);
 				}
-				if (gene) {
+				if (iv.isGene()) {
 					totallengene = totallengene + Math.abs(length);
 				} else {
 					totallenrna = totallenrna + Math.abs(length);
@@ -204,8 +204,7 @@ public class CaptureHolder implements java.io.Serializable {
 				totalcnt++;
 
 				String[] sa = line.split("\t");
-				boolean gene = sa.length > 4;
-
+				final String geneName = sa.length >= 4 ? sa[3] : null;
 				String chr = sa[0];
 				boolean chrContain = tgr.isRefExsist("chr1");
 				if (chrContain) {
@@ -215,7 +214,7 @@ public class CaptureHolder implements java.io.Serializable {
 				}
 				int start = Integer.parseInt(sa[1]);
 				int end = Integer.parseInt(sa[2]);
-				CapInterval iv = new CapInterval(chr, start, end, gene);
+				CapInterval iv = new CapInterval(chr, start, end, geneName);
 				list.add(iv);
 				totallen = totallen + Math.abs(end - start);
 			}
@@ -268,14 +267,10 @@ public class CaptureHolder implements java.io.Serializable {
 					float cgParcent = tgr.getCGParcent(chr, start, end);
 					float duality = cp.getDuality();
 					cp.setCgParcent(cgParcent);
-					String genestr = "rna";
-					if (cp.gene) {
-						genestr = "gene";
-					}
+					String genestr = cp.getGeneName();
 					bw.write(chr + "\t" + start + "\t" + end + "\t" + length
 							+ "\t" + cgParcent + "\t" + duality + "\t"
 							+ genestr + "\n");
-
 				}
 
 			}

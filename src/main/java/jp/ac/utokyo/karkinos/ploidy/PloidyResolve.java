@@ -54,7 +54,7 @@ public class PloidyResolve {
 		double d0 = 0, d1 = 0, d2 = 0;
 		int pidxb4 = -1;
 		int cntn = 0;
-		for (SNVHolder snv : dataset.getSnvlist()) {
+		for (SNVHolder snv : dataset.getSnvlistWithoutHLA()) {
 
 			//
 

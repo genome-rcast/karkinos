@@ -167,10 +167,7 @@ public class MakeAveDepth extends ReadWriteBase {
 					float cgParcent = tgr.getCGParcent(chr, start, end);
 					float duality = cp.getDuality();
 					cp.setCgParcent(cgParcent);
-					String genestr = "rna";
-					if (cp.isGene()) {
-						genestr = "gene";
-					}
+					final String genestr = cp.getGeneName();
 					float millionavedepth = 0;
 					if (map.containsKey(cp)) {
 

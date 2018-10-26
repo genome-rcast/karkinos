@@ -34,13 +34,21 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 	}
 
 	public boolean isGene() {
-		return gene;
+		return this.geneName != null && !this.geneName.equals("rna");
+	}
+
+	public boolean isHLA() {
+		return this.geneName != null && this.geneName.contains("HLA");
+	}
+
+	public String getGeneName() {
+		return this.geneName != null ? this.geneName : "rna";
 	}
 
 	String chr;
 	int start = 0;
 	int end = 0;
-	boolean gene = false;
+	private String geneName;
 	long total = 0;
 	public float getNormalAveDepth() {
 		return normalAveDepth;
@@ -136,9 +144,8 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return sb.toString();
 	}
 	
-	public CapInterval(String _chr, int _start, int _end, boolean _gene, float cgp, float _duality) {
-	
-		this(_chr,_start,_end,_gene);
+	public CapInterval(String _chr, int _start, int _end, String _geneName, float cgp, float _duality) {
+		this(_chr,_start,_end,_geneName);
 		cgParcent = cgp;
 		duality = _duality;
 	}
@@ -155,11 +162,11 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 	}
 
 
-	public CapInterval(String _chr, int _start, int _end, boolean _gene) {
+	public CapInterval(String _chr, int _start, int _end, String _geneName) {
 		chr = _chr;
 		start = _start;
 		end = _end;
-		gene = _gene;
+		geneName = _geneName;
 		length = end-start;
 		totallength = length;
 	}
@@ -172,6 +179,9 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		}
 		if (end < e) {
 			end = e;
+		}
+		if (!this.isGene() && iv.isGene()) {
+			this.geneName = iv.geneName;
 		}
 		totallength = totallength +iv.length;
 		duality = devide(totallength,end-start);
