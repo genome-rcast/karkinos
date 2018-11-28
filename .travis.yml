@@ -5,3 +5,4 @@ script:
   - ./gradlew --info check
   - ./gradlew uberjar
   - ./gradlew utilsJar
+  - ./gradlew test
