@@ -149,18 +149,21 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 
 	public float getDepth(long totalbase) {
 
-		double len = end - start;
+		double len = end - start + 1;
 		double dp = (double) totalbase / len;
 		return (float) dp;
 	}
 
 
+	/**
+	 * 1-based closed range: [start, end]
+	 */
 	public CapInterval(String _chr, int _start, int _end, boolean _gene) {
 		chr = _chr;
 		start = _start;
 		end = _end;
 		gene = _gene;
-		length = end-start;
+		length = end - start + 1;
 		totallength = length;
 	}
 
@@ -174,7 +177,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 			end = e;
 		}
 		totallength = totallength +iv.length;
-		duality = devide(totallength,end-start);
+		duality = devide(totallength, end - start + 1);
 //		if(cnvinfo==null){
 //			cnvinfo = iv.cnvinfo;
 //		}else{
@@ -206,7 +209,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		int s = sr.getAlignmentStart();
 		int e = sr.getAlignmentEnd();
 		if(e==0||e==s){
-			e = sr.getAlignmentStart() + sr.getReadLength();
+			e = sr.getAlignmentStart() + sr.getReadLength() - 1;
 		}
 		boolean overlap = (start <= e && s <= end);
 		return overlap;
