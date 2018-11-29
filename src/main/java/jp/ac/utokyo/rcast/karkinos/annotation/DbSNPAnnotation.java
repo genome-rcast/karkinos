@@ -38,8 +38,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Hex;
 
-import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
-
 public class DbSNPAnnotation implements java.io.Serializable {
 
 	public static final int MODEdbSNP = 0;

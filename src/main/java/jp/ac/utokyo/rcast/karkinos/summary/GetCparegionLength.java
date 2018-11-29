@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.TreeMap;
 
-import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
-
 public class GetCparegionLength {
 
 	public static long loadTargetFromCapregionFile(File f) throws IOException {
