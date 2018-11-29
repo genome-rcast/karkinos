@@ -15,8 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.annotation;
 
-import htsjdk.samtools.SAMRecord;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
