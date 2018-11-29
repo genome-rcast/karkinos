@@ -272,8 +272,8 @@ public class DataSet implements java.io.Serializable {
 			}
 			if (ciend.isEndChrom()) {
 				int end = ciend.getEnd();
-				if (seqIndex != null && seqIndex.containsKey(ciend.chr)) {
-					cni.setEnd(seqIndex.get(ciend.chr));
+				if (seqIndex != null && seqIndex.containsKey(ciend.getChr())) {
+					cni.setEnd(seqIndex.get(ciend.getChr()));
 				}
 				cni.setEnd(end);
 			} else {
@@ -356,7 +356,7 @@ public class DataSet implements java.io.Serializable {
 		while (ite.hasNext()) {
 			cnt++;
 			CapInterval key = ite.next();
-			String _chrom = key.chr;
+			String _chrom = key.getChr();
 			chrSet.add(_chrom);
 			if (!chrom.equals(_chrom)) {
 				if (!list.isEmpty()) {

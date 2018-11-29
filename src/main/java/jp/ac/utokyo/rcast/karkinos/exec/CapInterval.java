@@ -19,7 +19,54 @@ package jp.ac.utokyo.rcast.karkinos.exec;
 import htsjdk.samtools.SAMRecord;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
-public class CapInterval implements WaveletIF, java.io.Serializable{
+public class CapInterval implements WaveletIF, java.io.Serializable {
+	private static float divide(final int i, final int i2) {
+		return (float)((double)i/(double)i2);
+	}
+
+	private final String chr;
+	private int start, end; // 1-based closed range
+	private final boolean gene;
+	private final int length; // NB: This value is invalid if CapInterval is merged.
+	private int totallength;
+	private float cgParcent;
+	private float duality;
+	private int peakIdx;
+	private float cnvtotal;
+	private float aafreq;
+	private float bafreq;
+	private float normalAveDepth;
+	private double hmmvalue;
+	private double varidateval;
+	private CNVInfo cnvinfo;
+	private boolean startChrom;
+	private boolean endChrom;
+
+	public CapInterval(final String chr, final int start, final int end, final boolean gene) {
+		this(chr, start, end, gene, 0f, 1f);
+	}
+
+	public CapInterval(final String chr, final int start, final int end, final boolean gene,
+			final float cgParcent, final float duality) {
+		this.chr = chr;
+		this.start = start;
+		this.end = end;
+		this.gene = gene;
+		this.length = end - start + 1;
+		this.totallength = this.length;
+		this.cgParcent = cgParcent;
+		this.duality = duality;
+		this.peakIdx = 0;
+		this.cnvtotal = 0f;
+		this.aafreq = 0f;
+		this.bafreq = 0f;
+		this.normalAveDepth = 0f;
+		this.hmmvalue = 0;
+		this.varidateval = 0;
+		this.cnvinfo = null;
+		this.startChrom = false;
+		this.endChrom = false;
+	}
 
 	public String getChr() {
 		return chr;
@@ -37,36 +84,19 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return gene;
 	}
 
-	String chr;
-	int start = 0;
-	int end = 0;
-	boolean gene = false;
-	long total = 0;
 	public float getNormalAveDepth() {
 		return normalAveDepth;
 	}
 
-	public void setNormalAveDepth(float normalAveDepth) {
+	public void setNormalAveDepth(final float normalAveDepth) {
 		this.normalAveDepth = normalAveDepth;
 	}
-
-	int length;
-	float cgParcent = 0f;
-	float duality = 1f;
-	boolean startChrom;
-	boolean endChrom;
-	
-	int peakIdx=0;
-	float cnvtotal=0f;
-	float aafreq=0f;
-	float bafreq=0f;
-	float normalAveDepth=0f;
 
 	public int getPeakIdx() {
 		return peakIdx;
 	}
 
-	public void setPeakIdx(int peakIdx) {
+	public void setPeakIdx(final int peakIdx) {
 		this.peakIdx = peakIdx;
 	}
 
@@ -74,7 +104,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return cnvtotal;
 	}
 
-	public void setCnvtotal(float cnvtotal) {
+	public void setCnvtotal(final float cnvtotal) {
 		this.cnvtotal = cnvtotal;
 	}
 
@@ -82,7 +112,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return aafreq;
 	}
 
-	public void setAafreq(float aafreq) {
+	public void setAafreq(final float aafreq) {
 		this.aafreq = aafreq;
 	}
 
@@ -90,7 +120,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return bafreq;
 	}
 
-	public void setBafreq(float bafreq) {
+	public void setBafreq(final float bafreq) {
 		this.bafreq = bafreq;
 	}
 
@@ -98,7 +128,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return startChrom;
 	}
 
-	public void setStartChrom(boolean startChrom) {
+	public void setStartChrom(final boolean startChrom) {
 		this.startChrom = startChrom;
 	}
 
@@ -106,7 +136,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return endChrom;
 	}
 
-	public void setEndChrom(boolean endChrom) {
+	public void setEndChrom(final boolean endChrom) {
 		this.endChrom = endChrom;
 	}
 
@@ -118,116 +148,73 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return cgParcent;
 	}
 
-	int totallength =0;
-
 	public String getInfoStr() {
-		
 		StringBuffer sb = new StringBuffer();
 		sb.append(chr+"\t");
 		sb.append(start+"\t");
 		sb.append(end+"\t");
-		sb.append(cnvinfo.normalcnt+"\t");
-		sb.append(cnvinfo.tumorcnt+"\t");
-		sb.append(cnvinfo.tnratio+"\t");
+		sb.append(cnvinfo.getNormalcnt()+"\t");
+		sb.append(cnvinfo.getTumorcnt()+"\t");
+		sb.append(cnvinfo.getTnratio()+"\t");
 		sb.append(cnvinfo.getDenoise()+"\t");
 		sb.append(cnvinfo.getCopynumber()+"\t");
 		sb.append(getHMMValue()+"\t");
 		sb.append(getVaridateVal());
 		return sb.toString();
 	}
-	
-	public CapInterval(String _chr, int _start, int _end, boolean _gene, float cgp, float _duality) {
-	
-		this(_chr,_start,_end,_gene);
-		cgParcent = cgp;
-		duality = _duality;
-	}
 
-	public void setCgParcent(float cgParcent) {
+	public void setCgParcent(final float cgParcent) {
 		this.cgParcent = cgParcent;
 	}
 
-	public float getDepth(long totalbase) {
-
-		double len = end - start + 1;
-		double dp = (double) totalbase / len;
+	public float getDepth(final long totalbase) {
+		final double len = end - start + 1;
+		final double dp = (double) totalbase / len;
 		return (float) dp;
 	}
 
-
-	/**
-	 * 1-based closed range: [start, end]
-	 */
-	public CapInterval(String _chr, int _start, int _end, boolean _gene) {
-		chr = _chr;
-		start = _start;
-		end = _end;
-		gene = _gene;
-		length = end - start + 1;
-		totallength = length;
-	}
-
-	public void merge(CapInterval iv) {
-		int s = iv.start;
-		int e = iv.end;
-		if (s < start) {
-			start = s;
-		}
-		if (end < e) {
-			end = e;
-		}
-		totallength = totallength +iv.length;
-		duality = devide(totallength, end - start + 1);
+	public void merge(final CapInterval iv) {
+		start = Math.min(start, iv.start);
+		end = Math.max(end, iv.end);
+		totallength = totallength + iv.length;
+		duality = divide(totallength, end - start + 1);
 //		if(cnvinfo==null){
 //			cnvinfo = iv.cnvinfo;
 //		}else{
 //			cnvinfo.merge(iv.cnvinfo);
 //		}
-//		
 	}
 
-	private float devide(int i, int i2) {
-		
-		return (float)((double)(double)i/(double)i2);
+	public boolean intersect(final CapInterval iv) {
+		return intersect(iv.start, iv.end);
 	}
 
-	public boolean intersect(CapInterval iv) {
-		int s = iv.start;
-		int e = iv.end;
-		boolean overlap = start <= e && s <= end;
-		return overlap;
-	}
-	
-	public boolean intersect(int s,int e) {
-		boolean overlap = start <= e && s <= end;
-		return overlap;
-	}
-
-
-	public boolean intersect(SAMRecord sr) {
-
-		int s = sr.getAlignmentStart();
+	public boolean intersect(final SAMRecord sr) {
+		final int s = sr.getAlignmentStart();
 		int e = sr.getAlignmentEnd();
-		if(e==0||e==s){
+		if (e == 0 || e == s) {
 			e = sr.getAlignmentStart() + sr.getReadLength() - 1;
 		}
-		boolean overlap = (start <= e && s <= end);
-		return overlap;
-
+		return intersect(s, e);
 	}
-	
-	public boolean equals(Object obj){
-		
-		if(!(obj instanceof CapInterval)){
+
+	// The arguments take closed range [s,e]
+	public boolean intersect(final int s, final int e) {
+		final boolean overlap = start <= e && s <= end;
+		return overlap;
+	}
+
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CapInterval)) {
 			return false;
 		}
 		CapInterval ci0 = (CapInterval)obj;
-		return ci0.chr.equals(chr) 
+		return ci0.chr.equals(chr)
 			&& (ci0.start == start)
 			 && (ci0.end == end);
 	}
-	
-	public int hashCode(){
+
+	public int hashCode() {
 		return this.infoStr().hashCode();
 	}
 
@@ -235,41 +222,39 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return chr+":"+start+"-"+end+" ("+(length)+")";
 	}
 
-	CNVInfo cnvinfo;
-	public void setCNVInfo(CNVInfo _cnvinfo) {
-		cnvinfo = _cnvinfo;
+	public void setCNVInfo(final CNVInfo cnvinfo) {
+		this.cnvinfo = cnvinfo;
 	}
-	public CNVInfo getCNVInfo(){
+
+	public CNVInfo getCNVInfo() {
 		return cnvinfo;
 	}
 
-	public void setDenioseValue(double denoise) {
+	public void setDenioseValue(final double denoise) {
 		cnvinfo.setDenioseValue(denoise);
 	}
 
-	public void setCN(double copynumber) {
-		cnvinfo.setCN(copynumber);		
+	public void setCN(final double copynumber) {
+		cnvinfo.setCN(copynumber);
 	}
 
 	public double getOriginalValue() {
 		return cnvinfo.getOriginalTnratio();
 	}
-	
+
 	public double getValue() {
 		return cnvinfo.getTnratio();
 	}
 
-	public boolean include(int pos) {
-		boolean overlap = (start <= pos && pos <= end);
+	public boolean include(final int pos) {
+		return include(pos, 0);
+	}
+
+	public boolean include(final int pos, final int mergin) {
+		final boolean overlap = start - mergin <= pos && pos <= end + mergin;
 		return overlap;
 	}
 
-	public boolean include(int pos, int mergin) {
-		boolean overlap = (start-mergin <= pos && pos <= end+mergin);
-		return overlap;
-	}
-
-	
 	public double getDenioseValue() {
 		return cnvinfo.getDenoise();
 	}
@@ -278,39 +263,35 @@ public class CapInterval implements WaveletIF, java.io.Serializable{
 		return cnvinfo.getCopynumber();
 	}
 
-	double hmmvalue=0;
-	double varidateval = 0;
-	public void setHMMValue(double d) {
-		 hmmvalue=d;
-		 varidateval=d;
+	public void setHMMValue(final double d) {
+		 hmmvalue = d;
+		 varidateval = d;
 	}
 
 	public double getHMMValue() {
-		return  hmmvalue;
+		return hmmvalue;
+	}
+
+	public int getTotallength() {
+		return totallength;
 	}
 
 	public float getDuality() {
 		return duality;
 	}
 
-	public void setGCAdjustedTNratio(double adjustedY) {
-		if(cnvinfo!=null){
+	public void setGCAdjustedTNratio(final double adjustedY) {
+		if (cnvinfo != null) {
 			cnvinfo.tnratio = adjustedY;
 		}
 	}
 
 	public double getVaridateVal() {
-		
 		return varidateval;
 	}
 
-	public void setVaridateval(double varidateval) {
+	public void setVaridateval(final double varidateval) {
 		this.varidateval = varidateval;
 	}
-
-
-
-	
-	
 
 }
