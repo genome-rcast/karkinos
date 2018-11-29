@@ -125,7 +125,7 @@ public class BaitSampling implements Serializable {
 		int rstart = sam.getAlignmentStart();
 		int rend = sam.getAlignmentEnd();
 		if (rend == 0) {
-			rend = rstart + sam.getReadLength();
+			rend = rstart + sam.getReadLength() - 1;
 		}
 		// /
 		int cstart = ci.getStart();

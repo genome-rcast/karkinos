@@ -593,7 +593,7 @@ public class PileUP implements java.io.Serializable {
 		int start = sam.getAlignmentStart();
 		int end = sam.getAlignmentEnd();
 		if (end == 0 || end == start) {
-			end = start + sam.getReadLength();
+			end = start + sam.getReadLength() - 1;
 		}
 		return pos >= start && pos <= end;
 	}
