@@ -74,7 +74,7 @@ public class BaitSampling implements Serializable {
 			
 			int cstart = e.getKey().getStart();
 			int cend = e.getKey().getEnd();
-			int len = cend-cstart;
+			int len = cend - cstart + 1;
 			
 			System.out.println(cstart+"\t"+cend+"\t"+(cend-cstart));
 			BailSamplingBean sample = e.getValue();

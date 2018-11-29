@@ -191,8 +191,8 @@ public class CheckPossibleHDAmp {
 	private static boolean in1m(CopyNumberInterval cni, CapInterval ci) {
 
 		int unit = 1000000;
-		if (cni.getStart() < ci.getEnd() + unit
-				&& ci.getStart() - unit < cni.getEnd()) {
+		if (cni.getStart() <= ci.getEnd() + unit
+				&& ci.getStart() - unit <= cni.getEnd()) {
 			return true;
 		}
 		return false;

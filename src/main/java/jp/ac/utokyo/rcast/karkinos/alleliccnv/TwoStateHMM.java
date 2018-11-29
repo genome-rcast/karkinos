@@ -257,7 +257,7 @@ public class TwoStateHMM {
 			CapInterval ci = (CapInterval) wi;
 			int s = ci.getStart();
 			int e = ci.getEnd();
-			if (s < cni.getEnd() && cni.getStart() < e) {
+			if (s <= cni.getEnd() && cni.getStart() <= e) {
 				if (ci.getDenioseValue() > 3) {
 					ss.addValue(ci.getDenioseValue());
 				}

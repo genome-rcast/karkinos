@@ -15,6 +15,9 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.exec;
 
+/**
+ * The range is 1-based closed range [start,end]
+ */
 public class CopyNumberInterval implements java.io.Serializable{
 
 	public boolean isSupportbyAllelic() {

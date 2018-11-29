@@ -163,7 +163,7 @@ public class MakeAveDepth extends ReadWriteBase {
 					String chr = cp.getChr();
 					int start = cp.getStart();
 					int end = cp.getEnd();
-					int length = end - start;
+					int length = end - start + 1;
 					float cgParcent = tgr.getCGParcent(chr, start, end);
 					float duality = cp.getDuality();
 					cp.setCgParcent(cgParcent);
