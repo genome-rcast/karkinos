@@ -246,11 +246,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable {
 	}
 
 	public boolean include(final int pos) {
-		return include(pos, 0);
-	}
-
-	public boolean include(final int pos, final int mergin) {
-		return start - mergin <= pos && pos <= end + mergin;
+		return start <= pos && pos <= end;
 	}
 
 	public double getDenioseValue() {

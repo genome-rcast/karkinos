@@ -118,25 +118,5 @@ public class CapIntervalTest {
     // ci       ======
     // pos            .
     assertFalse(ci.include(11));
-
-    //      12345678901234567890
-    // ci      -======-
-    // pos    .
-    assertFalse(ci.include(3, 1));
-
-    //      12345678901234567890
-    // ci      -======-
-    // pos     .
-    assertTrue(ci.include(4, 1));
-
-    //      12345678901234567890
-    // ci      -======-
-    // pos            .
-    assertTrue(ci.include(11, 1));
-
-    //      12345678901234567890
-    // ci      -======-
-    // pos             .
-    assertFalse(ci.include(12, 1));
   }
 }
