@@ -200,8 +200,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable {
 
 	// The arguments take closed range [s,e]
 	public boolean intersect(final int s, final int e) {
-		final boolean overlap = start <= e && s <= end;
-		return overlap;
+		return start <= e && s <= end;
 	}
 
 	public boolean equals(Object obj) {
@@ -251,8 +250,7 @@ public class CapInterval implements WaveletIF, java.io.Serializable {
 	}
 
 	public boolean include(final int pos, final int mergin) {
-		final boolean overlap = start - mergin <= pos && pos <= end + mergin;
-		return overlap;
+		return start - mergin <= pos && pos <= end + mergin;
 	}
 
 	public double getDenioseValue() {
@@ -270,10 +268,6 @@ public class CapInterval implements WaveletIF, java.io.Serializable {
 
 	public double getHMMValue() {
 		return hmmvalue;
-	}
-
-	public int getTotallength() {
-		return totallength;
 	}
 
 	public float getDuality() {
