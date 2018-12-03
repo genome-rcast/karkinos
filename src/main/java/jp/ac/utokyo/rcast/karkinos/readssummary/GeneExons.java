@@ -97,6 +97,8 @@ public class GeneExons implements java.io.Serializable {
 					}
 					
 					
+					// Convert refGene.txt format (0-based half-opened range)
+					// into Interval format (1-based closed open range).
 					String refseqid = data[1];
 					String chrom = data[2];
 					int txstart = Integer.parseInt(data[4]);
@@ -106,8 +108,8 @@ public class GeneExons implements java.io.Serializable {
 						tm0 = new TreeMap<Integer, Interval>();
 						genemap.put(chrom, tm0);
 					}
-					Interval iv0 = new Interval(chrom, txstart, txend, refseqid,geneSymbol);
-					tm0.put(txstart, iv0);
+					Interval iv0 = new Interval(chrom, txstart + 1, txend, refseqid,geneSymbol);
+					tm0.put(txstart + 1, iv0);
 
 					int cdsstart = Integer.parseInt(data[6]);
 					int cdsend = Integer.parseInt(data[7]);
