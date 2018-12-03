@@ -270,6 +270,8 @@ public class CaptureHolder implements java.io.Serializable {
 					String chr = cp.getChr();
 					int start = cp.getStart();
 					int end = cp.getEnd();
+					// NB: We should not use cp.getLength() method here because the return value
+					// is invalid if CapInterval is merged.
 					int length = end - start + 1;
 					float cgParcent = tgr.getCGParcent(chr, start, end);
 					float duality = cp.getDuality();
