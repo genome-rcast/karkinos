@@ -21,10 +21,9 @@ public class CheckPossibleHDAmpTest {
         CopyNumberInterval.class, CapInterval.class);
     in1m.setAccessible(true);
 
-    CopyNumberInterval tmp_cni = new CopyNumberInterval();
-    tmp_cni.setStart(2 * unit + 4);
-    tmp_cni.setEnd(2 * unit + 6);
-    final CopyNumberInterval cni = tmp_cni;
+    final CopyNumberInterval cni = new CopyNumberInterval();
+    cni.setStart(2 * unit + 4);
+    cni.setEnd(2 * unit + 6);
 
     //      1234567890
     // cni     ===

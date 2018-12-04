@@ -25,10 +25,9 @@ public class TwoStateHMMTest {
         "getCoreVariance", List.class, CopyNumberInterval.class);
     getCoreVariance.setAccessible(true);
 
-    CopyNumberInterval tmp_cni = new CopyNumberInterval();
-    tmp_cni.setStart(4);
-    tmp_cni.setEnd(6);
-    final CopyNumberInterval cni = tmp_cni;
+    final CopyNumberInterval cni = new CopyNumberInterval();
+    cni.setStart(4);
+    cni.setEnd(6);
 
     //      1234567890
     // cni     ===
