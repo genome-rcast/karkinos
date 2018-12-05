@@ -83,16 +83,14 @@ public class CapIntervalTest {
     final File file = new File("test-resources/sam/test.sam");
 
     final CapInterval ci = new CapInterval("chr1", 10, 15, false);
-    final SAMFileReader rdr = new SAMFileReader(file);
-    final CloseableIterator<SAMRecord> it = rdr.iterator();
-    final boolean[] expected = new boolean[]{true, true, true, false, false, false};
-    int i = 0;
-    while (it.hasNext()) {
-      final SAMRecord record = it.next();
-      assertEquals(expected[i], ci.intersect(record));
-      ++i;
+    try (final SAMFileReader rdr = new SAMFileReader(file)) {
+      final boolean[] expected = new boolean[] {true, true, true, false, false, false};
+      int i = 0;
+      for (final SAMRecord record : rdr) {
+        assertEquals(expected[i], ci.intersect(record));
+        ++i;
+      }
     }
-    it.close();
   }
 
   @Test
