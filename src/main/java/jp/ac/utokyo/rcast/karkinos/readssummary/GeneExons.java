@@ -86,94 +86,71 @@ public class GeneExons implements java.io.Serializable {
 	}
 
 	Map<String,Integer> counter = new HashMap<String,Integer>();
-	private void loadmap(String refflat) {
-		// TODO Auto-generated method stub
-		try {
-			CSVReader brcvs = new CSVReader(new FileReader(refflat), '\t');
 
-			String[] data = null;
-			while ((data = brcvs.readNext()) != null) {
+	private void loadmap(final String refflat) {
+		try (final CSVReader brcvs = new CSVReader(new FileReader(refflat), '\t')) {
+			try {
+				String[] data = null;
+				while ((data = brcvs.readNext()) != null) {
+					final String geneSymbol = data[0];
+					final String symbolWithoutNum = symbolWithoutNum(geneSymbol);
+					this.counter.put(symbolWithoutNum, 1 + this.counter.getOrDefault(symbolWithoutNum, 0));
 
-				try {
-					
-					String geneSymbol = data[0];
-					String symbolWithoutNum = symbolWithoutNum(geneSymbol);
-					//System.out.println(geneSymbol+"\t"+symbolWithoutNum);
-					if(counter.containsKey(symbolWithoutNum)){
-						int countn = counter.get(symbolWithoutNum);
-						countn++;
-						counter.put(symbolWithoutNum, countn);
-					}else{
-						counter.put(symbolWithoutNum, 1);
-					}
-					
-					
 					// Convert refGene.txt format (0-based half-opened range)
 					// into Interval format (1-based closed open range).
-					String refseqid = data[1];
-					String chrom = data[2];
-					int txstart = Integer.parseInt(data[4]);
-					int txend = Integer.parseInt(data[5]);
-					TreeMap<Integer, Interval> tm0 = genemap.get(chrom);
-					if (tm0 == null) {
-						tm0 = new TreeMap<Integer, Interval>();
-						genemap.put(chrom, tm0);
-					}
-					Interval iv0 = new Interval(chrom, txstart + 1, txend, refseqid,geneSymbol);
-					tm0.put(txstart + 1, iv0);
+					final String refseqid = data[1];
+					final String chrom = data[2];
+					final int txStart = Integer.parseInt(data[4]);
+					final int txEnd = Integer.parseInt(data[5]);
+					this.genemap
+					    .computeIfAbsent(chrom, k -> new TreeMap<Integer, Interval>())
+					    .put(txStart + 1, new Interval(chrom, txStart + 1, txEnd, refseqid, geneSymbol));
 
-					int cdsstart = Integer.parseInt(data[6]);
-					int cdsend = Integer.parseInt(data[7]);
-					String exonstarts = data[9];
-					String exonends = data[10];
-					List<Integer> es = toIntList(exonstarts);
-					List<Integer> ee = toIntList(exonends);
-					// //
+					final int cdsStart = Integer.parseInt(data[6]);
+					final int cdsEnd = Integer.parseInt(data[7]);
+					final int exonCount = Integer.parseInt(data[8]);
+					final List<Integer> exonStarts = toIntList(data[9]);
+					final List<Integer> exonEnds = toIntList(data[10]);
+
+					// XXX: Is this loop intentional?
 					int idx = 0;
-					for (int start : es) {
-						int end = ee.get(idx);
-						if (start < cdsstart && end < cdsstart) {
+					for (int _i = 0; _i < exonCount; ++_i) {
+						int start = exonStarts.get(idx);
+						int end = exonEnds.get(idx);
+
+						// XXX: Is this condition intentional?
+						if (start < cdsStart && end < cdsStart) {
 							continue;
-						} else if (start < cdsstart && end >= cdsstart) {
-							start = cdsstart;
-						} else if (start > cdsend && end > cdsend) {
+						} else if (start < cdsStart && end >= cdsStart) {
+							start = cdsStart;
+						} else if (start > cdsEnd && end > cdsEnd) {
 							continue;
-						} else if (start <= cdsend && end > cdsend) {
-							end = cdsend;
+						} else if (start <= cdsEnd && end > cdsEnd) {
+							end = cdsEnd;
 						}
-						// /
-						TreeMap<Integer, Interval> tm = map.get(chrom);
-						if (tm == null) {
-							tm = new TreeMap<Integer, Interval>();
-							map.put(chrom, tm);
-						}
-						//
-						Interval iv = new Interval(chrom, start, end);
+
+						// XXX: Is this intentional? If the `depth` value is not used, we should call another constructor.
+						// Cf. https://github.com/genome-rcast/karkinos/blob/384514f68e3bcdce51adac36d47edd079d1922e5/src/main/java/jp/ac/utokyo/rcast/karkinos/readssummary/Interval.java#L25-L30
+						final Interval iv = new Interval(chrom, start, end);
 						iv.end = end;
 						iv.geneSymbol = geneSymbol;
 						iv.refseqid = refseqid;
-						iv.exonidx = idx+1;
-						
-						 
-						tm.put(start, iv);
+						iv.exonidx = idx + 1;
+						this.map
+						    .computeIfAbsent(chrom, k -> new TreeMap<Integer, Interval>())
+						    .put(start, iv);
+
 						idx++;
 					}
-
-				} catch (Exception e) {
-
 				}
-
+			} catch (final Exception e) {
+				// FALLTHROUGH
 			}
-			
-			
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-
 	}
-	
+
 	public static String symbolWithoutNum(String s){
 		
 		StringBuffer sb  = new StringBuffer();
