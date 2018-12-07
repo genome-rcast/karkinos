@@ -59,6 +59,17 @@ public class GeneExons implements java.io.Serializable {
 		return normaltotal;
 	}
 
+	public Map<String, Integer> getCounter() {
+		return counter;
+	}
+
+	public Map<String, TreeMap<Integer, Interval>> getMap() {
+		return map;
+	}
+
+	public Map<String, TreeMap<Integer, Interval>> getGeneMap() {
+		return genemap;
+	}
 
 	public void setNormaltotal(long normaltotal2) {
 		this.normaltotal = normaltotal2;
@@ -163,7 +174,7 @@ public class GeneExons implements java.io.Serializable {
 
 	}
 	
-	public String symbolWithoutNum(String s){
+	public static String symbolWithoutNum(String s){
 		
 		StringBuffer sb  = new StringBuffer();
 		for(char c :s.toCharArray()){
@@ -176,7 +187,7 @@ public class GeneExons implements java.io.Serializable {
 		
 	}
 
-	private boolean isNumber(char c) {
+	private static boolean isNumber(char c) {
 		if(c<'0'){
 			return false;
 		}
@@ -187,7 +198,7 @@ public class GeneExons implements java.io.Serializable {
 	}
 
 
-	private List<Integer> toIntList(String s) {
+	private static List<Integer> toIntList(String s) {
 
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (String ss : s.split(",")) {
