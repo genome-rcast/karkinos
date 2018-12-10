@@ -121,7 +121,7 @@ public class GeneExons implements java.io.Serializable {
 		}
 	}
 
-	public static String symbolWithoutNum(String s){
+	private static String symbolWithoutNum(String s){
 		
 		StringBuffer sb  = new StringBuffer();
 		for(char c :s.toCharArray()){
