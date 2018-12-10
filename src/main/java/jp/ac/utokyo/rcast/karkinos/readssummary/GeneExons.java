@@ -99,11 +99,11 @@ public class GeneExons implements java.io.Serializable {
 				// into Interval format (1-based closed open range).
 				final String refseqid = data[1];
 				final String chrom = data[2];
-				final int txStart = Integer.parseInt(data[4]);
+				final int txStart = Integer.parseInt(data[4]) + 1;
 				final int txEnd = Integer.parseInt(data[5]);
 				this.genemap
 				    .computeIfAbsent(chrom, k -> new TreeMap<>())
-				    .put(txStart + 1, new Interval(chrom, txStart + 1, txEnd, refseqid, geneSymbol));
+				    .put(txStart, new Interval(chrom, txStart, txEnd, refseqid, geneSymbol));
 
 				final int cdsStart = Integer.parseInt(data[6]);
 				final int cdsEnd = Integer.parseInt(data[7]);
