@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -147,9 +148,13 @@ public class GeneExonsTest {
 
   @Test
   void loadmapTest() {
-    final GeneExons ge = new GeneExons(refGene);
-    assertEquals(expectedCounter, ge.getCounter());
-    assertTrue(isSameMap(expectedGeneMap, ge.getGeneMap()));
-    assertTrue(isSameMap(expectedMap, ge.getMap()));
+    try {
+      final GeneExons ge = new GeneExons(refGene);
+      assertEquals(expectedCounter, ge.getCounter());
+      assertTrue(isSameMap(expectedGeneMap, ge.getGeneMap()));
+      assertTrue(isSameMap(expectedMap, ge.getMap()));
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
   }
 }

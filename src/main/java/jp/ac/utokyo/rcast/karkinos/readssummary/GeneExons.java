@@ -16,6 +16,7 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.readssummary;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,7 +33,7 @@ import jp.ac.utokyo.rcast.karkinos.utils.DataHolder;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class GeneExons implements java.io.Serializable {
-	public GeneExons(String refflat) {
+	public GeneExons(String refflat) throws IOException {
 
 		//
 		if (refflat != null) {
@@ -88,7 +89,7 @@ public class GeneExons implements java.io.Serializable {
 
 	Map<String,Integer> counter = new HashMap<String,Integer>();
 
-	private void loadmap(final String refflat) {
+	private void loadmap(final String refflat) throws IOException {
 		try (final CSVReader brcvs = new CSVReader(new FileReader(refflat), '\t')) {
 			String[] data = null;
 			while ((data = brcvs.readNext()) != null) {
@@ -129,8 +130,6 @@ public class GeneExons implements java.io.Serializable {
 					}
 				}
 			}
-		} catch (final Exception e) {
-			e.printStackTrace();
 		}
 	}
 

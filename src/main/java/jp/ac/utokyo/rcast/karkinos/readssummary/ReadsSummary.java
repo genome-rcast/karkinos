@@ -17,6 +17,7 @@ package jp.ac.utokyo.rcast.karkinos.readssummary;
 
 import htsjdk.samtools.SAMRecord;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -311,9 +312,14 @@ public class ReadsSummary implements java.io.Serializable {
 	String refflat = null;
 	public void setRefFlat(String refflat) {
 		this.refflat = refflat;	
-		GeneExons ge = new GeneExons(refflat);
-		normalDepth.setGeneExons(ge);
-		tumorDepth.setGeneExons(ge);
+		try {
+			GeneExons ge = new GeneExons(refflat);
+			normalDepth.setGeneExons(ge);
+			tumorDepth.setGeneExons(ge);
+		} catch (final IOException e) {
+			System.out.println("could not read `" + refflat + "`: " + e.getMessage());
+			return;
+		}
 		
 	}
 	public void clearGeneExon() {
