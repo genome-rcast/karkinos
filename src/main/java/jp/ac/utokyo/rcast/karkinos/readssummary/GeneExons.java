@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import jp.ac.utokyo.rcast.karkinos.utils.DataHolder;
 import au.com.bytecode.opencsv.CSVReader;
@@ -105,41 +106,27 @@ public class GeneExons implements java.io.Serializable {
 				    .computeIfAbsent(chrom, k -> new TreeMap<>())
 				    .put(txStart, new Interval(chrom, txStart, txEnd, refseqid, geneSymbol));
 
-				final int cdsStart = Integer.parseInt(data[6]);
+				final int cdsStart = Integer.parseInt(data[6]) + 1;
 				final int cdsEnd = Integer.parseInt(data[7]);
 				final int exonCount = Integer.parseInt(data[8]);
-				final List<Integer> exonStarts = toIntList(data[9]);
+				final List<Integer> exonStarts = toIntList(data[9]).stream().map(e -> e + 1).collect(Collectors.toList());
 				final List<Integer> exonEnds = toIntList(data[10]);
 
-				// XXX: Is this loop intentional?
-				int idx = 0;
-				for (int _i = 0; _i < exonCount; ++_i) {
-					int start = exonStarts.get(idx);
-					int end = exonEnds.get(idx);
-
-					// XXX: Is this condition intentional?
-					if (start < cdsStart && end < cdsStart) {
-						continue;
-					} else if (start < cdsStart && end >= cdsStart) {
-						start = cdsStart;
-					} else if (start > cdsEnd && end > cdsEnd) {
-						continue;
-					} else if (start <= cdsEnd && end > cdsEnd) {
-						end = cdsEnd;
+				if (cdsStart <= cdsEnd) {
+					for (int i = 0; i < exonCount; ++i) {
+						int start = exonStarts.get(i);
+						int end = exonEnds.get(i);
+						if (end < cdsStart || cdsEnd < start) {
+							continue;
+						}
+						start = Math.max(start, cdsStart);
+						end = Math.min(end, cdsEnd);
+						final Interval iv = new Interval(chrom, start, end, refseqid, geneSymbol);
+						iv.exonidx = i + 1;
+						this.map
+						    .computeIfAbsent(chrom, k -> new TreeMap<>())
+						    .put(start, iv);
 					}
-
-					// XXX: Is this intentional? If the `depth` value is not used, we should call another constructor.
-					// Cf. https://github.com/genome-rcast/karkinos/blob/384514f68e3bcdce51adac36d47edd079d1922e5/src/main/java/jp/ac/utokyo/rcast/karkinos/readssummary/Interval.java#L25-L30
-					final Interval iv = new Interval(chrom, start, end);
-					iv.end = end;
-					iv.geneSymbol = geneSymbol;
-					iv.refseqid = refseqid;
-					iv.exonidx = idx + 1;
-					this.map
-					    .computeIfAbsent(chrom, k -> new TreeMap<>())
-					    .put(start, iv);
-
-					idx++;
 				}
 			}
 		} catch (final Exception e) {
