@@ -150,9 +150,9 @@ public class GeneExonsTest {
   void loadmapTest() {
     try {
       final GeneExons ge = new GeneExons(refGene);
-      assertEquals(expectedCounter, ge.getCounter());
-      assertTrue(isSameMap(expectedGeneMap, ge.getGeneMap()));
-      assertTrue(isSameMap(expectedMap, ge.getMap()));
+      assertEquals(expectedCounter, ge.counter);
+      assertTrue(isSameMap(expectedGeneMap, ge.genemap));
+      assertTrue(isSameMap(expectedMap, ge.map));
     } catch (final IOException e) {
       e.printStackTrace();
     }

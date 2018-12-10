@@ -61,18 +61,6 @@ public class GeneExons implements java.io.Serializable {
 		return normaltotal;
 	}
 
-	public Map<String, Integer> getCounter() {
-		return counter;
-	}
-
-	public Map<String, TreeMap<Integer, Interval>> getMap() {
-		return map;
-	}
-
-	public Map<String, TreeMap<Integer, Interval>> getGeneMap() {
-		return genemap;
-	}
-
 	public void setNormaltotal(long normaltotal2) {
 		this.normaltotal = normaltotal2;
 	}
