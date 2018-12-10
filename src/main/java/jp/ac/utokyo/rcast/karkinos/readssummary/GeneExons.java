@@ -81,7 +81,15 @@ public class GeneExons implements java.io.Serializable {
 		try (final CSVReader brcvs = new CSVReader(new FileReader(refflat), '\t')) {
 			String[] data = null;
 			while ((data = brcvs.readNext()) != null) {
-				final String geneSymbol = data[0];
+				final String geneSymbol;
+				if (data.length == 11) { // refFlat.txt
+					geneSymbol = data[0];
+				} else if (data.length == 16) { // refGene.txt
+					geneSymbol = data[12];
+				} else {
+					throw new IOException("Illegal `refFlat` or `refGene` format.");
+				}
+
 				final String symbolWithoutNum = symbolWithoutNum(geneSymbol);
 				this.counter.put(symbolWithoutNum, 1 + this.counter.getOrDefault(symbolWithoutNum, 0));
 
