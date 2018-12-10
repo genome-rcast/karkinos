@@ -102,7 +102,7 @@ public class GeneExons implements java.io.Serializable {
 				final int txStart = Integer.parseInt(data[4]);
 				final int txEnd = Integer.parseInt(data[5]);
 				this.genemap
-				    .computeIfAbsent(chrom, k -> new TreeMap<Integer, Interval>())
+				    .computeIfAbsent(chrom, k -> new TreeMap<>())
 				    .put(txStart + 1, new Interval(chrom, txStart + 1, txEnd, refseqid, geneSymbol));
 
 				final int cdsStart = Integer.parseInt(data[6]);
@@ -136,7 +136,7 @@ public class GeneExons implements java.io.Serializable {
 					iv.refseqid = refseqid;
 					iv.exonidx = idx + 1;
 					this.map
-					    .computeIfAbsent(chrom, k -> new TreeMap<Integer, Interval>())
+					    .computeIfAbsent(chrom, k -> new TreeMap<>())
 					    .put(start, iv);
 
 					idx++;
