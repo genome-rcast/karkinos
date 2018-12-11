@@ -54,7 +54,7 @@ public class CaptureHolder implements java.io.Serializable {
 		int end = iv.getEnd();
 		if (tm == null)
 			return null;
-		SortedMap sm = tm.subMap(start, end);
+		SortedMap sm = tm.subMap(start, end + 1);
 		return sm;
 	}
 
