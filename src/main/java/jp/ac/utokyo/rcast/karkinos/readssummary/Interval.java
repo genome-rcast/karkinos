@@ -53,22 +53,20 @@ public class Interval implements java.io.Serializable{
 		this.refseqid = refseqid;
 	}
 
-	public boolean extendInterval(String chr,int pos,int depth){
-		
-		if(!chr.equals(this.chr)){
+	public boolean extendInterval(final String chr, final int end, final int depth) {
+		if (!this.chr.equals(chr)) {
 			return false;
 		}
-		if(pos-this.end>1){
+		if (end <= this.end) {
 			return false;
 		}
-		if(this.depth!=depth){
+		if (this.depth != depth) {
 			return false;
 		}
-		////
-		this.end = pos;
-		return true;		
+		this.end = end;
+		return true;
 	}
-	
+
 	public String getChr() {
 		return chr;
 	}
