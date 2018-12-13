@@ -526,12 +526,10 @@ public class CheckHDAMPFromFile {
 					if (cni != null) {
 						copyNumberIntervalList.add(cni);
 					}
-					cni = new CopyNumberInterval();
-					cni.setChr(chr0);
+					cni = new CopyNumberInterval(chr0, aaf, baf);
 					cni.setStart(pos);
 					cni.setEnd(pos);
-					cni.setAaf(aaf);
-					cni.setBaf(baf);
+					cni.setCopynumber(cn);
 				} else {
 
 					if (cni != null) {
@@ -766,13 +764,10 @@ public class CheckHDAMPFromFile {
 					if (cni != null) {
 						copyNumberIntervalList.add(cni);
 					}
-					cni = new CopyNumberInterval();
-					cni.setChr(chr0);
+					cni = new CopyNumberInterval(chr0, aaf, baf);
 					cni.setStart(pos);
 					cni.setEnd(pos);
 					cni.setCopynumber(cn);
-					cni.setAaf(aaf);
-					cni.setBaf(baf);
 
 				} else {
 

@@ -348,8 +348,7 @@ public class TwoStateHMM {
 						list.add(cnin);
 						cnin = null;
 					}
-					cnin = new CopyNumberInterval();
-					cnin.setChr(ci.getChr());
+					cnin = new CopyNumberInterval(ci.getChr());
 					cnin.setStart(ci.getStart());
 					cnin.setCopynumber(cni.getCopynumber());
 
@@ -359,8 +358,7 @@ public class TwoStateHMM {
 						list.add(cnin);
 						cnin = null;
 					}
-					cnin = new CopyNumberInterval();
-					cnin.setChr(ci.getChr());
+					cnin = new CopyNumberInterval(ci.getChr());
 					cnin.setHdeletion(true);
 					cnin.setStart(ci.getStart());
 					cnin.setCopynumber(copygain);

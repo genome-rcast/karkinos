@@ -263,14 +263,14 @@ public class DataSet implements java.io.Serializable {
 
 			CapInterval cistart = alist.get(m);
 			CapInterval ciend = alist.get(m + 1);
-			CopyNumberInterval cni = new CopyNumberInterval();
-			cni.setChr(cistart.getChr());
+			CopyNumberInterval cni = new CopyNumberInterval(cistart.getChr(), cistart.getAafreq(), cistart.getBafreq());
 			if (cistart.isStartChrom()) {
 				cni.setStart(1);
 			} else {
 				cni.setStart(cistart.getStart());
 			}
 			if (ciend.isEndChrom()) {
+				// TODO: Fix overwriting `setEnd`.
 				int end = ciend.getEnd();
 				if (seqIndex != null && seqIndex.containsKey(ciend.getChr())) {
 					cni.setEnd(seqIndex.get(ciend.getChr()));
@@ -289,14 +289,12 @@ public class DataSet implements java.io.Serializable {
 			//float copynumber = (float) (d / 0.5);
 			float copynumber = (float)d;
 			cni.setCopynumber(copynumber);
-			cni.setAaf(cistart.getAafreq());
-			cni.setBaf(cistart.getBafreq());
 			boolean contain = false;
 			for (CopyNumberInterval cn : copyNumberIntervalList) {
 				if (cn.getChr().equals(cni.getChr())) {
 					if (cn.getStart() == cni.getStart()) {
 						// if(cn.getEnd() == cni.getEnd()){
-						if ((cn.aaf == cni.aaf) && (cn.baf == cni.baf)) {
+						if (cn.getAaf() == cni.getAaf() && cn.getBaf() == cni.getBaf()) {
 							contain = true;
 						}
 						// }

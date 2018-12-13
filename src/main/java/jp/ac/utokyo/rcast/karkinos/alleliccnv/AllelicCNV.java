@@ -178,8 +178,7 @@ public class AllelicCNV {
 						cni.setNoSNP(noSNP);
 						copyNumberIntervalList.add(cni);
 					}
-					cni = new CopyNumberInterval();
-					cni.setChr(sc.getSnv().getChr());
+					cni = new CopyNumberInterval(sc.getSnv().getChr());
 					cni.setStart(sc.getSnv().getPos());
 					cni.setCopynumber(hmmv);
 					cni.setAllelic(true);
