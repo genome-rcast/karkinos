@@ -529,7 +529,7 @@ public class CheckHDAMPFromFile {
 					cni = new CopyNumberInterval(chr0, aaf, baf);
 					cni.setStart(pos);
 					cni.setEnd(pos);
-					cni.setCopynumber(cn);
+
 				} else {
 
 					if (cni != null) {
