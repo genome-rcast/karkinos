@@ -42,8 +42,8 @@ public class CorrelVaridate {
 		for(CopyNumberInterval cni: cniList){
 			
 			//
-				if(Math.abs(cni.getEnd()-cni.getStart())<1000000){
 			if(!cni.isHdeletion()){
+				if(cni.length()<1000000){
 					if(cni.getCopynumber()>6){
 						
 						if(cnib4!=null){

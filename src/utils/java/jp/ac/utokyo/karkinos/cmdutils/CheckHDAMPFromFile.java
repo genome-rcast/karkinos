@@ -547,16 +547,11 @@ public class CheckHDAMPFromFile {
 		List<CopyNumberInterval> ampList = new ArrayList<CopyNumberInterval>();
 		List<CopyNumberInterval> hdList = new ArrayList<CopyNumberInterval>();
 
-		for (CopyNumberInterval cni0 : copyNumberIntervalList) {
+		for (final CopyNumberInterval cni0 : copyNumberIntervalList) {
 
-			//
-			int len = cni0.getEnd() - cni0.getStart();
-			if (len < 5000000) {
+			if (cni0.length() < 5000000) {
 
 				if (cni0.getAaf() >= 3 && cni0.getBaf() >= 2) {
-					// System.out.println(cni0.getChr() + "\t" + cni0.getAaf()
-					// + "\t" + cni0.getBaf()+"\t"+len);
-					//
 					ampList.add(cni0);
 				}
 				if (cni0.getAaf() <= 1 && cni0.getBaf() <= 1) {
@@ -589,13 +584,12 @@ public class CheckHDAMPFromFile {
 
 		}
 
-		for (CopyNumberInterval cni1 : ampListCheck) {
+		for (final CopyNumberInterval cni1 : ampListCheck) {
 
 			String chr = cni1.getChr();
 			if (!chr.contains("chr")) {
 				chr = "chr" + chr;
 			}
-			int len = cni1.getEnd() - cni1.getStart();
 			String gss = ex.getGeneSymbols(chr, cni1.getStart(), cni1.getEnd());
 
 			String band = chr
@@ -603,17 +597,12 @@ public class CheckHDAMPFromFile {
 
 			String amps = "AMP" + "\t" + band + "\t" + id + "\t" + chr + "\t"
 					+ cni1.getStart() + "\t" + cni1.getEnd() + "\t"
-					+ cni1.getCopynumber() + "\t" + len + "\t" + gss;
+					+ cni1.getCopynumber() + "\t" + cni1.length() + "\t" + gss;
 			System.out.println(amps);
 
 			setGene(mapgeneamp, gss);
 
 			ampList2.add(amps);
-
-			// pw.print("AMP" + "\t" + id + "\t" + chr + "\t"
-			// + cni1.getStart() + "\t" + cni1.getEnd() + "\t"
-			// + cni1.getCopynumber() + "\t" + len +"\t"+gss+ "\n");
-
 		}
 		List<CopyNumberInterval> hdListCheck = new ArrayList<CopyNumberInterval>();
 		for (CopyNumberInterval cni2 : hdList) {
@@ -632,14 +621,13 @@ public class CheckHDAMPFromFile {
 
 		}
 
-		for (CopyNumberInterval cni2 : hdListCheck) {
+		for (final CopyNumberInterval cni2 : hdListCheck) {
 
 			String chr = cni2.getChr();
 			if (!chr.contains("chr")) {
 				chr = "chr" + chr;
 			}
 
-			int len = cni2.getEnd() - cni2.getStart();
 			String gss = ex.getGeneSymbols(chr, cni2.getStart(), cni2.getEnd());
 			//
 
@@ -648,16 +636,11 @@ public class CheckHDAMPFromFile {
 
 			String hds = "HD" + "\t" + band + "\t" + id + "\t" + chr + "\t"
 					+ cni2.getStart() + "\t" + cni2.getEnd() + "\t"
-					+ cni2.getCopynumber() + "\t" + len + "\t" + gss;
+					+ cni2.getCopynumber() + "\t" + cni2.length() + "\t" + gss;
 			System.out.println(hds);
 			hdList2.add(hds);
 
 			setGene(mapgenehd, gss);
-
-			// pw.print("HD" + "\t" + id + "\t" + chr + "\t"
-			// + cni2.getStart() + "\t" + cni2.getEnd() + "\t"
-			// + cni2.getCopynumber() + "\t" + len +"\t"+gss+ "\n");
-
 		}
 
 	}
