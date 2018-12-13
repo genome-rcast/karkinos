@@ -42,13 +42,13 @@ public class CorrelVaridate {
 		for(CopyNumberInterval cni: cniList){
 			
 			//
-			if(!cni.isHdelation()){
 				if(Math.abs(cni.getEnd()-cni.getStart())<1000000){
+			if(!cni.isHdeletion()){
 					if(cni.getCopynumber()>6){
 						
 						if(cnib4!=null){
 							if((cnib4.getCopynumber()-cni.getCopynumber())>1){
-								cni.setHdelation(true);
+								cni.setHdeletion(true);
 							}
 						}
 						
@@ -62,7 +62,7 @@ public class CorrelVaridate {
 		dataset.setVaridatedCNlist(cniList);
 		
 		for(CopyNumberInterval cni:cniListb4c){
-			if(cni.isHdelation()){
+			if(cni.isHdeletion()){
 				if(!cniList.contains(cni)){
 					cniList.add(cni);
 				}

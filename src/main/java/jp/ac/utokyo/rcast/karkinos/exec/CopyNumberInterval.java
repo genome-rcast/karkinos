@@ -19,6 +19,7 @@ package jp.ac.utokyo.rcast.karkinos.exec;
  * The range is 1-based closed range [start,end]
  */
 public class CopyNumberInterval implements java.io.Serializable{
+	private boolean hdeletion = false; // Homozygous deletion
 
 	public boolean isSupportbyAllelic() {
 		return supportbyAllelic;
@@ -80,14 +81,10 @@ public class CopyNumberInterval implements java.io.Serializable{
 		this.recurrent = recurrent;
 	}
 	boolean varidated = true;
-	boolean hdelation = false;
-	public boolean isHdelation() {
-		return hdelation;
+	public void setHdeletion(final boolean hdeletion) {
+		this.hdeletion = hdeletion;
 	}
 
-	public void setHdelation(boolean hdelation) {
-		this.hdelation = hdelation;
-	}
 	float snpclrrel;
 	int noSNP;
 	

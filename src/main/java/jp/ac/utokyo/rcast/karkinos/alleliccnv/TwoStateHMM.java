@@ -360,8 +360,8 @@ public class TwoStateHMM {
 						cnin = null;
 					}
 					cnin = new CopyNumberInterval();
-					cnin.setHdelation(true);
 					cnin.setChr(ci.getChr());
+					cnin.setHdeletion(true);
 					cnin.setStart(ci.getStart());
 					cnin.setCopynumber(copygain);
 				}

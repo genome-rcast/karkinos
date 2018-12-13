@@ -118,7 +118,7 @@ public class AllelicCNV {
 			for (CopyNumberInterval cnihigh : allelicLOHhigh) {
 				if (include(cnihigh, cni)) {
 					if (cnihigh.getCopynumber() == 1) {
-						cnihigh.setHdelation(true);
+						cnihigh.setHdeletion(true);
 						hdlist.add(cnihigh);
 						cnihigh.setCopynumber(0);
 					}
