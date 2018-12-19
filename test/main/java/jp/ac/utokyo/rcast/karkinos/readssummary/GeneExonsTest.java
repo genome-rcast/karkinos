@@ -3,6 +3,8 @@ package jp.ac.utokyo.rcast.karkinos.readssummary;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,10 +22,9 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-// TODO: This test class only aims at testing Interval.
-// We should add more tests in the future.
 public class GeneExonsTest {
   private static final String refGene = "test-resources/refgene/refGene.txt";
+  private static final String refGeneMedium = "test-resources/refgene/medium.txt";
 
   private static final Map<String, Integer> expectedCounter = new HashMap<String, Integer>() {{
     put("KANSL-AS", 1);
@@ -136,7 +137,7 @@ public class GeneExonsTest {
     return true;
   }
 
-  private static Stream<Arguments> toIntListArgs() {
+  private static final Stream<Arguments> toIntListArgs() {
     return Stream.of(
         Arguments.of(Arrays.asList(16400226), "16400226,"),
         Arguments.of(Arrays.asList(592235, 595220), "592235,595220,"));
@@ -162,4 +163,112 @@ public class GeneExonsTest {
       e.printStackTrace();
     }
   }
+
+  private static final Stream<Arguments> symbolWithoutNumArgs() {
+    return Stream.of(
+        Arguments.of("", "123"),
+        Arguments.of("MIR-", "MIR3670-3"),
+        Arguments.of("MIR-", "MIR3670-4"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("symbolWithoutNumArgs")
+  void symbolWithoutNumTest(final String expected, final String input)
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    final Method symbolWithoutNum = GeneExons.class.getDeclaredMethod("symbolWithoutNum", String.class);
+    symbolWithoutNum.setAccessible(true);
+    assertEquals(expected, (String)symbolWithoutNum.invoke(GeneExons.class, input));
+  }
+
+  private static final Stream<Arguments> isNumberArgs() {
+    return Stream.of(
+        Arguments.of(true, '0'),
+        Arguments.of(true, '5'),
+        Arguments.of(true, '9'),
+        Arguments.of(false, '\0'),
+        Arguments.of(false, 'a'));
+  }
+
+  @ParameterizedTest
+  @MethodSource("isNumberArgs")
+  void isNumberTest(final boolean expected, final char input)
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    final Method isNumber = GeneExons.class.getDeclaredMethod("isNumber", char.class);
+    isNumber.setAccessible(true);
+    assertEquals(expected, (boolean)isNumber.invoke(GeneExons.class, input));
+  }
+
+  private static final Stream<Arguments> getIVArgs() {
+    return Stream.of(
+        Arguments.of(null,
+          "chr1", 3, new LinkedHashMap<String, TreeMap<Integer, Interval>>() {{
+            put("chr2", new TreeMap<>());
+          }}),
+        Arguments.of(null,
+          "chr1", 3, new LinkedHashMap<String, TreeMap<Integer, Interval>>() {{
+            put("chr1", new TreeMap<>());
+          }}),
+        Arguments.of(null,
+          "chr1", 3, new LinkedHashMap<String, TreeMap<Integer, Interval>>() {{
+            put("chr1", new TreeMap<Integer, Interval>() {{
+              put(2, new Interval("chr1", 2, 2, "NR_037415", "MIR3620"));
+            }});
+          }}),
+        Arguments.of(new Interval("chr1", 2, 3, "NR_037415", "MIR3620"),
+          "chr1", 3, new LinkedHashMap<String, TreeMap<Integer, Interval>>() {{
+            put("chr1", new TreeMap<Integer, Interval>() {{
+              put(2, new Interval("chr1", 2, 3, "NR_037415", "MIR3620"));
+            }});
+          }}),
+        Arguments.of(new Interval("chr1", 3, 3, "NR_037415", "MIR3621"),
+          "chr1", 3, new LinkedHashMap<String, TreeMap<Integer, Interval>>() {{
+            put("chr1", new TreeMap<Integer, Interval>() {{
+              put(2, new Interval("chr1", 2, 3, "NR_037415", "MIR3620"));
+              put(3, new Interval("chr1", 3, 3, "NR_037415", "MIR3621"));
+            }});
+          }})
+        );
+  }
+
+  @ParameterizedTest
+  @MethodSource("getIVArgs")
+  void getIVTdest(final Interval expected, final String chr, final int pos, final Map<String, TreeMap<Integer, Interval>> map)
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    final Method getIV = GeneExons.class.getDeclaredMethod("getIV", String.class, int.class, Map.class);
+    getIV.setAccessible(true);
+    final Interval actual = (Interval)getIV.invoke(GeneExons.class, chr, pos, map);
+    if (expected == null && actual == null) {
+      return;
+    }
+    assertTrue(isSameInterval(expected, actual));
+  }
+
+  @Test
+  void getGeneSymbolTdest() {
+    try {
+      final GeneExons ge = new GeneExons(refGene);
+      assertNull(ge.getGeneSymbol("chr2", 1));
+      assertNull(ge.getGeneSymbol("chr16", 16400226));
+      assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400227));
+      assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400228));
+      assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400291));
+      assertNull(ge.getGeneSymbol("chr16", 16400292));
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  void isFrequentIsoformTdest() {
+    try {
+      final GeneExons ge = new GeneExons(refGeneMedium );
+      assertFalse(ge.isFrequentIsoform("chr1", 1));
+      assertFalse(ge.isFrequentIsoform("chr1", 228284964));
+      assertFalse(ge.isFrequentIsoform("chr16", 15001573));
+      assertTrue(ge.isFrequentIsoform("chr16", 15001600));
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
+  }
+
 }

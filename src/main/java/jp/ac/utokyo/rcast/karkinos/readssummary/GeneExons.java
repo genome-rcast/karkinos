@@ -287,7 +287,7 @@ public class GeneExons implements java.io.Serializable {
 	
 	
 
-	private Interval getIV(String chr, int pos,Map<String, TreeMap<Integer, Interval>> map) {
+	private static Interval getIV(String chr, int pos,Map<String, TreeMap<Integer, Interval>> map) {
 
 		TreeMap<Integer, Interval> tm = map.get(chr);
 		if (tm != null) {
