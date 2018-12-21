@@ -50,7 +50,7 @@ public class TwoStateHMMTest {
       SummaryStatistics expected = new SummaryStatistics();
       expected.addValue(1.0);
       expected.addValue(10.0);
-      assertTrue(ss.equals(expected));
+      assertEquals(expected, ss);
     }
 
     //      1234567890
@@ -72,7 +72,7 @@ public class TwoStateHMMTest {
 
       SummaryStatistics expected = new SummaryStatistics();
       expected.addValue(10.0);
-      assertTrue(ss.equals(expected));
+      assertEquals(expected, ss);
     }
 
     //      1234567890
@@ -94,7 +94,7 @@ public class TwoStateHMMTest {
 
       SummaryStatistics expected = new SummaryStatistics();
       expected.addValue(10.0);
-      assertTrue(ss.equals(expected));
+      assertEquals(expected, ss);
     }
 
     //      1234567890
@@ -117,7 +117,7 @@ public class TwoStateHMMTest {
       SummaryStatistics expected = new SummaryStatistics();
       expected.addValue(1.0);
       expected.addValue(10.0);
-      assertTrue(ss.equals(expected));
+      assertEquals(expected, ss);
     }
   }
 }
