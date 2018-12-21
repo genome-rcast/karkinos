@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 import java.io.File;
+import java.io.IOException;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import jp.ac.utokyo.rcast.karkinos.utils.Interval;
@@ -27,13 +28,9 @@ public class CaptureHolderTest {
   }
 
   @Test
-  void loadTargetBedTest() {
+  void loadTargetBedTest() throws IOException {
     final CaptureHolder ch = new CaptureHolder();
-    try {
-      ch.loadTargetBedFirstTime(bed, new TwoBitGenomeReader(twobit));
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
+    ch.loadTargetBedFirstTime(bed, new TwoBitGenomeReader(twobit));
 
     //        12345678901234567890123456789012
     // 1,11   ===========
@@ -47,13 +44,9 @@ public class CaptureHolderTest {
   }
 
   @Test
-  void getIntersectCapintervalTest() {
+  void getIntersectCapintervalTest() throws IOException {
     final CaptureHolder ch = new CaptureHolder();
-    try {
-      ch.loadTargetBedFirstTime(bed, new TwoBitGenomeReader(twobit));
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
+    ch.loadTargetBedFirstTime(bed, new TwoBitGenomeReader(twobit));
 
     //        12345678901234567890123456789012
     // 1,11   ===========

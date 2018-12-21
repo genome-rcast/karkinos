@@ -153,15 +153,11 @@ public class GeneExonsTest {
   }
 
   @Test
-  void loadmapTest() {
-    try {
-      final GeneExons ge = new GeneExons(refGene);
-      assertEquals(expectedCounter, ge.counter);
-      assertTrue(isSameMap(expectedGeneMap, ge.genemap));
-      assertTrue(isSameMap(expectedMap, ge.map));
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
+  void loadmapTest() throws IOException {
+    final GeneExons ge = new GeneExons(refGene);
+    assertEquals(expectedCounter, ge.counter);
+    assertTrue(isSameMap(expectedGeneMap, ge.genemap));
+    assertTrue(isSameMap(expectedMap, ge.map));
   }
 
   private static final Stream<Arguments> symbolWithoutNumArgs() {
@@ -244,31 +240,23 @@ public class GeneExonsTest {
   }
 
   @Test
-  void getGeneSymbolTdest() {
-    try {
-      final GeneExons ge = new GeneExons(refGene);
-      assertNull(ge.getGeneSymbol("chr2", 1));
-      assertNull(ge.getGeneSymbol("chr16", 16400226));
-      assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400227));
-      assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400228));
-      assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400291));
-      assertNull(ge.getGeneSymbol("chr16", 16400292));
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
+  void getGeneSymbolTdest() throws IOException {
+    final GeneExons ge = new GeneExons(refGene);
+    assertNull(ge.getGeneSymbol("chr2", 1));
+    assertNull(ge.getGeneSymbol("chr16", 16400226));
+    assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400227));
+    assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400228));
+    assertEquals("MIR3670-4", ge.getGeneSymbol("chr16", 16400291));
+    assertNull(ge.getGeneSymbol("chr16", 16400292));
   }
 
   @Test
-  void isFrequentIsoformTdest() {
-    try {
-      final GeneExons ge = new GeneExons(refGeneMedium );
-      assertFalse(ge.isFrequentIsoform("chr1", 1));
-      assertFalse(ge.isFrequentIsoform("chr1", 228284964));
-      assertFalse(ge.isFrequentIsoform("chr16", 15001573));
-      assertTrue(ge.isFrequentIsoform("chr16", 15001600));
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
+  void isFrequentIsoformTdest() throws IOException {
+    final GeneExons ge = new GeneExons(refGeneMedium );
+    assertFalse(ge.isFrequentIsoform("chr1", 1));
+    assertFalse(ge.isFrequentIsoform("chr1", 228284964));
+    assertFalse(ge.isFrequentIsoform("chr16", 15001573));
+    assertTrue(ge.isFrequentIsoform("chr16", 15001600));
   }
 
 }
