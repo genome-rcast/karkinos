@@ -83,12 +83,8 @@ public class CNVUtils {
 
 	}
 
-	private static boolean focalamp(CopyNumberInterval cni) {
-		
-		boolean b1 = cni.getCopynumber() >=6;
-		boolean b2 = Math.abs(cni.getEnd()-cni.getStart()) < 1000000;
-		return b1 && b2;
-		
+	private static boolean focalamp(final CopyNumberInterval cni) {
+		return cni.getCopynumber() >= 6 && cni.length() < 1000000;
 	}
 
 	private static CopyNumberInterval intercect(List<CopyNumberInterval> lohs,

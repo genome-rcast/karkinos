@@ -144,8 +144,8 @@ public class ReadsCounter implements java.io.Serializable {
 					start = end;
 					end = tmp;
 				}
-				end = end + sam.getReadLength();
-				insertsize = end - start;
+				end += sam.getReadLength() - 1;
+				insertsize = end - start + 1;
 				inserSizeAdd(insertsize);
 			}
 

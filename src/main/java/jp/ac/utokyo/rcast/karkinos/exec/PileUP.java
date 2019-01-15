@@ -63,12 +63,12 @@ public class PileUP implements java.io.Serializable {
 			//
 			int key = ite.next();
 			CapInterval ci = sm.get(key);
-			int start = ci.start - mergin;
+			int start = ci.getStart() - mergin;
 			if (lastpileup + 1 > start) {
 				start = lastpileup + 1;
 			}
-			int end = ci.end + mergin;
-			String chr = ci.chr;
+			int end = ci.getEnd() + mergin;
+			String chr = ci.getChr();
 			int[] indexes = new int[2];
 			
 			boolean definedpos = false;
@@ -80,7 +80,7 @@ public class PileUP implements java.io.Serializable {
 					definedpos = ds.contains(n);
 				}
 				
-				boolean ontag = ((n >= ci.start) && (n <= ci.end));
+				boolean ontag = ((n >= ci.getStart()) && (n <= ci.getEnd()));
 				
 				if (iv.getStart() <= n && n <= iv.getEnd()) {
 
@@ -593,7 +593,7 @@ public class PileUP implements java.io.Serializable {
 		int start = sam.getAlignmentStart();
 		int end = sam.getAlignmentEnd();
 		if (end == 0 || end == start) {
-			end = start + sam.getReadLength();
+			end = start + sam.getReadLength() - 1;
 		}
 		return pos >= start && pos <= end;
 	}

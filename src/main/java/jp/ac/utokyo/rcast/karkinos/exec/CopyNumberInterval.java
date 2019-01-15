@@ -15,129 +15,95 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.exec;
 
+/**
+ * The range is 1-based closed range [start,end]
+ */
 public class CopyNumberInterval implements java.io.Serializable{
+	private final String chr;
+	private final float aaf, baf;
+	private int start, end;
+	private float copynumber;
+	private boolean allelic = false;
+	private boolean hdeletion = false; // Homozygous deletion
+	private int noSNP;
 
-	public boolean isSupportbyAllelic() {
-		return supportbyAllelic;
+	public CopyNumberInterval(final String chr) {
+		this(chr, 0, 0);
 	}
 
-	public void setSupportbyAllelic(boolean supportbyAllelic) {
-		this.supportbyAllelic = supportbyAllelic;
+	public CopyNumberInterval(final String chr, final float aaf, final float baf) {
+		this.chr = chr;
+		this.aaf = aaf;
+		this.baf = baf;
 	}
 
-	public void setVaridated(boolean varidated) {
-		this.varidated = varidated;
-	}
-
-	public void setSnpclrrel(float snpclrrel) {
-		this.snpclrrel = snpclrrel;
-	}
-
-	public void setNoSNP(int noSNP) {
+	public void setNoSNP(final int noSNP) {
 		this.noSNP = noSNP;
 	}
-	String chr;
-	int start;
-	int end;
-	float copynumber;
-	boolean recurrent = false;
-	boolean allelic = false;
-	float aaf=0;
-	float baf=0;
-	
+
 	public float getAaf() {
 		return aaf;
-	}
-
-	public void setAaf(float aaf) {
-		this.aaf = aaf;
 	}
 
 	public float getBaf() {
 		return baf;
 	}
 
-	public void setBaf(float baf) {
-		this.baf = baf;
-	}
-
 	public boolean isAllelic() {
 		return allelic;
 	}
 
-	public void setAllelic(boolean allelic) {
+	public void setAllelic(final boolean allelic) {
 		this.allelic = allelic;
 	}
 
-	public boolean isRecurrent() {
-		return recurrent;
+	public boolean isHdeletion() {
+		return hdeletion;
 	}
 
-	public void setRecurrent(boolean recurrent) {
-		this.recurrent = recurrent;
-	}
-	boolean varidated = true;
-	boolean hdelation = false;
-	public boolean isHdelation() {
-		return hdelation;
+	public void setHdeletion(final boolean hdeletion) {
+		this.hdeletion = hdeletion;
 	}
 
-	public void setHdelation(boolean hdelation) {
-		this.hdelation = hdelation;
-	}
-	float snpclrrel;
-	int noSNP;
-	
-	boolean supportbyAllelic;
-	
-	public String getKey(){
-		return chr+":"+start+"-"+end;
-	}
-	
 	public String getChr() {
 		return chr;
 	}
-	public void setChr(String chr) {
-		this.chr = chr;
-	}
+
 	public int getStart() {
 		return start;
 	}
-	public void setStart(int start) {
+
+	public void setStart(final int start) {
 		this.start = start;
 	}
+
 	public int getEnd() {
 		return end;
 	}
-	public void setEnd(int end) {
+
+	public void setEnd(final int end) {
 		this.end = end;
 	}
+
 	public float getCopynumber() {
-	
 		return copynumber;
-		
 	}
-	public String getRejected() {
-		
-		if(varidated){
-			return "false";
-		}else{
-			if(noSNP<50){
-				return "n.v";
-			}
-			return "true";
-		}
-	}
-	public float getSnpclrrel() {
-		return snpclrrel;
-	}
+
 	public int getNoSNP() {
 		return noSNP;
 	}
-	public void setCopynumber(float copynumber2) {
-		this.copynumber = copynumber2;
+
+	public void setCopynumber(final float copynumber) {
+		this.copynumber = copynumber;
 	}
-	
-	
-	
+
+	/**
+	 * Return the length of Copy Number Interval.
+	 */
+	public int length() {
+		if (start > end) {
+			return 0;
+		}
+		return end - start + 1;
+	}
 }

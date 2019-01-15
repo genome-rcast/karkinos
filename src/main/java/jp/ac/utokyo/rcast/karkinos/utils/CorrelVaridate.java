@@ -42,13 +42,13 @@ public class CorrelVaridate {
 		for(CopyNumberInterval cni: cniList){
 			
 			//
-			if(!cni.isHdelation()){
-				if(Math.abs(cni.getEnd()-cni.getStart())<1000000){
+			if(!cni.isHdeletion()){
+				if(cni.length()<1000000){
 					if(cni.getCopynumber()>6){
 						
 						if(cnib4!=null){
 							if((cnib4.getCopynumber()-cni.getCopynumber())>1){
-								cni.setHdelation(true);
+								cni.setHdeletion(true);
 							}
 						}
 						
@@ -62,7 +62,7 @@ public class CorrelVaridate {
 		dataset.setVaridatedCNlist(cniList);
 		
 		for(CopyNumberInterval cni:cniListb4c){
-			if(cni.isHdelation()){
+			if(cni.isHdeletion()){
 				if(!cniList.contains(cni)){
 					cniList.add(cni);
 				}
@@ -85,11 +85,6 @@ public class CorrelVaridate {
 
 			List<Point2D.Float> list = new ArrayList<Point2D.Float>();
 			List<SNVHolder> holderL = new ArrayList<SNVHolder>();
-			
-			if(include(allelicCNAs ,cni)){
-				cni.setSupportbyAllelic(true);
-			}
-			
 			//
 			int noSNP = 0;
 			for (SNVHolder holder : dataset.getSnvlist()) {
@@ -115,13 +110,11 @@ public class CorrelVaridate {
 //			}
 			//System.out.println("correl="+snpcorrel);
 			
-			cni.setSnpclrrel(snpcorrel);
 			//correlation corpse because of CNA
 			boolean varidated = snpcorrel < 0.7;
 			if(noSNP<50){
 				varidated = true;// cannot varidate
 			}
-			cni.setVaridated(varidated);
 
 			//
 			for(SNVHolder holder :holderL){
@@ -181,14 +174,12 @@ public class CorrelVaridate {
 			
 			if(allelic.getCopynumber()<2){
 				if(cni.getCopynumber()<2){
-					 cni.setRecurrent(true);
 					 return true;
 				}
 			}
 			
 			if(allelic.getCopynumber()>2){
 				if(cni.getCopynumber()>2){
-					 cni.setRecurrent(true);
 					 return true;
 				}
 			}

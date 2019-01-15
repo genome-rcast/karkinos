@@ -54,7 +54,7 @@ public class CaptureHolder implements java.io.Serializable {
 		int end = iv.getEnd();
 		if (tm == null)
 			return null;
-		SortedMap sm = tm.subMap(start, end);
+		SortedMap sm = tm.subMap(start, end + 1);
 		return sm;
 	}
 
@@ -142,13 +142,15 @@ public class CaptureHolder implements java.io.Serializable {
 				String[] sa = line.split("\t");
 				String chr = sa[0];
 
+				// Convert .capregion and .capwithdepth format (0-based half-opened range)
+				// into CapInterval format (1-based closed range).
 				int start = Integer.parseInt(sa[1]);
 				int end = Integer.parseInt(sa[2]);
 				int length = end - start;
 				float cgp = Float.parseFloat(sa[4]);
 				float duality = Float.parseFloat(sa[5]);
 				boolean gene = sa[6].equals("gene");
-				CapInterval iv = new CapInterval(chr, start, end, gene, cgp,
+				CapInterval iv = new CapInterval(chr, start + 1, end, gene, cgp,
 						duality);
 				TreeMap<Integer, CapInterval> tm = map.get(chr);
 				if (tm == null) {
@@ -213,9 +215,11 @@ public class CaptureHolder implements java.io.Serializable {
 						chr = "chr" + chr;
 					}
 				}
+				// Convert BED range (0-based half-opened range) into CapInterval
+				// range (1-based closed range).
 				int start = Integer.parseInt(sa[1]);
 				int end = Integer.parseInt(sa[2]);
-				CapInterval iv = new CapInterval(chr, start, end, gene);
+				CapInterval iv = new CapInterval(chr, start + 1, end, gene);
 				list.add(iv);
 				totallen = totallen + Math.abs(end - start);
 			}
@@ -228,12 +232,12 @@ public class CaptureHolder implements java.io.Serializable {
 		Collections.sort(list, new MYComparator());
 		for (CapInterval iv : list) {
 
-			TreeMap<Integer, CapInterval> tm = map.get(iv.chr);
+			TreeMap<Integer, CapInterval> tm = map.get(iv.getChr());
 			if (tm == null) {
 				tm = new TreeMap<Integer, CapInterval>();
-				map.put(iv.chr, tm);
+				map.put(iv.getChr(), tm);
 			}
-			Integer before = tm.floorKey(iv.start);
+			Integer before = tm.floorKey(iv.getStart());
 			boolean merge = false;
 			if (before != null) {
 				CapInterval ivb4 = tm.get(before);
@@ -243,7 +247,7 @@ public class CaptureHolder implements java.io.Serializable {
 				}
 			}
 			if (merge == false) {
-				tm.put(iv.start, iv);
+				tm.put(iv.getStart(), iv);
 			}
 
 		}
@@ -260,19 +264,23 @@ public class CaptureHolder implements java.io.Serializable {
 				Set<Entry<Integer, CapInterval>> es = tm.entrySet();
 				for (Entry<Integer, CapInterval> entry : es) {
 
+					// Convert CapInterval range (1-based closed range) into BED range
+					// (0-based half-opened range).
 					CapInterval cp = entry.getValue();
 					String chr = cp.getChr();
 					int start = cp.getStart();
 					int end = cp.getEnd();
-					int length = end - start;
+					// NB: We should not use cp.getLength() method here because the return value
+					// is invalid if CapInterval is merged.
+					int length = end - start + 1;
 					float cgParcent = tgr.getCGParcent(chr, start, end);
 					float duality = cp.getDuality();
 					cp.setCgParcent(cgParcent);
 					String genestr = "rna";
-					if (cp.gene) {
+					if (cp.isGene()) {
 						genestr = "gene";
 					}
-					bw.write(chr + "\t" + start + "\t" + end + "\t" + length
+					bw.write(chr + "\t" + (start - 1) + "\t" + end + "\t" + length
 							+ "\t" + cgParcent + "\t" + duality + "\t"
 							+ genestr + "\n");
 
@@ -288,18 +296,18 @@ public class CaptureHolder implements java.io.Serializable {
 	class MYComparator implements Comparator<CapInterval> {
 
 		public int compare(CapInterval o1, CapInterval o2) {
-			if (o1.chr.equals(o2.chr)) {
-				return o1.start - o2.start;
+			if (o1.getChr().equals(o2.getChr())) {
+				return o1.getStart() - o2.getStart();
 			} else {
 
-				String chr1 = o1.chr;
-				if (o1.chr.contains("chr")) {
-					chr1 = o1.chr.replace("chr", "");
+				String chr1 = o1.getChr();
+				if (chr1.contains("chr")) {
+					chr1 = chr1.replace("chr", "");
 				}
 
-				String chr2 = o2.chr;
-				if (o2.chr.contains("chr")) {
-					chr2 = o2.chr.replace("chr", "");
+				String chr2 = o2.getChr();
+				if (chr2.contains("chr")) {
+					chr2 = chr2.replace("chr", "");
 				}
 				if (number(chr1) && number(chr2)) {
 					return toInt(chr1) - toInt(chr2);
@@ -357,7 +365,7 @@ public class CaptureHolder implements java.io.Serializable {
 		int s = sam.getAlignmentStart();
 		int e = sam.getAlignmentEnd();
 		if (e == 0 || e == s) {
-			e = s + sam.getReadLength();
+			e = s + sam.getReadLength() - 1;
 		}
 		return getOverlapping(sam.getReferenceName(), s, e);
 
@@ -371,12 +379,15 @@ public class CaptureHolder implements java.io.Serializable {
 		// check only proper
 		if (sam.getProperPairFlag()) {
 			int s = sam.getMateAlignmentStart();
-			int e = s + sam.getReadLength();
+			int e = s + sam.getReadLength() - 1;
 			return getOverlapping(sam.getReferenceName(), s, e);
 		}
 		return null;
 	}
 
+	/**
+	 * The arguments take 1-based closed range: [start,end]
+	 */
 	public CapInterval getOverlapping(String chrom, int start, int end) {
 
 		TreeMap<Integer, CapInterval> refmap = map.get(chrom);
@@ -403,7 +414,7 @@ public class CaptureHolder implements java.io.Serializable {
 		// check only proper
 		if (sam.getProperPairFlag()) {
 			int s = sam.getMateAlignmentStart();
-			int e = s + sam.getReadLength();
+			int e = s + sam.getReadLength() - 1;
 			return getOverlapping(sam.getReferenceName(), s - baitmergin, e
 					+ baitmergin);
 		}

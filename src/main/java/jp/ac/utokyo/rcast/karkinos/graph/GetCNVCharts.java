@@ -119,13 +119,13 @@ public class GetCNVCharts {
 						continue;
 					if (cni.getCopynumber() == 0)
 						continue;
-					if (cni.isHdelation())
+					if (cni.isHdeletion())
 						continue;
 				} else {
-					if (1 <= cni.getCopynumber() && !cni.isHdelation()) {
+					if (1 <= cni.getCopynumber() && !cni.isHdeletion()) {
 						continue;
 					}
-					if(cni.getCopynumber()!=0 && cni.isHdelation()){
+					if(cni.getCopynumber()!=0 && cni.isHdeletion()){
 						continue;
 					}
 					

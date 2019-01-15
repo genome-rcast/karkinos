@@ -107,9 +107,9 @@ public class AllelicCNV {
 		return hdList;
 	}
 
-	private List<CopyNumberInterval> analyse(
-			List<CopyNumberInterval> allelicLOHLow,
-			List<CopyNumberInterval> allelicLOHhigh) {
+	private static List<CopyNumberInterval> analyse(
+			final List<CopyNumberInterval> allelicLOHLow,
+			final List<CopyNumberInterval> allelicLOHhigh) {
 
 		List<CopyNumberInterval> hdlist = new ArrayList<CopyNumberInterval>();
 
@@ -118,7 +118,7 @@ public class AllelicCNV {
 			for (CopyNumberInterval cnihigh : allelicLOHhigh) {
 				if (include(cnihigh, cni)) {
 					if (cnihigh.getCopynumber() == 1) {
-						cnihigh.setHdelation(true);
+						cnihigh.setHdeletion(true);
 						hdlist.add(cnihigh);
 						cnihigh.setCopynumber(0);
 					}
@@ -128,7 +128,7 @@ public class AllelicCNV {
 		return hdlist;
 	}
 
-	private boolean include(CopyNumberInterval cnihigh, CopyNumberInterval cni) {
+	private static boolean include(final CopyNumberInterval cnihigh, final CopyNumberInterval cni) {
 
 		if (!cnihigh.getChr().equals(cni.getChr())) {
 			return false;
@@ -139,18 +139,12 @@ public class AllelicCNV {
 		if ((cni.getStart() <= cnihigh.getStart())
 				&& (cni.getEnd() >= cnihigh.getEnd())) {
 
-			if (len(cni) > len(cnihigh)) {
+			if (cni.length() > cnihigh.length()) {
 
 				return true;
 			}
 		}
 		return false;
-	}
-
-	private int len(CopyNumberInterval cni) {
-
-		return Math.abs(cni.getEnd() - cni.getStart());
-
 	}
 
 	public List<CopyNumberInterval> getLOH(boolean higher) {
@@ -178,8 +172,7 @@ public class AllelicCNV {
 						cni.setNoSNP(noSNP);
 						copyNumberIntervalList.add(cni);
 					}
-					cni = new CopyNumberInterval();
-					cni.setChr(sc.getSnv().getChr());
+					cni = new CopyNumberInterval(sc.getSnv().getChr());
 					cni.setStart(sc.getSnv().getPos());
 					cni.setCopynumber(hmmv);
 					cni.setAllelic(true);

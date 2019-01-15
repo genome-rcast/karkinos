@@ -413,8 +413,10 @@ public class FileOutPut {
 
 				for (WaveletIF wi : list) {
 
+					// Convert CapInterval format (1-based closed open range)
+					// into _cnvdepth.txt format (0-based half-opened range)
 					CapInterval ci = (CapInterval) wi;
-					bw.write(ci.getChr() + "\t" + ci.getStart() + "\t"
+					bw.write(ci.getChr() + "\t" + (ci.getStart() - 1) + "\t"
 							+ ci.getEnd() + "\t"
 							+ format(ci.getCNVInfo().getNormaldepthAdj())
 							+ "\t" + format(ci.getCNVInfo().getTumordepthAdj())

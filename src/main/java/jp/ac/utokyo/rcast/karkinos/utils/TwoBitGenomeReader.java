@@ -254,9 +254,12 @@ public class TwoBitGenomeReader {
 		return getGenomeNuc(pos, strand);
 	}
 	
+	/**
+	 * The argument range is closed range [start, end]
+	 */
 	public float getCGParcent(String chrom, int start, int end) throws IOException{
 		
-		int total = end-start;
+		int total = end - start + 1;
 		float cg = 0;
 		for(int n= start;n<=end;n++){
 			char c = getGenomeNuc(chrom,n,true);

@@ -15,8 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.annotation;
 
-import htsjdk.samtools.SAMRecord;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,8 +35,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Hex;
-
-import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 
 public class DbSNPAnnotation implements java.io.Serializable {
 

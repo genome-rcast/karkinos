@@ -357,14 +357,19 @@ public class TumorGenotyper extends ReadWriteBase {
 		//fullanalysis=true;
 		if (fullanalysis) {
 			// analysis
-			GeneExons ge = new GeneExons(refflat);
-			// analysis(bean, dbSNP, mappability, tgr, tumorbamf, g1000,
-			// g1000thres,cosmic, -1,exonSNP,ge);
-			analysisNew(bean, dbSNP, mappability, tgr, normalbamf,tumorbamf, g1000,
-					g1000thres, cosmic, -1, exonSNP, ge, useAvearageNormal,sites);
-			// output
-			output(bean, outdir, tgr, id, readsStat, alCNV, ge, na, pi,
-					baseploidy, nopdf,refflat,sites);
+			try {
+				GeneExons ge = new GeneExons(refflat);
+				// analysis(bean, dbSNP, mappability, tgr, tumorbamf, g1000,
+				// g1000thres,cosmic, -1,exonSNP,ge);
+				analysisNew(bean, dbSNP, mappability, tgr, normalbamf,tumorbamf, g1000,
+						g1000thres, cosmic, -1, exonSNP, ge, useAvearageNormal,sites);
+				// output
+				output(bean, outdir, tgr, id, readsStat, alCNV, ge, na, pi,
+						baseploidy, nopdf,refflat,sites);
+			} catch (final IOException e) {
+				System.out.println("could not read `" + refflat + "`: " + e.getMessage());
+				return;
+			}
 		}
 	}
 

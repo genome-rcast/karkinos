@@ -97,7 +97,7 @@ public class ReadInterval {
 		int start = sam.getAlignmentStart();
 		int end = sam.getAlignmentEnd();
 		if (end == 0) {
-			end = sam.getAlignmentStart() + sam.getReadLength();
+			end = sam.getAlignmentStart() + sam.getReadLength() - 1;
 		}
 
 		boolean isfirst = false;
