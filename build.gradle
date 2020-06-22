@@ -1,6 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.5"
+}
 
 group = 'karkinos'
 version = '2.0.5-SNAPSHOT'
@@ -101,5 +106,6 @@ task utilsJar(type: Jar) {
 }
 
 test {
+    test.finalizedBy jacocoTestReport
     useJUnitPlatform()
 }
