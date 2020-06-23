@@ -101,6 +101,13 @@ task uberjar(type: Jar) {
   exclude "META-INF/*.SF"
 }
 
+jacocoTestReport {
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+}
+
 task utilsJar(type: Jar) {
     from sourceSets.utils.output
 }
