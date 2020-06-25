@@ -1,0 +1,23 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: '11'
+        architecture: x64
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Run test
+      run: ./gradlew test
+    - name: Coverage Graph
+      uses: codecov/codecov-action@v1.0.7
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: "./build/reports/jacoco/test/jacocoTestReport.xml"
