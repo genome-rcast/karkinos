@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/genome-rcast/karkinos.svg?branch=master)](https://travis-ci.org/genome-rcast/karkinos)
+[![test](https://github.com/genome-rcast/karkinos/workflows/test/badge.svg)](https://github.com/genome-rcast/karkinos/actions)
+[![codecov](https://codecov.io/gh/genome-rcast/karkinos/branch/master/graph/badge.svg)](https://codecov.io/gh/genome-rcast/karkinos)
 
 # About
 
