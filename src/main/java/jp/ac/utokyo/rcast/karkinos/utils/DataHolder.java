@@ -31,10 +31,6 @@ public class DataHolder {
 
 	}
 
-	public List<CapInterval> getList() {
-		return list;
-	}
-
 	long normaltotal = 0;
 	long tumortotal = 0;
 

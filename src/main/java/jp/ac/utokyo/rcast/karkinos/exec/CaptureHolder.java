@@ -180,14 +180,6 @@ public class CaptureHolder implements java.io.Serializable {
 		System.out.println("ncRNA " + totallenrna + "bp has loaded");
 	}
 
-	public long getTotalcnt() {
-		return totalcnt;
-	}
-
-	public long getTotallen() {
-		return totallen;
-	}
-
 	public void loadTargetBedFirstTime(File bed, TwoBitGenomeReader tgr)
 			throws IOException {
 

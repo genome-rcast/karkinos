@@ -25,9 +25,6 @@ public class SupportReadsCheckResult {
 	
 	float ntQualityDiff=0;
 	
-	public float getNtQualityDiff() {
-		return ntQualityDiff;
-	}
 	public void setNtQualityDiff(float ntQualityDiff) {
 		this.ntQualityDiff = ntQualityDiff;
 	}

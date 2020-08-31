@@ -148,21 +148,6 @@ public class CapInterval implements WaveletIF, java.io.Serializable {
 		return cgParcent;
 	}
 
-	public String getInfoStr() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(chr+"\t");
-		sb.append(start+"\t");
-		sb.append(end+"\t");
-		sb.append(cnvinfo.getNormalcnt()+"\t");
-		sb.append(cnvinfo.getTumorcnt()+"\t");
-		sb.append(cnvinfo.getTnratio()+"\t");
-		sb.append(cnvinfo.getDenoise()+"\t");
-		sb.append(cnvinfo.getCopynumber()+"\t");
-		sb.append(getHMMValue()+"\t");
-		sb.append(getVaridateVal());
-		return sb.toString();
-	}
-
 	public void setCgParcent(final float cgParcent) {
 		this.cgParcent = cgParcent;
 	}

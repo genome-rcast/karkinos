@@ -41,9 +41,7 @@ import jp.ac.utokyo.rcast.karkinos.graph.output.CNVVcf;
 import jp.ac.utokyo.rcast.karkinos.graph.output.FileOutPut;
 import jp.ac.utokyo.rcast.karkinos.graph.output.PdfReport;
 import jp.ac.utokyo.rcast.karkinos.graph.output.TextSummary;
-import jp.ac.utokyo.rcast.karkinos.hmm.AdjustBetweenState;
 import jp.ac.utokyo.rcast.karkinos.hmm.CountCNV;
-import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysis;
 import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysisFromEM;
 import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
@@ -404,101 +402,6 @@ public class TumorGenotyper extends ReadWriteBase {
 	NoiseAnalysis na;
 	PeaksInfo pi;
 
-	protected void analysis(SaveBean bean, String dbSNP, String mappability,
-			TwoBitGenomeReader tgr, String normalbamf,String tumorbamf, String g1000,
-			float g1000thres, String cosmic, double fixtumorratio,
-			String exonSNP, GeneExons ge) throws IOException {
-
-		System.out.println("analysis start");
-		DataSet dataset = bean.getDataset();
-		ReadsSummary readsSummary = bean.getReadsSummary();
-		// Excute CNV analysis using wavelet transform
-		System.out.println("CNV analysis 1 start");
-		GCParcentAdjust.calc(dataset);
-		denoizeAndHMM(dataset);
-		// if CNV exceed max num 25 denoize more
-		if (CountCNV.count(dataset) > 25) {
-			KarkinosProp.maxdenoiseLevel = KarkinosProp.maxdenoiseLevel + 1;
-			denoizeAndHMM(dataset);
-		}
-
-		// annotate datalist by CNV value
-		dataset.assginCaptureInterval();
-		// add betwwen states for poor fit chromosome
-		AdjustBetweenState.calc(dataset);
-
-		System.out.println("assgin dbSNP start");
-		// annotate datalist by dbSNP
-		DbSNPAnnotation dbAnno = new DbSNPAnnotation(dbSNP, g1000, g1000thres,
-				cosmic, exonSNP);
-		dataset.assgindbSNP(dbAnno);
-
-		// try to find allelic CNV
-		alCNV = new AllelicCNV(dataset, readsSummary);
-
-		// find hetro SNP correlation in each CMV interval
-		// reject if correration is high
-		CorrelVaridate.varidate(dataset, alCNV);
-		// CheckPossibleHDAmp.check(dataset);
-		// ///
-		CNVUtils.reflectToSNV(dataset, alCNV.getAllelicLOHLow(),
-				alCNV.getAllelicLOHhigh());
-
-		System.out.println("tumor ratio");
-		// calculate tumor ratio
-		dataset.getAnalyseDist();
-		if (fixtumorratio > 0) {
-			dataset.setFixtc((float) fixtumorratio);
-		}
-
-		// support reads,entropy,mappability check
-		System.out.println("filter annotation");
-		FilterAnnotation fa = new FilterAnnotation(mappability, tgr,normalbamf,tumorbamf,
-				dbAnno, ge);
-		// set filter1
-		float tc1 = dataset.getTumorRatio();
-		fa.filterAnnotation(dataset, readsSummary, 2);
-		// tcontents from somatic val
-		dataset.getAnalyseDist().reanalyseTC(dataset);
-
-		//
-		float tc2 = dataset.getTumorRatio();
-		if (tc1 != tc2) {
-			fa.filterAnnotation(dataset, readsSummary, 2);
-		}
-		// set filter stat
-		dataset.getAnalyseDist().analyseDist(dataset);
-		//
-
-		dataset.bailAnalysis();
-		System.out.println("analysis done");
-		na = fa.getNa();
-
-	}
-
-	private void _denoizeAndHMM(DataSet dataset) throws IOException {
-		System.out.println("CNV analysis 2 start");
-		WaveletDenoize.calc(dataset);
-
-		System.out.println("CNV analysis 3 start");
-		// HMM call for CNV
-		HMMCNVAnalysis.calc(dataset);
-	}
-
-	// for future use
-	private void denoizeAndHMM(DataSet dataset) throws IOException {
-		System.out.println("CNV analysis 2 start");
-		// MovingAverage.calc(dataset);
-		double baselineLOHEstimate = WaveletDenoize.calc(dataset);
-		// EMMethod to calc distribution
-		System.out.println("CNV analysis 3 start");
-		pi = EMMethod.calc(dataset, baselineLOHEstimate);
-		System.out.println("CNV analysis 4 start");
-		// HMM call for CNV
-		HMMCNVAnalysis.calc(dataset);
-
-	}
-
 	int baseploidy = 2;
 
 	protected void analysisNew(SaveBean bean, String dbSNP, String mappability,
@@ -621,12 +524,6 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 		HMMCNVAnalysisFromEM.calc(dataset, pi);
 
-	}
-
-	private String info(SummaryStatistics ss) {
-
-		return ss.getMean() + "\t" + ss.getStandardDeviation() + "\t"
-				+ ss.getN();
 	}
 
 	protected void output(SaveBean bean, String outdir, TwoBitGenomeReader tgr,

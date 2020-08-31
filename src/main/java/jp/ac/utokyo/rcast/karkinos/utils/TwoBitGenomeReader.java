@@ -29,14 +29,6 @@ import java.util.TreeMap;
 
 public class TwoBitGenomeReader {
 
-	public void setCheckNmask(boolean checkNmask) {
-		this.checkNmask = checkNmask;
-	}
-
-	public void setCheckRepeat(boolean checkRepeat) {
-		this.checkRepeat = checkRepeat;
-	}
-
 	File twoBitRef = null;
 	boolean checkNmask = true;
 	boolean checkRepeat = true;
@@ -120,56 +112,10 @@ public class TwoBitGenomeReader {
 
 	}
 	
-	
-	
-	public static Map<String, Integer> getReadSizes(File f) throws IOException {
-
-		Map<String, Integer> m = new LinkedHashMap<String, Integer>();
-		Map<String, Integer> m2 = new LinkedHashMap<String, Integer>();
-		RandomAccessFile raf = new RandomAccessFile(f, "r");
-		LittleEndian la = new LittleEndian(raf);
-		raf.seek(0L);
-		// header
-		int sig = la.readInt();
-		boolean sigOK = (sig == 0x1a412743);
-		int version = la.readInt();
-		int seqCount = la.readInt();
-		int reserved = la.readInt();
-
-		for (int n = 0; n < seqCount; n++) {
-			byte namesize = raf.readByte();
-			byte[] ba = new byte[namesize];
-			raf.read(ba);
-			String name = new String(ba);
-			int size = la.readInt();
-			m.put(name, size);
-		}
-		Iterator<String> ite = m.keySet().iterator();
-		while(ite.hasNext()){
-			String chrom = ite.next();
-			raf.seek(m.get(chrom));
-			int dnaSize = la.readInt();
-			m2.put(chrom, dnaSize);			
-		}		
-		raf.close();
-		return m2;
-
-	}
-	
-	
-
 	private byte genomeBuf[] = null;
 	private String lastloadchr = "";
 	private PositionBrocks nBlock = null, maskBlock = null;
 
-	
-	public void readRefIfNew(String chrom) throws IOException {
-		if (!lastloadchr.equals(chrom)) {
-			System.out.println(chrom);
-			readRef(chrom);
-		}		
-	}
-	
 	public boolean isRefExsist(String chrom){
 		
 		boolean contain = index.containsKey(chrom);
@@ -177,19 +123,6 @@ public class TwoBitGenomeReader {
 			contain = index.containsKey("chr"+chrom);
 		}
 		return contain;
-	}
-	
-	public String getChromString(int chridxn) {
-		
-		int n = 1;
-		for(Entry<String, Integer> et:index.entrySet()){
-			
-			if(chridxn==n){
-				return et.getKey();
-			}
-			n++;
-		}		
-		return null;
 	}
 	
 	public boolean readRef(String chrom) throws IOException {

@@ -357,62 +357,6 @@ public class GetCNVCharts {
 
 	}
 
-	private static void addMaker(XYPlot xyplot, double baselineLOHEstimate) {
-		Marker marker0 = new ValueMarker(baselineLOHEstimate);
-		marker0.setPaint(Color.RED);
-		Marker marker1 = new ValueMarker(1);
-		marker1.setPaint(Color.RED);
-		Marker marker2 = new ValueMarker(2 - baselineLOHEstimate);
-		marker2.setPaint(Color.RED);
-		Marker marker3 = new ValueMarker(3 - (2 * baselineLOHEstimate));
-		marker3.setPaint(Color.RED);
-		xyplot.addRangeMarker(marker0);
-		xyplot.addRangeMarker(marker1);
-		xyplot.addRangeMarker(marker2);
-		xyplot.addRangeMarker(marker3);
-
-	}
-
-	//
-	//
-	//
-	// private static DisplayObject caprate(DataSet dataset) {
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getChart(1,dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	// }
-	//
-	// private static DisplayObject cnvList(DataSet dataset) {
-	//
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getcnvlist(dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	// }
-	//
-	// private static DisplayObject hetroSNP(DataSet dataset) {
-	//
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getChart(2,dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	// }
-	//
-	// private static DisplayObject mutation(DataSet dataset) {
-	//
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getChart(3,dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	//
-	// }
-
-	private static String format(double num) {
-		NumberFormat nf = NumberFormat.getNumberInstance();
-		return nf.format(num);
-	}
-
 	private static String format(int num) {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);

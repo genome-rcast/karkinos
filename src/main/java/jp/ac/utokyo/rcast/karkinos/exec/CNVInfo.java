@@ -45,20 +45,12 @@ public class CNVInfo implements java.io.Serializable{
 		return normalcnt;
 	}
 
-	public double getNormaldepth() {
-		return normaldepth;
-	}
-
 	public double getNormaldepthAdj() {
 		return normaldepthAdj;
 	}
 
 	public long getTumorcnt() {
 		return tumorcnt;
-	}
-
-	public double getTumordepth() {
-		return tumordepth;
 	}
 
 	public double getTumordepthAdj() {

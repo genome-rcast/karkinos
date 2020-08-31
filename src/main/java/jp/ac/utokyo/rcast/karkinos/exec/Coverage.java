@@ -41,10 +41,6 @@ public class Coverage implements Serializable {
 		Interval iv;
 		int cnt;
 
-		public String getInfoStr() {
-			return iv.getChrom() + ":" + iv.getStart() + "-" + iv.getEnd() + "\t" + cnt;
-		}
-
 	}
 
 	class Container implements Serializable {
@@ -83,14 +79,6 @@ public class Coverage implements Serializable {
 			readcounts10K.put(key, cn);
 		}
 
-	}
-
-	public Map<String, Container> getReadcounts10K() {
-		return readcounts10K;
-	}
-
-	public void setReadcounts10K(Map<String, Container> readcounts10k) {
-		readcounts10K = readcounts10k;
 	}
 
 	Map<CapInterval, Container> capregion = new LinkedHashMap<CapInterval, Container>();
@@ -223,14 +211,6 @@ public class Coverage implements Serializable {
 
 	public void analysisBaitSampling() {
 		bs.analyze();
-	}
-
-	public BaitSampling getBs() {
-		return bs;
-	}
-
-	public void setBs(BaitSampling bs) {
-		this.bs = bs;
 	}
 
 	private void mapinit(CaptureHolder ch) {

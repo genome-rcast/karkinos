@@ -58,24 +58,8 @@ public class BinData {
 		return udepth;
 	}
 
-	public void setUdepth(int udepth) {
-		this.udepth = udepth;
-	}
-
 	public int getLdepth() {
 		return ldepth;
-	}
-
-	public void setLdepth(int ldepth) {
-		this.ldepth = ldepth;
-	}
-
-	public SummaryStatistics getHetroSNPAF() {
-		return hetroSNPAF;
-	}
-
-	public void setHetroSNPAF(SummaryStatistics hetroSNPAF) {
-		this.hetroSNPAF = hetroSNPAF;
 	}
 
 	int numCandidate;

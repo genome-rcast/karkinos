@@ -60,41 +60,4 @@ public class NormalSNPCounter {
 
 	}
 
-	
-	public float getHetroSNPRatio(String key){
-		//6 allele
-		
-		SNPDepthCounter counter = null;
-		key = GenotypeKeyUtils.aggrigateKeys(key);
-		if (mutationCounterNormalSNP.containsKey(key)) {
-			
-			counter = mutationCounterNormalSNP.get(key);
-			
-		}
-		int cnt = 1;
-		if(counter!=null){
-			cnt = cnt+counter.getTotal();
-		}
-		return (float)((double)cnt/(double)(total+6));
-		
-	}
-	public float getHetroSNPRatioRemain(String key){
-		return 1-getHetroSNPRatio(key);
-		
-	}
-	
-	public float getLogRefHetroSNPRatio(String key, long ntotal){
-		
-		key = GenotypeKeyUtils.aggrigateKeys(key);
-		SNPDepthCounter counter = null;
-		if (mutationCounterNormalSNP.containsKey(key)) {
-			
-			counter = mutationCounterNormalSNP.get(key);
-			double d = (double)((double)ntotal/(double)(counter.getTotal()+1));
-			return (float)(Math.log10(d));
-		}
-		return 1;
-		
-	}
-	
 }

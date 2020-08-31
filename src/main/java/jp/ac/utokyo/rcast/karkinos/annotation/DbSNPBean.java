@@ -50,10 +50,6 @@ public class DbSNPBean implements java.io.Serializable{
 	public boolean isCosmic() {
 		return cosmic;
 	}
-	public boolean isCosmicHigh() {
-		return isCosmic()&& isValid() && cnt > 1;
-	}
-	
 
 	public void setCosmic(boolean cosmic) {
 		this.cosmic = cosmic;
@@ -85,15 +81,6 @@ public class DbSNPBean implements java.io.Serializable{
 
 	public void setData(String[] _sa) {
 		sa = _sa;
-	}
-
-	public String toStr() {
-
-		StringBuffer sb = new StringBuffer();
-		for (String s : sa) {
-			sb.append(s+"\t");
-		}
-		return sb.toString();
 	}
 
 	public String getInfo() {

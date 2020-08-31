@@ -60,10 +60,6 @@ public class SNPDepthCounter {
 		return x3count;
 	}
 
-	public int getX4count() {
-		return x4count;
-	}
-
 	public int getHighdepthcnt() {
 		return highdepthcnt;
 	}

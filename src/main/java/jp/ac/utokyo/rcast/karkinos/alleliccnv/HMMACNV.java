@@ -186,25 +186,6 @@ public class HMMACNV {
 		return hmm;
 	}
 
-	private static SummaryStatistics getVariance(
-			List<List<SNVHolderPlusACnv>> plist, boolean high) {
-		SummaryStatistics ss = new SummaryStatistics();
-		for (List<SNVHolderPlusACnv> list : plist) {
-			for (SNVHolderPlusACnv sc : list) {
-				double d = 0;
-				if (high) {
-					d = sc.getHighera().getWtval();
-				} else {
-					d = sc.getLowera().getWtval();
-				}
-				if (between(d, 0.8, 1.2)) {
-					ss.addValue(d);
-				}
-			}
-		}
-		return ss;
-	}
-
 	private static boolean between(double d, double s, double e) {
 
 		//

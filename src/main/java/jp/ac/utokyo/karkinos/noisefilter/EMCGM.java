@@ -24,32 +24,6 @@ import org.apache.commons.math.distribution.NormalDistribution;
 import org.apache.commons.math.distribution.NormalDistributionImpl;
 
 public class EMCGM {
-
-	public static void main(String[] arg) {
-
-		EMCGM emcgm = new EMCGM();
-		emcgm.setInitVariance(0.05);
-		List<Point2D> lista = new ArrayList<Point2D>();
-		//
-		lista.add(new Point2D.Double(0.01, 10));
-		lista.add(new Point2D.Double(0.02, 10));
-		lista.add(new Point2D.Double(0.1, 10));
-		lista.add(new Point2D.Double(0.12, 10));
-		lista.add(new Point2D.Double(0.101, 10));
-		lista.add(new Point2D.Double(0.2, 10));
-		lista.add(new Point2D.Double(0.25, 10));
-		lista.add(new Point2D.Double(0.33, 10));
-		lista.add(new Point2D.Double(0.39, 10));
-		lista.add(new Point2D.Double(0.35, 10));
-		lista.add(new Point2D.Double(0.4, 10));
-		lista.add(new Point2D.Double(0.45, 10));
-		lista.add(new Point2D.Double(0.41, 10));
-		lista.add(new Point2D.Double(0.47, 10));
-		lista.add(new Point2D.Double(0.5, 10));
-
-		emcgm.analyse(lista);
-	}
-
 	public static final double u1Min = 0.35;
 	public static final double u1Max = 0.75;
 
@@ -314,10 +288,6 @@ public class EMCGM {
 		return numcandidate;
 	}
 
-	public int getNumnoise() {
-		return numnoise;
-	}
-
 	public double getBorderAF() {
 		return borderAF;
 	}
@@ -327,11 +297,4 @@ public class EMCGM {
 	}
 
 	double borderAF;
-
-	public void _analyse(List<Point2D> list) {
-
-		//
-
-	}
-
 }

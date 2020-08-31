@@ -104,10 +104,6 @@ public class FilterResult implements java.io.Serializable {
 
 	boolean typicalSysErr;
 
-	public boolean isTypicalSysErr() {
-		return typicalSysErr;
-	}
-
 	public void setTypicalSysErr(boolean typicalSysErr) {
 		this.typicalSysErr = typicalSysErr;
 	}
@@ -525,14 +521,6 @@ public class FilterResult implements java.io.Serializable {
 
 	BfilterResult bresult;
 
-	public BfilterResult getBresult() {
-		return bresult;
-	}
-
-	public void setBresult(BfilterResult bresult) {
-		this.bresult = bresult;
-	}
-
 	DbSNPBean dbSNPbean;
 
 	public DbSNPBean getDbSNPbean() {
@@ -550,10 +538,6 @@ public class FilterResult implements java.io.Serializable {
 	double lognAjusted = 0;
 	boolean uncertainDelation = false;
 	float ntQualityDiff = 0;
-
-	public void setNtQualityDiff(float ntQualityDiff) {
-		this.ntQualityDiff = ntQualityDiff;
-	}
 
 	public void setUncertainDelation(boolean uncertainDelation) {
 		this.uncertainDelation = uncertainDelation;
@@ -578,16 +562,8 @@ public class FilterResult implements java.io.Serializable {
 	char secondAllele;
 	float secondAF;
 
-	public char getSecondAllele() {
-		return secondAllele;
-	}
-
 	public void setSecondAllele(char secondAllele) {
 		this.secondAllele = secondAllele;
-	}
-
-	public float getSecondAF() {
-		return secondAF;
 	}
 
 	public void setSecondAF(double d) {
@@ -628,42 +604,22 @@ public class FilterResult implements java.io.Serializable {
 		this.tumorVrcnt = tumorVrcnt;
 	}
 
-	public int getNumSupportRead() {
-		return numSupportRead;
-	}
-
 	public void setNumSupportRead(int numSupportRead) {
 		this.numSupportRead = numSupportRead;
 	}
 
 	boolean lowdepthafterTCadjustInfo;
 
-	public boolean isLowdepthafterTCadjustInfo() {
-		return lowdepthafterTCadjustInfo;
-	}
-
 	public void setLowdepthafterTCadjustInfo(boolean lowdepthafterTCadjustInfo) {
 		this.lowdepthafterTCadjustInfo = lowdepthafterTCadjustInfo;
-	}
-
-	public boolean isLowdepthafterTCadjust() {
-		return lowdepthafterTCadjust;
 	}
 
 	public void setLowdepthafterTCadjust(boolean lowdepthafterTCadjust) {
 		this.lowdepthafterTCadjust = lowdepthafterTCadjust;
 	}
 
-	public boolean isLowtumorAfterTCadjust() {
-		return lowtumorAfterTCadjust;
-	}
-
 	public void setLowtumorAfterTCadjust(boolean lowtumorAfterTCadjust) {
 		this.lowtumorAfterTCadjust = lowtumorAfterTCadjust;
-	}
-
-	public boolean isHighnormalAfterTCadjust() {
-		return highnormalAfterTCadjust;
 	}
 
 	public void setHighnormalAfterTCadjust(boolean highnormalAfterTCadjust) {
@@ -673,16 +629,8 @@ public class FilterResult implements java.io.Serializable {
 	double adjustedTumorAllereFreq;
 	int adjustedtumortotalreads;
 
-	public double getAdjustedTumorAllereFreq() {
-		return adjustedTumorAllereFreq;
-	}
-
 	public void setAdjustedTumorAllereFreq(double adjustedTumorAllereFreq) {
 		this.adjustedTumorAllereFreq = adjustedTumorAllereFreq;
-	}
-
-	public int getAdjustedtumortotalreads() {
-		return adjustedtumortotalreads;
 	}
 
 	public void setAdjustedtumortotalreads(int adjustedtumortotalreads) {
@@ -730,10 +678,6 @@ public class FilterResult implements java.io.Serializable {
 		this.logn = logn;
 	}
 
-	public double getPvalFisher() {
-		return pvalFisher;
-	}
-
 	public void setPvalFisher(double pvalFisher) {
 		this.pvalFisher = pvalFisher;
 	}
@@ -746,10 +690,6 @@ public class FilterResult implements java.io.Serializable {
 
 	public void setPval4FiserDirectional(float pval4FiserDirectional) {
 		this.pval4FiserDirectional = pval4FiserDirectional;
-	}
-
-	public boolean isFisherTestSignif() {
-		return fisherTestSignif;
 	}
 
 	public void setFisherTestSignif(boolean fisherTestSignif) {
@@ -766,24 +706,12 @@ public class FilterResult implements java.io.Serializable {
 	int normaldepth;
 	int tumordepth;
 
-	public int getNormaldepth() {
-		return normaldepth;
-	}
-
 	public void setNormaldepth(int normaldepth) {
 		this.normaldepth = normaldepth;
 	}
 
-	public int getTumordepth() {
-		return tumordepth;
-	}
-
 	public void setTumordepth(int tumordepth) {
 		this.tumordepth = tumordepth;
-	}
-
-	public float getMapQ() {
-		return mapQ;
 	}
 
 	public void setMapQ(float mapQ) {
@@ -798,10 +726,6 @@ public class FilterResult implements java.io.Serializable {
 		this.indel = indel;
 	}
 
-	public float getPhredbq() {
-		return phredbq;
-	}
-
 	public void setPhredbq(float phredbq) {
 		this.phredbq = phredbq;
 	}
@@ -812,10 +736,6 @@ public class FilterResult implements java.io.Serializable {
 
 	public void setSeqEntropy(double seqEntropy) {
 		this.seqEntropy = seqEntropy;
-	}
-
-	public boolean isRepeat() {
-		return repeat;
 	}
 
 	public void setRepeat(boolean reapeat) {

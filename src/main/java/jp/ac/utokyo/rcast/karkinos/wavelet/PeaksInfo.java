@@ -49,14 +49,6 @@ public class PeaksInfo {
 		this.matchmatrix = matchmatrix;
 	}
 
-	public List<Peak> getMainpeakdist() {
-		return mainpeakdist;
-	}
-
-	public void setMainpeakdist(List<Peak> mainpeakdist) {
-		this.mainpeakdist = mainpeakdist;
-	}
-
 	public double[] getPeaksignals() {
 		return peaksignals;
 	}
@@ -144,16 +136,5 @@ public class PeaksInfo {
 		}
 		return list;
 	}
-
-	public double getSD() {
-		double maxsd = 0;
-		for (Peak p : peaklist) {
-			if(p.getSD()>maxsd){
-				maxsd = p.getSD();
-			}
-		}
-		return maxsd;
-	}
-	
 
 }

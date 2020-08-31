@@ -21,9 +21,6 @@ public class PeakTmpInfo {
 	float magnatude;
 	float peakpos;
 	
-	public float getPeakpos() {
-		return peakpos;
-	}
 	public void setPeakpos(float peakpos) {
 		this.peakpos = peakpos;
 	}

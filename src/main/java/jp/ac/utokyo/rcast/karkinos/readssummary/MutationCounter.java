@@ -93,10 +93,6 @@ public class MutationCounter implements java.io.Serializable{
 		return x3countH;
 	}
 
-	public int getX4countH() {
-		return x4countH;
-	}
-
 	public int getHighdepthcntH() {
 		return highdepthcntH;
 	}
@@ -107,10 +103,6 @@ public class MutationCounter implements java.io.Serializable{
 
 	public int getX3count() {
 		return x3count;
-	}
-
-	public int getX4count() {
-		return x4count;
 	}
 
 	public int getLowdepthcnt() {

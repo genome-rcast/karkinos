@@ -27,9 +27,6 @@ public class OntagetInfo implements Serializable{
 	public void setOntag(boolean ontag) {
 		this.ontag = ontag;
 	}
-	public boolean isOnmarjin() {
-		return onmarjin;
-	}
 	public void setOnmarjin(boolean onmarjin) {
 		this.onmarjin = onmarjin;
 	}

@@ -30,23 +30,11 @@ public class StringWithIndex {
 		return str.charAt(index+start);
 	}
 	
-	public String getStr() {
-		return str;
-	}
-	public void setStr(String str) {
-		this.str = str;
-	}
 	public int getStart() {
 		return start;
 	}
-	public void setStart(int start) {
-		this.start = start;
-	}
 	public int getEnd() {
 		return end;
-	}
-	public void setEnd(int end) {
-		this.end = end;
 	}
 	public void setStartEnd(int start, int end) {
 		this.start = start;

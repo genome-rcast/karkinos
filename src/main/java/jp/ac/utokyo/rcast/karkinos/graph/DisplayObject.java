@@ -17,9 +17,6 @@ package jp.ac.utokyo.rcast.karkinos.graph;
 
 public class DisplayObject {
 	
-	public DisplayObject(){
-		
-	}
 	public DisplayObject(Object _obj,int _size,String _title){
 		object = _obj;
 		size = _size;
@@ -31,22 +28,13 @@ public class DisplayObject {
 	public Object getObject() {
 		return object;
 	}
-	public void setObject(Object object) {
-		this.object = object;
-	}
 	public int getSize() {
 		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
 	}
 	String title ="";
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return title;
-	}
-	public void setTitle(String _title) {
-		title = _title;		
 	}
 	
 }

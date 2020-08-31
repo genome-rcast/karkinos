@@ -46,64 +46,10 @@ public abstract class ReadWriteBase {
 		return reader;
 	}
 
-	public SAMFileReader getReader(InputStream INPUT) {
-
-		SAMFileReader reader = new SAMFileReader(INPUT);
-		SAMFileHeader sfh = reader.getFileHeader();
-		if (sfh.getAttribute("SO") == null
-				|| sfh.getAttribute("SO").equals("sorted")) {
-			sfh.setSortOrder(SortOrder.coordinate);
-		}
-		reader.setValidationStringency(ValidationStringency.SILENT);
-		return reader;
-	}
-
-	public SAMFileReader getIsReader(String in) throws FileNotFoundException {
-
-		File INPUT = new File(in);
-		FileInputStream fis = new FileInputStream(INPUT);
-		return getReader(fis);
-	}
-
 	public static SAMFileReader getReader(String in) {
 
 		File INPUT = new File(in);
 		return getReader(INPUT);
-	}
-
-	public static SAMFileWriter getWriter(SAMFileHeader sfh2, String OUTPUT)
-			throws Exception {
-
-		SAMFileWriterFactory factory = new SAMFileWriterFactory();
-		sfh2.setSortOrder(SortOrder.unsorted);
-		SAMFileWriter writer = factory.makeSAMOrBAMWriter(sfh2, false,
-				new File(OUTPUT));
-
-		return writer;
-	}
-
-	public static SAMFileWriter getPreSortWriter(SAMFileHeader sfh2, String OUTPUT)
-			throws Exception {
-
-		SAMFileWriterFactory factory = new SAMFileWriterFactory();
-		sfh2.setSortOrder(SortOrder.coordinate);
-		factory.setCreateIndex(true);
-		SAMFileWriter writer = factory.makeSAMOrBAMWriter(sfh2, true, new File(
-				OUTPUT));
-
-		return writer;
-	}
-
-	public static SAMFileWriter getSortWriter(SAMFileHeader sfh2, String OUTPUT)
-			throws Exception {
-
-		SAMFileWriterFactory factory = new SAMFileWriterFactory();
-		sfh2.setSortOrder(SortOrder.coordinate);
-		factory.setCreateIndex(true);
-		SAMFileWriter writer = factory.makeSAMOrBAMWriter(sfh2, false,
-				new File(OUTPUT));
-
-		return writer;
 	}
 
 }

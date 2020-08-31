@@ -172,21 +172,6 @@ public class MexicanHatWavelet {
 		return (c* f1 * f2 * ev);
 
 	}
-	
-//	private static double getMexicanHat(double sd, double diff) {
-//
-//		diff = diff * sd;
-//		
-//		double x = (diff);
-//		double x2 = pow2(x);
-//		double c = 2.0 / cube(Math.PI);
-//		double f1 = (1.0 / sqrt(3));
-//		double f2 = (1 - x2);
-//		double ev = Math.exp(-0.5 * x2);
-//		return (c* f1 * f2 * ev);
-//
-//	}
-
 	public static double pow2(double d) {
 		return Math.pow(d, 2);
 	}

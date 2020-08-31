@@ -33,38 +33,6 @@ public class XYSeriesExtract {
 		this.map = map;
 	}
 
-	
-	public IntervalXYDataset getXYSeriesForLogdist(float degree,
-			boolean normal) {
-
-
-
-		DataHolderByCN data = map.get(degree);
-		Map<String,float[]> map = null;
-		if(normal){
-			map = data.getNormalLogdist();
-		}else{
-			map = data.getTumorLogdist();
-		}
-		
-				
-		Iterator<String> keys = map.keySet().iterator();
-		XYSeriesCollection dataset = new XYSeriesCollection();
-		while(keys.hasNext()){
-			
-			String key = keys.next();
-			float[] vals = map.get(key);
-			XYSeries series = new XYSeries(key);
-			int n= 0;
-			for(float f:vals){
-				series.add(n,f);
-				n++;
-			}
-			dataset.addSeries(series);
-		}			
-		
-		return dataset;
-	}
 
 	public IntervalXYDataset getXYSeriesAfterFinalFilter(float degree,
 			boolean normal) {

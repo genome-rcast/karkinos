@@ -30,19 +30,6 @@ import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 
 public class AnalyseDist implements java.io.Serializable {
-
-	// public SummaryStatistics getTumorratioFromLOH() {
-	// return tumorratioFromLOH;
-	// }
-	//
-	// public SummaryStatistics getTumorratioFromGAIN() {
-	// return tumorratioFromGAIN;
-	// }
-	//
-	// public SummaryStatistics getTumorratioALL() {
-	// return tumorratioALL;
-	// }
-
 	public Map<Float, DataHolderByCN> getMap() {
 		return map;
 	}
@@ -171,10 +158,6 @@ public class AnalyseDist implements java.io.Serializable {
 		return tcflg;
 	}
 
-	public void setTumorratioFromGAIN(TumorRatioBean tumorratioFromGAIN) {
-		this.tumorratioFromGAIN = tumorratioFromGAIN;
-	}
-
 	public void reanalyseTC(DataSet dataset) {
 
 		initmap();
@@ -232,28 +215,6 @@ public class AnalyseDist implements java.io.Serializable {
 
 	}
 
-	// private void addTumorratioStats(SNVHolder snv) {
-	//
-	// if(!snv.isHetroSNP())return;
-	//
-	// float f = (float) snv.getCi().getHMMValue();
-	// if((f==LOH)||(f==GAIN)){
-	//
-	// float observedR =snv.getTumor().getRatio();
-	// float tumorratio = TumorRateCalculator.getTumorRatio(f, observedR);
-	// if(tumorratio==0)return;
-	// //20120705-
-	// if(underThres(snv.getTumor())||underThres(snv.getNormal()))return;
-	// if(f==LOH){
-	// tumorratioFromLOH.addValue(tumorratio);
-	// }else if(f==GAIN){
-	// tumorratioFromGAIN.addValue(tumorratio);
-	// }
-	// tumorratioALL.addValue(tumorratio);
-	// }
-	//
-	// }
-
 	private double ratiodev(int exceed1, int totalpass) {
 		double d = (double)exceed1;
 		double d2 = (double)totalpass;
@@ -301,17 +262,6 @@ public class AnalyseDist implements java.io.Serializable {
 			sum = sum + (int) snpDistT[n];
 		}
 		return sum;
-	}
-
-	public static float getGain() {
-		return GAIN;
-	}
-
-	private boolean underThres(PileUPResult pr) {
-		if (pr.getTotalcnt() < (KarkinosProp.mindepth * 2)) {
-			return true;
-		}
-		return false;
 	}
 
 	private void initmap() {

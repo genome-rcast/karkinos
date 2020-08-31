@@ -81,15 +81,6 @@ public class HMMCNVAnalysisFromEM {
 
 	}
 
-	private static List<ObservationReal> trim(List<ObservationReal> olist, int i) {
-		
-		List<ObservationReal> l = new ArrayList<ObservationReal>();
-		for(int n = 0;n<i;n++){
-			l.add(olist.get(n));
-		}
-		return l;
-	}
-
 	private static void setdef(List<WaveletIF> list) {
 		
 		for(WaveletIF wif: list){

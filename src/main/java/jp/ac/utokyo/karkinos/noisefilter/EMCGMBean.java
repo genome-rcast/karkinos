@@ -30,14 +30,8 @@ public class EMCGMBean {
 	public void setValue(double value) {
 		this.value = value;
 	}
-	public double getLike0() {
-		return like0;
-	}
 	public void setLike0(double like0) {
 		this.like0 = like0;
-	}
-	public double getLike1() {
-		return like1;
 	}
 	public void setLike1(double like1) {
 		this.like1 = like1;

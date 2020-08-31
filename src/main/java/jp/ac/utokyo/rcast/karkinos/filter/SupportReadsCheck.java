@@ -1016,14 +1016,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 	}
 
-	private String key(SAMRecord sam) {
-		boolean pflg = false;
-		if (sam.getReadPairedFlag()) {
-			pflg = sam.getFirstOfPairFlag();
-		}
-		return sam.getReadName() + pflg;
-	}
-
 	private boolean neighborIndelExist(List<SAMRecord> allreads, int pos) {
 
 		int mergin = KarkinosProp.nearindelbt;

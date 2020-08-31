@@ -25,14 +25,8 @@ public class ACNVInfoBean {
 	public float getRow() {
 		return row;
 	}
-	public void setRow(float row) {
-		this.row = row;
-	}
 	public float getGcadjusted() {
 		return gcadjusted;
-	}
-	public void setGcadjusted(float gcadjusted) {
-		this.gcadjusted = gcadjusted;
 	}
 	public float getWtval() {
 		return wtval;

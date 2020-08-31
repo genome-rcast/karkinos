@@ -49,22 +49,8 @@ public class TheoreticalNodes {
 
 	double diffu;
 	double diffpd;
-	
-	
-	public double getDiffu() {
-		return diffu;
-	}
-
-
-
 	public void setDiffu(double diffu) {
 		this.diffu = diffu;
-	}
-
-
-
-	public double getDiffpd() {
-		return diffpd;
 	}
 
 
@@ -84,17 +70,6 @@ public class TheoreticalNodes {
 			VirtualPeakCalculator.calc(ploidy,i,imbalance4N,distTo4N,peakpos);				
 		}
 		
-	}
-
-
-
-	public double getPeakpos() {
-		return peakpos;
-	}
-
-
-	public void setPeakpos(double peakpos) {
-		this.peakpos = peakpos;
 	}
 
 
@@ -119,28 +94,15 @@ public class TheoreticalNodes {
 	public float[] getImbalance4N() {
 		return imbalance4N;
 	}
-	public void setImbalance4N(float[] imbalance4n) {
-		imbalance4N = imbalance4n;
-	}
 	public float[] getDistTo4N() {
 		return distTo4N;
-	}
-	public void setDistTo4N(float[] distTo4N) {
-		this.distTo4N = distTo4N;
 	}
 	public float[] getImbalance2N() {
 		return imbalance2N;
 	}
-	public void setImbalance2N(float[] imbalance2n) {
-		imbalance2N = imbalance2n;
-	}
 	public float[] getDistTo2N() {
 		return distTo2N;
 	}
-	public void setDistTo2N(float[] distTo2N) {
-		this.distTo2N = distTo2N;
-	}
-
 
 	public String getID() {
 

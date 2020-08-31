@@ -253,14 +253,6 @@ public class ReadsSummary implements java.io.Serializable {
 		}
 	}
 	
-	public long getNucCountRef(char genomeR) {
-		int idx = getNucIndex(genomeR);
-		if(idx>=0){
-			return nucrefcount[idx];
-		}
-		return 0;
-	}
-
 	long[] nuccount = new long[4];
 	public void setNucCount(char genomeR) {
 		int idx = getNucIndex(genomeR);
@@ -305,10 +297,6 @@ public class ReadsSummary implements java.io.Serializable {
 		}
 	}
 
-	public int getReadslen() {
-		return Math.max(readslent,readslenn);
-	}
-	
 	String refflat = null;
 	public void setRefFlat(String refflat) {
 		this.refflat = refflat;	

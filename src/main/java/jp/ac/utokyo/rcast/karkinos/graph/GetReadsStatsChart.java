@@ -366,32 +366,6 @@ public class GetReadsStatsChart {
 		return jfc;
 	}
 
-	private static Object getLibrarySizeTable(ReadsSummary readsSummary) {
-
-		Table table;
-		try {
-			table = new Table(6);
-
-			// row1
-			table.addCell("Library size");
-			table.addCell("normal");
-			table.addCell("tumor");
-
-			table.addCell("");
-			table.addCell(format(readsSummary.getNormalCounter()
-					.getMeanInsertSize()));
-			table.addCell(format(readsSummary.getTumorCounter()
-					.getMeanInsertSize()));
-			return table;
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-
-	}
-
 	private static Object getChrSummaryTable(ReadsCounter totalc,
 			Map<String, ReadsCounter> datamap) {
 

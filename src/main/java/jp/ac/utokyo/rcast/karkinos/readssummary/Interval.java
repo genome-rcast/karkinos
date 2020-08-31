@@ -49,10 +49,6 @@ public class Interval implements java.io.Serializable{
 		return refseqid;
 	}
 
-	public void setRefseqid(String refseqid) {
-		this.refseqid = refseqid;
-	}
-
 	public boolean extendInterval(final String chr, final int end, final int depth) {
 		if (!this.chr.equals(chr)) {
 			return false;

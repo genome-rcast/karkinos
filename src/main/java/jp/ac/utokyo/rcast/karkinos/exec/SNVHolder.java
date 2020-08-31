@@ -40,10 +40,6 @@ public class SNVHolder implements java.io.Serializable{
 		this.pvalFisher = pvalFisher;
 	}
 
-	public boolean isFisherTestSignif() {
-		return fisherTestSignif;
-	}
-
 	public void setFisherTestSignif(boolean fisherTestSignif) {
 		this.fisherTestSignif = fisherTestSignif;
 	}
@@ -57,24 +53,6 @@ public class SNVHolder implements java.io.Serializable{
 		filterResult.setDbSNPbean(dbSNPbean);
 	}
 
-	public String getInfoStr() {
-		
-		StringBuffer sb = new StringBuffer();
-		sb.append(chr+"\t");
-		sb.append(pos+"\t");
-		String dbSNP = "";
-		if(dbSNPbean!=null){
-			dbSNP = dbSNPbean.getInfo();
-		}
-		sb.append(dbSNP+"\t");
-		sb.append(ci.getCN()+"\t");
-		sb.append(normal.getInfoStr()+"\t");
-		sb.append(tumor.getInfoStr()+"\t");
-		
-		
-		return sb.toString();
-	}
-	
 	public DbSNPBean getDbSNPbean() {
 		return dbSNPbean;
 	}

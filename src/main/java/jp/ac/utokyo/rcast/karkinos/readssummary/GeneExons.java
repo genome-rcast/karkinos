@@ -54,10 +54,6 @@ public class GeneExons implements java.io.Serializable {
 		return counterForGene;
 	}
 
-	public void setCounterForGene(final Map<String, DataHolder> counterForGene) {
-		this.counterForGene = counterForGene;
-	}
-
 	public long getNormaltotal() {
 		return normaltotal;
 	}
@@ -173,18 +169,6 @@ public class GeneExons implements java.io.Serializable {
 		return iv.contain(chr, pos) ? iv.refseqid : null;
 	}
 
-	public Interval getGeneInterval(final String chr, final int pos) {
-		if (this.ivprevgene != null && this.ivprevgene.contain(chr, pos)) {
-			return this.ivprevgene;
-		}
-		final Interval iv = this.getIV(chr, pos, this.genemap);
-		if (iv == null) {
-			return null;
-		}
-		this.ivprevgene = iv;
-		return iv.contain(chr, pos) ? iv : null;
-	}
-
 	public Interval getGeneIntervalExon(final String chr, final int pos) {
 		if (this.ivprevExon != null && this.ivprevExon.contain(chr, pos)) {
 			return this.ivprevExon;
@@ -228,19 +212,4 @@ public class GeneExons implements java.io.Serializable {
 		}
 		return null;
 	}
-
-	public String getGeneSymbols(final String chr, final int start, final int end) {
-		final int interval = 1000;
-		final Set<String> set = new LinkedHashSet<String>();
-		int n = start - interval;
-		while (n < end + interval) {
-			final String gs = this.getGeneSymbol(chr, n);
-			if (gs != null) {
-				set.add(gs);
-			}
-			n += interval;
-		}
-		return set.stream().collect(Collectors.joining(",")) + ",";
-	}
-
 }

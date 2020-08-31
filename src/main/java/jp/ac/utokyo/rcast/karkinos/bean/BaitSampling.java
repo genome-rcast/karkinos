@@ -29,22 +29,6 @@ import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class BaitSampling implements Serializable {
 
-	public SummaryStatistics[] getS_fstat() {
-		return s_fstat;
-	}
-
-	public SummaryStatistics[] getS_rstat() {
-		return s_rstat;
-	}
-
-	public SummaryStatistics[] getE_fstat() {
-		return e_fstat;
-	}
-
-	public SummaryStatistics[] getE_rstat() {
-		return e_rstat;
-	}
-
 	Map<CapInterval, BailSamplingBean> map = new HashMap<CapInterval, BailSamplingBean>();
 	public final static int bait_sample_length = 200;
 	SummaryStatistics[] s_fstat = new SummaryStatistics[bait_sample_length];

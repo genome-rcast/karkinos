@@ -104,13 +104,6 @@ public class DataHolderByCN implements java.io.Serializable {
 		
 	}
 
-	
-	public Map<String, float[]> getNormalLogdist() {
-		return normallogdist;
-	}
-	public Map<String, float[]> getTumorLogdist() {
-		return tumorlogdist;
-	}
 	Map<String,float[]> normallogdist = new TreeMap<String,float[]>();
 	Map<String,float[]> tumorlogdist = new TreeMap<String,float[]>();
 	
@@ -158,10 +151,6 @@ public class DataHolderByCN implements java.io.Serializable {
 			n=99;
 		}
 		return n;
-	}
-
-	public SummaryStatistics getTumorhetrosnpMeanSd() {
-		return tumorhetrosnpMeanSd;
 	}
 
 	private void addup(float[] dist, float ratio) {

@@ -455,13 +455,6 @@ public class DataSet implements java.io.Serializable {
 		return tnratio;
 	}
 
-	private boolean outof2sd(double val, SummaryStatistics ss) {
-
-		double diff = ss.getMean() - val;
-		boolean loerend = (diff > (ss.getStandardDeviation() * 2));
-		return loerend;
-	}
-
 	public List<String> getChromList() {
 		List<String> chromList = new ArrayList<String>();
 		for (String s : chrSet) {
@@ -473,11 +466,6 @@ public class DataSet implements java.io.Serializable {
 	private boolean lowCnt(long cnt) {
 
 		return cnt < KarkinosProp.mincoverbase;
-	}
-
-	private boolean lowCnt2(long cnt) {
-
-		return cnt < (KarkinosProp.mincoverbase * 10);
 	}
 
 	double baselineLOHEstimate;

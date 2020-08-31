@@ -102,59 +102,6 @@ public class PileUP implements java.io.Serializable {
 
 	}
 
-	// private static int setSublist(int pos, LinkedList<SAMRecord> subList,
-	// int idx, List<SAMRecord> list) {
-	//
-	// // remove
-	// SAMRecord sam = null;
-	// while (!subList.isEmpty() && !include(pos, (sam = subList.getFirst()))) {
-	// subList.removeFirst();
-	// }
-	//
-	// // add and return idx
-	// int n = idx;
-	// if (n < 0)
-	// n = 0;
-	// boolean onceAdd = false;
-	// for (; n < list.size(); n++) {
-	// SAMRecord samt = list.get(n);
-	// if (include(pos, samt)) {
-	// subList.addLast(samt);
-	// onceAdd = true;
-	// } else if (!onceAdd) {
-	// continue;
-	// } else {
-	// n--;
-	// break;
-	// }
-	// }
-	// return n;
-	// }
-
-	// private static TreeMap<Integer, Integer> getListIdx(List<SAMRecord>
-	// samList) {
-	//
-	// TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
-	// int cnt = 0;
-	// for(SAMRecord sam:samList){
-	// int start = sam.getAlignmentStart();
-	// if(cnt%1000==0){
-	// map.put(start, cnt);
-	// }
-	// cnt++;
-	// }
-	// return map;
-	// }
-
-	private static int samplingFirstReads(List<SAMRecord> tumorList) {
-
-		if (tumorList != null && !tumorList.isEmpty()) {
-			return tumorList.get(0).getReadLength();
-		}
-		return 100;
-	}
-
-	// ////
 	public static final int NONSignif = 0;
 	public static final int NormalSNP = 1;
 	public static final int SomaticMutation = 2;
@@ -290,24 +237,6 @@ public class PileUP implements java.io.Serializable {
 			}
 		}
 		return ret;
-	}
-
-	private static String toTabstring(int[] sa) {
-
-		StringBuffer sb = new StringBuffer();
-		for (int n : sa) {
-			sb.append(n + "\t");
-		}
-		return sb.toString();
-	}
-
-	private static String toTabstring(double[] sa) {
-
-		StringBuffer sb = new StringBuffer();
-		for (double d : sa) {
-			sb.append(d + "\t");
-		}
-		return sb.toString();
 	}
 
 	private static int checkReg(PileUPResult normal, PileUPResult tumor,boolean targetSeq) {

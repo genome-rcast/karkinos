@@ -103,17 +103,6 @@ public class OddRatioCalculator {
 	}
 
 	static final float noize_factor = 0.8f;
-	private static int getAddSampleNumber(int totaldepth, int altsize,
-			double tumorratio, double copynumber) {
-		
-		double adjusttotal = (totaldepth * tumorratio * noize_factor);
-		int sampleExpectNum = (int) (adjusttotal / (double) copynumber);
-		if (altsize < sampleExpectNum) {
-			return sampleExpectNum - altsize;
-		}
-		return 0;
-		
-	}
 
 	private static boolean equalChar(char c1, char c2) {
 

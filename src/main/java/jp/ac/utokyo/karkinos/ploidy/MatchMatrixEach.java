@@ -53,9 +53,6 @@ public class MatchMatrixEach {
 	public void setNodecounter(Map<String, double[]> nodecounter) {
 		this.nodecounter = nodecounter;
 	}
-	public double getSumdist() {
-		return sumdist;
-	}
 	public void setSumdist(double sumdist) {
 		this.sumdist = sumdist;
 	}

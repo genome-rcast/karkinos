@@ -172,36 +172,7 @@ public class CNVVcf {
 
 	}
 
-	private static Properties getProp(String file) throws IOException {
-		// TODO Auto-generated method stub
-		FileInputStream fis = new FileInputStream(file);
-		Properties p = new Properties();
-		p.load(fis);
-		return p;
-	}
-
 	private static String format(double num) {
-		NumberFormat nf = NumberFormat.getNumberInstance();
-		return nf.format(num);
-	}
-
-	private static String format(String num) {
-		try {
-			long l = Long.parseLong(num);
-			return format(l);
-		} catch (Exception ex) {
-
-		}
-		try {
-			double d = Double.parseDouble(num);
-			return format(d);
-		} catch (Exception ex) {
-
-		}
-		return "";
-	}
-
-	private static String format(long num) {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);
 	}
@@ -211,24 +182,4 @@ public class CNVVcf {
 		return nf.format(num);
 	}
 
-	private static float getX20percent(DepthCounter dc) {
-
-		try {
-			long total = dc.getTotal();
-			Map<Integer, CounterA> mt = dc.getMap();
-			int[] keys = new int[] { 0, 1, 10 };
-			long less20x = 0;
-			for (int n : keys) {
-				CounterA ca = mt.get(n);
-				if (ca != null) {
-					less20x = ca.getCnt();
-				}
-
-			}
-			return (float) (((double) (total - less20x) / (double) total) * 100);
-		} catch (Exception ex) {
-
-		}
-		return 0f;
-	}
 }

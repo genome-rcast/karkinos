@@ -293,30 +293,6 @@ public class CategoryAxisSkipLabels extends CategoryAxis  {
           return 0.0d; 
   } 
 
-  private Rectangle2D calcAdjustedDataArea(Rectangle2D dataArea, RectangleEdge edge){
-      CategoryPlot plot = (CategoryPlot) getPlot(); 
-      
-      Rectangle2D adjustedDataArea = new Rectangle2D.Double(); 
-      if (plot.getRenderer() instanceof Effect3D) { 
-          Effect3D e3D = (Effect3D) plot.getRenderer(); 
-          double adjustedX = dataArea.getMinX(); 
-          double adjustedY = dataArea.getMinY(); 
-          double adjustedW = dataArea.getWidth() - e3D.getXOffset(); 
-          double adjustedH = dataArea.getHeight() - e3D.getYOffset(); 
-
-          if (edge == RectangleEdge.LEFT || edge == RectangleEdge.BOTTOM) { 
-              adjustedY += e3D.getYOffset(); 
-          } 
-          else if (edge == RectangleEdge.RIGHT || edge == RectangleEdge.TOP) { 
-              adjustedX += e3D.getXOffset(); 
-          } 
-          adjustedDataArea.setRect(adjustedX, adjustedY, adjustedW, adjustedH); 
-      } 
-      else { 
-          adjustedDataArea.setRect(dataArea); 
-      } 
-      return adjustedDataArea;	  
-  }
   private LabelDefs gatherDrawingGeometries(Graphics2D g2, Rectangle2D dataArea, 
           							   RectangleEdge edge, AxisState state, List ticks){
 	  int labelCount = 0;
@@ -461,8 +437,5 @@ public class CategoryAxisSkipLabels extends CategoryAxis  {
 	
 	  return result;
 	}
-  public void setDisplaySkippedTickMarks(boolean displaySkippedTickMarks){
-	  this.displaySkippedTickMarks  = displaySkippedTickMarks;
-  }
   
 } 

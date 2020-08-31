@@ -46,21 +46,6 @@ public class AFDepthMatrix {
 
 	}
 
-	public static void main(String[] arg) {
-
-		AFDepthMatrix inst = new AFDepthMatrix(null, 0);
-		inst.a1 = 1.51;
-		inst.b1 = -1.68;
-		// double a1fix = 1.51;
-		// double b1fix = -1.68;
-		// for(double x=0;x<0.5;x=x+0.1){
-		// System.out.println(x+"\t"+inst.func((float) x));
-		// }
-		float pval = inst.getPval(0.1f, 1);
-		System.out.println(pval);
-
-	}
-
 	public float getPval(float adjusttedAF, float readdepth) {
 
 		try {
@@ -365,23 +350,6 @@ public class AFDepthMatrix {
 		return y;
 	}
 
-	private float ratio(int total2, int total) {
-
-		return (float) ((double) (total2) / (double) (total));
-	}
-
-	private void printDist() {
-
-		for (int n = 0; n < 20; n++) {
-
-			for (int m = 0; m < 20; m++) {
-				System.out.print(counter[m][n] + "\t");
-			}
-			System.out.println();
-		}
-
-	}
-
 	public boolean reject(int depth_c, float adjusttedAF,
 			boolean highErrorSample) {
 
@@ -457,32 +425,6 @@ public class AFDepthMatrix {
 		if (y < 0)
 			y = 0;
 		return depth_c < y;
-
-	}
-
-	private double getTargetX(int depth_c, List<Point2D> list) {
-
-		Point2D laste = list.get(list.size() - 1);
-		double lastd = laste.getY();
-		if (depth_c > lastd) {
-			return laste.getX();
-		}
-		if (list.size() == 1) {
-			return list.get(0).getX();
-		}
-
-		for (int n = 0; n < list.size() - 1; n++) {
-
-			Point2D e1 = list.get(n);
-			Point2D e2 = list.get(n + 1);
-			//
-			if ((depth_c >= e1.getY()) && (depth_c <= e2.getY())) {
-				//
-				double mean = (e1.getX() + e2.getX()) / 2;
-				return mean;
-			}
-		}
-		return list.get(0).getX();
 
 	}
 

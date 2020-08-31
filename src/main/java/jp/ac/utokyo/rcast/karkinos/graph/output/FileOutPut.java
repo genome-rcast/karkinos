@@ -163,26 +163,6 @@ public class FileOutPut {
 
 	}
 
-	public static void outPutCNVData(String outpath, DataSet dataset) {
-
-		try {
-
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(outpath)));
-			for (List<WaveletIF> list : dataset.getCapInterval()) {
-				for (WaveletIF wif : list) {
-
-					CapInterval ci = (CapInterval) wif;
-					bw.write(ci.getInfoStr() + "\n");
-
-				}
-			}
-			bw.close();
-		} catch (IOException ex) {
-		}
-
-	}
-
 	public static void lowcovBed(String outpathnormal, String outpathtumor,
 			ReadsSummary readsSummary, GeneExons ge) {
 

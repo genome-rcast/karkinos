@@ -58,13 +58,6 @@ public class PeakAnalysisComponent {
 
 	}
 
-	public void setSMutaion(SNVHolder snv) {
-
-		double tumorAF = snv.getTumor().getRatio();
-		somaticSNV.setValue(tumorAF);
-
-	}
-
 	public void setSNPPlus(SNVHolderPlusACnv snvHolderPlusACnv) {
 
 		if (snvHolderPlusACnv != null) {

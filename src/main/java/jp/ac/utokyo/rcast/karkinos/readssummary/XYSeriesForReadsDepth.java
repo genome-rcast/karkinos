@@ -65,13 +65,6 @@ public class XYSeriesForReadsDepth {
 		
 	}
 
-	public DefaultCategoryDataset getTumorXYSeries(){
-		
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		add(dataset,readSummary.getTumorDepth(),"tumor");
-		return dataset;
-	}
-
 
 	
 }

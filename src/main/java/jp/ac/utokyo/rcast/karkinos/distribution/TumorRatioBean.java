@@ -58,9 +58,6 @@ public class TumorRatioBean {
 	public void setMode(int i) {
 		mode = i;		
 	}
-	public int getMode(){
-		return mode;
-	}
 	public String getModeStr() {
 		
 		if(mode==0){

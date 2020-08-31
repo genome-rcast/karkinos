@@ -77,16 +77,6 @@ public class TumorRateCalculator {
 
 	}
 
-	private static boolean midreangeLOH(float observedR) {
-		// TODO Auto-generated method stub
-		return observedR > 0.4 && observedR < 0.6;
-	}
-
-	private static boolean midreangeGAIN(float observedR) {
-		// TODO Auto-generated method stub
-		return observedR > 0.45 && observedR < 0.55;
-	}
-
 	public static float getTumorRatioSomatic(float observedS) {
 		if (observedS == 0)
 			return 0;

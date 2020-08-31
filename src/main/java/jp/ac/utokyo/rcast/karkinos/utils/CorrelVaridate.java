@@ -150,48 +150,6 @@ public class CorrelVaridate {
 
 	}
 
-
-
-	private static boolean include(List<CopyNumberInterval> allelicList,
-			CopyNumberInterval cni) {
-		for(CopyNumberInterval allelic:allelicList){
-			
-			if(include(cni,allelic)){
-				return true;
-			}
-		}		
-		return false;
-	}
-
-
-
-	private static boolean include(CopyNumberInterval cni, CopyNumberInterval allelic) {
-		if(!cni.getChr().equals(allelic.getChr())){
-			return false;
-		}
-		
-		if((cni.getStart()<allelic.getEnd())&&(allelic.getStart()<cni.getEnd())){
-			
-			if(allelic.getCopynumber()<2){
-				if(cni.getCopynumber()<2){
-					 return true;
-				}
-			}
-			
-			if(allelic.getCopynumber()>2){
-				if(cni.getCopynumber()>2){
-					 return true;
-				}
-			}
-			
-		}		
-		
-		
-		return false;
-	}
-
-
-
 	public static double getPearsonCorrelation(List<Float> list) {
 		
 		if(list.size()==0)return 0;

@@ -24,16 +24,9 @@ public class RegressionInfo implements java.io.Serializable {
 	// y=ae^bx+c
 	double a = 0, b = 0, c = 0, d=0;
 	double baseAdjust = 0;
-	public double getBaseAdjust() {
-		return baseAdjust;
-	}
 
 	public void setBaseAdjust(double baseAdjust) {
 		this.baseAdjust = baseAdjust;
-	}
-
-	public double getD() {
-		return d;
 	}
 
 	public void setD(double d) {
@@ -41,11 +34,6 @@ public class RegressionInfo implements java.io.Serializable {
 	}
 
 	int funcflg = 0;
-
-
-	public int getFuncflg() {
-		return funcflg;
-	}
 
 	public void setFuncflg(int funcflg) {
 		this.funcflg = funcflg;
@@ -59,24 +47,12 @@ public class RegressionInfo implements java.io.Serializable {
 		this.gcMedianList = gcMedianList;
 	}
 
-	public double getA() {
-		return a;
-	}
-
 	public void setA(double a) {
 		this.a = a;
 	}
 
-	public double getB() {
-		return b;
-	}
-
 	public void setB(double b) {
 		this.b = b;
-	}
-
-	public double getC() {
-		return c;
 	}
 
 	public void setC(double c) {

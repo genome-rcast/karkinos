@@ -25,11 +25,6 @@ import org.apache.commons.math.distribution.BinomialDistribution;
 import org.apache.commons.math.distribution.BinomialDistributionImpl;
 
 public class PileUPResult implements java.io.Serializable {
-
-	public void setRatiocalclated(boolean ratiocalclated) {
-		this.ratiocalclated = ratiocalclated;
-	}
-
 	boolean diff = false;
 	int[] seqCounter = new int[5];
 	double[] expected = new double[5];
@@ -173,11 +168,6 @@ public class PileUPResult implements java.io.Serializable {
 
 	}
 
-	public void setIndel(boolean indel) {
-		this.indel = indel;
-		ratiocalclated = false;
-	}
-
 	public int getRefCnt() {
 
 		int gidx = seqALL.indexOf(genomeR);
@@ -251,13 +241,6 @@ public class PileUPResult implements java.io.Serializable {
 		double pq = mapqualRMS[mi];
 		double d = pq / (double) count;
 		return (float) Math.sqrt(d);
-	}
-
-	private static double getBinomial(double p_hat, int cnt, int total) throws MathException {
-
-		BinomialDistribution bd = new BinomialDistributionImpl(total, p_hat);
-		double p = bd.cumulativeProbability(cnt);
-		return p;
 	}
 
 	public class Counter implements java.io.Serializable {
@@ -353,10 +336,6 @@ public class PileUPResult implements java.io.Serializable {
 
 	public int getTotalcnt() {
 		return totalcnt;
-	}
-
-	public void setTotalcnt(int totalcnt) {
-		this.totalcnt = totalcnt;
 	}
 
 	public boolean isInsersion() {
@@ -574,35 +553,6 @@ public class PileUPResult implements java.io.Serializable {
 		return ratio <= _ratio;
 	}
 
-	// public boolean haveLowerRatio(float _ratio, char alt) {
-	// double ratio = calcRatio_SNV(alt);
-	// return ratio <= _ratio;
-	// }
-	//
-	// private double calcRatio_SNV(char alt) {
-	// try {
-	// int idxref = seqALL.indexOf(genomeR);
-	// int idxalt = seqALL.indexOf(alt);
-	// if ((idxref < 0) || (idxalt < 0)) {
-	// return getRatio();
-	// }
-	// double totall = 0;
-	// double ratiol = 0;
-	// for (double d : expected) {
-	// totall = totall + d;
-	// }
-	//
-	// if (totall!= 0) {
-	// ratiol = (float) ((double) expected[idxalt] / (double) total);
-	// } else {
-	// ratiol = 0;
-	// }
-	// return ratiol;
-	// } catch (Exception ex) {
-	// return getRatio();
-	// }
-	// }
-
 	public boolean haveHigherRatio(float _ratio) {
 		double ratio = getRatio();
 		return ratio >= _ratio;
@@ -656,14 +606,6 @@ public class PileUPResult implements java.io.Serializable {
 			}
 		}
 		return max;
-	}
-
-	public String getInfoStr() {
-		StringBuffer sb = new StringBuffer();
-		for (double d : expected) {
-			sb.append(d + "\t");
-		}
-		return sb.toString();
 	}
 
 }

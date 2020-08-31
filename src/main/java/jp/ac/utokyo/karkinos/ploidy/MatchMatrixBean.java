@@ -73,10 +73,6 @@ public class MatchMatrixBean {
 		this.bestmme = bestmme;
 	}
 
-	public List<MatchMatrixEach> getMacthlist() {
-		return macthlist;
-	}
-
 	public void setMacthlist(List<MatchMatrixEach> macthlist) {
 		this.macthlist = macthlist;
 	}
@@ -91,22 +87,6 @@ public class MatchMatrixBean {
 
 	int nummatch = 0;
 	double summatchdist = 0;
-
-	public int getNummatch() {
-		return nummatch;
-	}
-
-	public void setNummatch(int nummatch) {
-		this.nummatch = nummatch;
-	}
-
-	public double getSummatchdist() {
-		return summatchdist;
-	}
-
-	public void setSummatchdist(double summatchdist) {
-		this.summatchdist = summatchdist;
-	}
 
 	public double getInterval() {
 		if (pEvenMax != null) {

@@ -103,10 +103,6 @@ public class AllelicCNV {
 		return allelicLOHLow;
 	}
 
-	public List<CopyNumberInterval> getHdList() {
-		return hdList;
-	}
-
 	private static List<CopyNumberInterval> analyse(
 			final List<CopyNumberInterval> allelicLOHLow,
 			final List<CopyNumberInterval> allelicLOHhigh) {

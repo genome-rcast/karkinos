@@ -29,10 +29,6 @@ public class ChrAllelicPeak {
 	SummaryStatistics lowa = new SummaryStatistics();
 	AFCounter tumorSNP = new AFCounter();
 	boolean even = false;
-	
-	public boolean isEven() {
-		return even;
-	}
 
 	public void setEven(boolean even) {
 		this.even = even;

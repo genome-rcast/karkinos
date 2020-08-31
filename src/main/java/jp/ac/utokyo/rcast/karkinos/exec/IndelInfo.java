@@ -35,11 +35,5 @@ public class IndelInfo implements java.io.Serializable{
 	public String getInsersion() {
 		return insersion;
 	}
-	public int getLength() {
-		return length;
-	}
-	public int getCnt() {
-		return cnt;
-	}	
 	
 }

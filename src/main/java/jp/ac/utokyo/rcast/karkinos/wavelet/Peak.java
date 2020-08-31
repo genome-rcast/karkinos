@@ -61,18 +61,6 @@ public class Peak {
 		return artifitial;
 	}
 
-	public void setArtifitial(boolean artifitial) {
-		this.artifitial = artifitial;
-	}
-
-	public double getVinit() {
-		return vinit;
-	}
-
-	public void setVinit(double vinit) {
-		this.vinit = vinit;
-	}
-
 	double SUMZ;
 	double SUMZX;
 	double SUMZX2;
@@ -83,54 +71,14 @@ public class Peak {
 		return cn;
 	}
 
-	public void setCn(float cn) {
-		this.cn = cn;
-	}
-
-	public double getSUMZ() {
-		return SUMZ;
-	}
-
-	public void setSUMZ(double sUMZ) {
-		SUMZ = sUMZ;
-	}
-
-	public double getSUMZX() {
-		return SUMZX;
-	}
-
-	public void setSUMZX(double sUMZX) {
-		SUMZX = sUMZX;
-	}
-
-	public double getSUMZX2() {
-		return SUMZX2;
-	}
-
-	public void setSUMZX2(double sUMZX2) {
-		SUMZX2 = sUMZX2;
-	}
-
 	public Peak(double x2, double y2) {
 
 		x = x2;
 		y = y2;
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public void setX(double x) {
-		this.x = x;
-	}
-
 	public double getY() {
 		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
 	}
 
 	public double getU() {
@@ -165,14 +113,6 @@ public class Peak {
 	}
 
 	boolean defualt;
-
-	public void setDefault(boolean b) {
-		defualt = b;
-	}
-
-	public boolean getDefault() {
-		return defualt;
-	}
 
 	public Peak deepCopy() {
 

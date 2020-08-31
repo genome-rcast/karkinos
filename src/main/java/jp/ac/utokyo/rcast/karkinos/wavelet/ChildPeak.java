@@ -54,26 +54,11 @@ public class ChildPeak {
 	public double getPeakdist() {
 		return peakdist;
 	}
-	public void setPeakdist(double peakdist) {
-		this.peakdist = peakdist;
-	}
 	public double getU() {
 		return u;
 	}
-	public void setU(double u) {
-		this.u = u;
-	}
-	public double getV() {
-		return v;
-	}
-	public void setV(double v) {
-		this.v = v;
-	}
 	public double getR() {
 		return r;
-	}
-	public void setR(double r) {
-		this.r = r;
 	}
 	public boolean isNotSexChrom() {
 		

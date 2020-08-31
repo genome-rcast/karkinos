@@ -26,20 +26,11 @@ public class Interval implements java.io.Serializable{
 	public String getChrom() {
 		return chrom;
 	}
-	public void setChrom(String chrom) {
-		this.chrom = chrom;
-	}
 	public int getStart() {
 		return start;
 	}
-	public void setStart(int start) {
-		this.start = start;
-	}
 	public int getEnd() {
 		return end;
-	}
-	public void setEnd(int end) {
-		this.end = end;
 	}
 	int start;
 	int end;

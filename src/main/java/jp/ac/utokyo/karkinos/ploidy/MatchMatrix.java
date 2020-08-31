@@ -68,28 +68,6 @@ public class MatchMatrix {
 //
 //	}
 
-	private static boolean compHex(MatchMatrixBean mmbTetra,
-			MatchMatrixBean mmbHex) {
-
-		MatchMatrixEach tetra = mmbTetra.getBestmme();
-		MatchMatrixEach hex = mmbHex.getBestmme();
-
-		// for triploidhit requre lower 2n or odd 2 hit
-		if (hex.getSumratio() > tetra.getSumratio()) {
-
-			//
-			boolean two2 = hex.nodecounter.containsKey("2.0-2.0");
-			boolean one1 = hex.nodecounter.containsKey("1.0-1.0");
-			if (one1 && two2) {
-				return false;
-			}
-
-		}
-
-		return true;
-
-	}
-
 	public static MBResult matchMatrix(List<TheoreticalNodes> dilist,
 			List<TheoreticalNodes> tetraplist, PeaksInfo pi,
 			int maxMagnatudeEvenIdx, double sdratio, double sdposition,

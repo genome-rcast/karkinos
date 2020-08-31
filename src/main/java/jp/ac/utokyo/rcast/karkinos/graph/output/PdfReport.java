@@ -47,10 +47,8 @@ import jp.ac.utokyo.rcast.karkinos.graph.GetCNVCharts;
 import jp.ac.utokyo.rcast.karkinos.graph.GetCNVPeaksCharts;
 import jp.ac.utokyo.rcast.karkinos.graph.GetCNVPreGraph;
 import jp.ac.utokyo.rcast.karkinos.graph.GetGCAdjustGrapth;
-import jp.ac.utokyo.rcast.karkinos.graph.GetReadDirectionChart;
 import jp.ac.utokyo.rcast.karkinos.graph.GetReadsStatsChart;
 import jp.ac.utokyo.rcast.karkinos.graph.GetSNVChart;
-import jp.ac.utokyo.rcast.karkinos.graph.GetSNVDistChart;
 import jp.ac.utokyo.rcast.karkinos.graph.GetThresholdsCharts;
 import jp.ac.utokyo.rcast.karkinos.graph.NoisePeakChart;
 import jp.ac.utokyo.rcast.karkinos.graph.SNPGraph;
@@ -66,7 +64,6 @@ public class PdfReport {
 		List<DisplayObject> chartList = new ArrayList<DisplayObject>();
 		chartList.addAll(GetReadsStatsChart.getChartLists(readsSummary,
 				readsStat));
-		// chartList.addAll(GetReadDirectionChart.getChartLists(dataset));
 		chartList.addAll(SNPGraph.getChartList(dataset));
 		
 		chartList.addAll(GetGCAdjustGrapth.getChartLists(dataset));
