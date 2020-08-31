@@ -128,14 +128,8 @@ public class LabelDefs extends Vector {
 		public void markAsDrawn() {
 			this.drawn = new Boolean(true);
 		}	
-		public void setDrawn(boolean markAsDrawnFlag) {
-			this.drawn = new Boolean(markAsDrawnFlag);
-		}
 		public CategoryTick getTick() {
 			return tick;
-		}
-		public Line2D getMark() {
-			return mark;
 		}
 		public Point2D getAnchorPoint() {
 			return anchorPoint;

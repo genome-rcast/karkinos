@@ -78,20 +78,6 @@ public class PeaksInfo {
 		this.ma = ma;
 	}
 
-	public double getVal(double x) {
-
-		double sum = 0;
-		for (Peak p : peaklist) {
-
-			double r = p.getR();
-			double d = getNdistP(x, p.getU(), p.getV());
-			sum = sum + (r * d);
-
-		}
-		return sum;
-
-	}
-
 	public Number getAcutualVal(double x) {
 		double sum = 0;
 		for (Peak p : peaklist) {

@@ -61,10 +61,6 @@ public class Peak {
 
 	float cn;
 
-	public float getCn() {
-		return cn;
-	}
-
 	public Peak(double x2, double y2) {
 
 		x = x2;

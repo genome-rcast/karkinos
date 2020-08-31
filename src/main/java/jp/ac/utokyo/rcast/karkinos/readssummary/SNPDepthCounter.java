@@ -44,10 +44,6 @@ public class SNPDepthCounter {
 		
 	}
 
-	public int getTotal() {
-		return total;
-	}
-
 	public int getLowdepthcnt() {
 		return lowdepthcnt;
 	}
