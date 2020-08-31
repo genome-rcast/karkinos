@@ -47,7 +47,6 @@ public class TheoreticalNodematch {
 
 	}
 
-	public static final int diploid = 2;
 	public static final int tetraploid = 4;
 
 	public MatchMatrixBean matchPeak(PeaksInfo pi, int maxMagnatudeEvenIdx,

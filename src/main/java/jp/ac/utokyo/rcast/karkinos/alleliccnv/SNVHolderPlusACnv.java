@@ -96,7 +96,6 @@ public class SNVHolderPlusACnv {
 
 
 
-	FunctionRegression fr;
 	SNVHolder snv;
 	ACNVInfoBean lowera;
 	ACNVInfoBean highera;

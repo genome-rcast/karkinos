@@ -20,7 +20,6 @@ import java.util.List;
 public class EMval {
 	
 	double value;
-	List<Double> pforpeak;
 
 	public void setValue(double value) {
 		this.value = value;

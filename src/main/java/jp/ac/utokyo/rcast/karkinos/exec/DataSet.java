@@ -478,7 +478,6 @@ public class DataSet implements java.io.Serializable {
 		baselineLOHEstimate = _baselineLOHEstimate;
 	}
 
-	Map<Float, DataHolderByCN> map = null;
 	AnalyseDist as = null;
 
 	public AnalyseDist getAnalyseDist() {

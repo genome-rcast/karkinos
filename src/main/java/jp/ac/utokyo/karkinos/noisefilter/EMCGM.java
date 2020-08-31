@@ -276,7 +276,6 @@ public class EMCGM {
 	}
 
 	int numcandidate;
-	int numnoise;
 	double initVariance = 0.1;
 	boolean success = false;
 

@@ -85,9 +85,6 @@ public class MatchMatrixBean {
 		this.ploidyflg = ploidyflg;
 	}
 
-	int nummatch = 0;
-	double summatchdist = 0;
-
 	public double getInterval() {
 		if (pEvenMax != null) {
 

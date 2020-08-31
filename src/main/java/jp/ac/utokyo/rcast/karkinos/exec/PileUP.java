@@ -35,8 +35,6 @@ public class PileUP implements java.io.Serializable {
 	//static boolean debug = false;
 	//static final int debugpos = 18640448;
 
-	static int debugpos = 309750;
-	static boolean debug = true;
 	//static boolean debug = false;
 	
 	public static void pileup(Interval iv, DataSet dataset,

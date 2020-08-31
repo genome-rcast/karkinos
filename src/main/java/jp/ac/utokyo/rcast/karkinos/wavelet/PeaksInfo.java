@@ -36,9 +36,6 @@ public class PeaksInfo {
 		this.ploidy = ploidy;
 	}
 
-	List<Double> peakdist;
-	List<Peak> mainpeakdist;
-	
 	MatchMatrixBean matchmatrix;
 
 	public MatchMatrixBean getMatchmatrix() {

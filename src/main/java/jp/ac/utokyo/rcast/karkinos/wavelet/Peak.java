@@ -30,7 +30,6 @@ public class Peak {
 	double u;
 	double v;
 	double r;
-	double vinit;
 	boolean artifitial;
 	int peakidx;
 	float copynum;
@@ -60,10 +59,6 @@ public class Peak {
 	public boolean isArtifitial() {
 		return artifitial;
 	}
-
-	double SUMZ;
-	double SUMZX;
-	double SUMZX2;
 
 	float cn;
 

@@ -20,7 +20,6 @@ public class IndelInfo implements java.io.Serializable{
 	public boolean indel = false;
 	public String insersion;
 	public int length;
-	public int cnt;
 	public boolean reg = false;
 	public int refpos;;
 	public void clear() {

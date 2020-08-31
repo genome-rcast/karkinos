@@ -34,7 +34,6 @@ public class PeakAnalysisComponent {
 
 	AFCounter normalSNP = new AFCounter();
 	AFCounter tumorSNP = new AFCounter();
-	AFCounter somaticSNV = new AFCounter();
 	Map<String,ChrAllelicPeak> ap = new LinkedHashMap<String,ChrAllelicPeak>();
 	
 	
@@ -43,8 +42,6 @@ public class PeakAnalysisComponent {
 	
 	boolean evenpeak = true;
 	float hpeakdistance = 0;
-	float aAfreq = 0;
-	float bAfreq = 0;
 	int numdistpeak =0;
 	boolean complexpeak = false;
 	double sdnormal = 0;

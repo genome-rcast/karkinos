@@ -33,8 +33,6 @@ public class PileUPResult implements java.io.Serializable {
 	double[] phredQual = new double[5];
 	double[] mapqualRMS = new double[5];
 	double[] phredQualRMS = new double[5];
-	double refp = 0;
-	double mutatep = 0;
 
 	IndelInfo indelinfo = null;
 	Map<String, Counter> insersionmap = null;

@@ -102,8 +102,6 @@ public class OddRatioCalculator {
 		return retlist;
 	}
 
-	static final float noize_factor = 0.8f;
-
 	private static boolean equalChar(char c1, char c2) {
 
 		c1 = Character.toUpperCase(c1);

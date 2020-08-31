@@ -519,8 +519,6 @@ public class FilterResult implements java.io.Serializable {
 		return filter;
 	}
 
-	BfilterResult bresult;
-
 	DbSNPBean dbSNPbean;
 
 	public DbSNPBean getDbSNPbean() {
@@ -537,7 +535,6 @@ public class FilterResult implements java.io.Serializable {
 	double logn = 0;
 	double lognAjusted = 0;
 	boolean uncertainDelation = false;
-	float ntQualityDiff = 0;
 
 	public void setUncertainDelation(boolean uncertainDelation) {
 		this.uncertainDelation = uncertainDelation;

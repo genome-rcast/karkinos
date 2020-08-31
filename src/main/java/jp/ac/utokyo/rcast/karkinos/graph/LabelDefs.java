@@ -29,7 +29,6 @@ public class LabelDefs extends Vector {
 	public static int CATEGORY_TICK = 0;
 	public static int BOUNDS = 1;
 	public static int ANCHOR_POINT = 2;
-	public static int DRAWN = 3;
 	public static int TICK_MARK_LINE = 4;
 	
 	

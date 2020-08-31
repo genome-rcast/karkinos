@@ -24,7 +24,6 @@ public class ChildPeak {
 		return chrom;
 	}
 	double u;
-	double v;
 	double r;
 	double peakdist;
 	Set<String> chrom = new HashSet<String>();

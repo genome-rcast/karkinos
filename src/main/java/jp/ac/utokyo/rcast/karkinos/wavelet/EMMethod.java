@@ -35,8 +35,6 @@ import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 
 public class EMMethod {
 
-	public static double vinit = 0.0003;
-
 	public static PeaksInfo calc(DataSet dataset, double lohestimate)
 			throws IOException {
 

@@ -35,7 +35,6 @@ import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 
 public class AFDepthMatrix {
 
-	int[][] counter = null;
 	List<BinData> binlist;
 	int binsize = 20;
 

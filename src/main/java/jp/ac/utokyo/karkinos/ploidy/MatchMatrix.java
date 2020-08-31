@@ -35,7 +35,6 @@ public class MatchMatrix {
 
 	final static int diploid = 2;
 	final static int tetraploid = 4;
-	final static int hexaploid = 6;
 
 //	public static MatchMatrixBean matchMatrixHex(List<TheoreticalNodes> dilist,
 //			List<TheoreticalNodes> tetraplist, PeaksInfo pi,
