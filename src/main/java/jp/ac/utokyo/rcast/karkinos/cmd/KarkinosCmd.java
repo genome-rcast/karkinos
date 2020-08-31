@@ -15,11 +15,7 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.cmd;
 
-import jp.ac.utokyo.rcast.karkinos.annotationutils.AnnoverOutputJoin;
 import jp.ac.utokyo.rcast.karkinos.exec.TumorGenotyper;
-import jp.ac.utokyo.rcast.karkinos.exec.TumorGenotyperReanalysis;
-import jp.ac.utokyo.rcast.karkinos.summary.SummaryStats;
-import jp.ac.utokyo.rcast.karkinos.summary.SummaryStatsVaridate;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -35,18 +31,6 @@ public class KarkinosCmd {
     switch (arg[0]) {
       case "analysis":
         TumorGenotyper.main(arg2);
-        break;
-      case "reanalysis":
-        TumorGenotyperReanalysis.main(arg2);
-        break;
-      case "mergeresult":
-        AnnoverOutputJoin.main(arg2);
-        break;
-      case "Summary":
-        SummaryStats.main(arg2);
-        break;
-      case "SummaryVaridated":
-        SummaryStatsVaridate.main(arg2);
         break;
       default:
         printMessage();
@@ -68,8 +52,5 @@ public class KarkinosCmd {
     System.err.println("usage: karkinos.jar <command> options");
     System.err.println("Command: ");
     System.err.println("  analysis	analysis SNV,CSV,tumor rate from bamfiles");
-    System.err.println("  reanalysis	reanalysis of SNV,CSV,tumorrate from middle pileuped file");
-    System.err.println("  mergeresult	merge Annover result into csv file");
-    System.err.println("  Summary	summary result across sample");
   }
 }
