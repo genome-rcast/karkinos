@@ -385,7 +385,6 @@ public class GetReadsStatsChart {
 
 				String chrom = entry.getKey();
 				//
-				boolean usualchrom = usualChrom(chrom);
 				
 				ReadsCounter rc = entry.getValue();
 				int target = rc.getTotalOnTarget();

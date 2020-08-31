@@ -30,21 +30,11 @@ public class CNVUtils {
 			List<CopyNumberInterval> lohs, List<CopyNumberInterval> gains) {
 
 		List<CopyNumberInterval> hdAmp = new ArrayList<CopyNumberInterval>();
-		int unit = 5000000;
 
 		for (CopyNumberInterval cni : dataset.getCniVaridateList()) {
 
 			if (cni.getCopynumber() == 2)
 				continue;
-			//
-			// int length = Math.abs(cni.getEnd()-cni.getStart());
-			// boolean amp = cni.getCopynumber()>2;
-			// boolean narrowamp = amp&&(length<unit);
-			// if(cni.isAllelic()&&cni.getNoSNP()>100&&(length>unit)&&!narrowamp){
-			//
-			//
-			// al.add(cni);
-			// }
 			if (cni.getCopynumber() == 0 ) {
 				hdAmp.add(cni);
 			}

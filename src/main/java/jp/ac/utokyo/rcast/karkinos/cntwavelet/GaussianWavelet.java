@@ -29,7 +29,6 @@ public class GaussianWavelet {
 			data[idx]= 1;
 			idx++;
 		}
-		CTWaveletBean bean = getWaveletTransform(data);
 		
 //		double sum = 0;
 //		for(double d= -1;d<1;d=d+0.001){
@@ -70,8 +69,6 @@ public class GaussianWavelet {
 		double sdintv = 0.001;
 
 		double maxpeak = -10;
-		double maxsd = 0;
-		double[] maxfit = null;
 		double[] data2 = null;
 
 		
@@ -90,8 +87,6 @@ public class GaussianWavelet {
 				sumval   =sumval +val;
 //				if(val  > maxpeak){
 //					maxpeak = val ;
-//					maxfit = data2;
-//					maxsd = sd;
 //					double mostfittingvariance = Math.pow(sd, 2);
 //					bean.setMostfittingvariance(mostfittingvariance);
 //					System.out.println("val="+val+"\t"+sd);
@@ -101,8 +96,6 @@ public class GaussianWavelet {
 
 			if (sumval  > maxpeak) {
 				maxpeak = sumval ;
-				maxfit = data2;
-				maxsd = sd;
 				double mostfittingvariance = Math.pow(sd, 2);
 				bean.setMostfittingvariance(mostfittingvariance);				
 				sumval = 0;

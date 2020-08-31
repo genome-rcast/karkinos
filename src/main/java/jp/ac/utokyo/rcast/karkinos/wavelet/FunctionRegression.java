@@ -101,7 +101,6 @@ public class FunctionRegression implements java.io.Serializable {
 			float binstart = f;
 			float binend = f+0.4f;
 			for(double[] da : l){
-				int x = (int) Math.round(da[0]);
 				// gc%
 				int y = (int) Math.round(da[1]);
 				// value
@@ -133,7 +132,6 @@ public class FunctionRegression implements java.io.Serializable {
 			
 			SummaryStatistics ss = new SummaryStatistics();
 			for(double[] da : l){
-				int x = (int) Math.round(da[0]);
 				// gc%
 				int y = (int) Math.round(da[1]);
 				// value
@@ -756,7 +754,6 @@ public class FunctionRegression implements java.io.Serializable {
 
 	public Object[] getBaitLabel() {
 		List<Integer> list = new ArrayList<Integer>();
-		int dev = 100 / gridnum;
 		for (int n = 0; n < gridnum; n++) {
 
 			//

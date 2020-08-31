@@ -203,35 +203,10 @@ public class CheckPossibleHDAmp {
 			List<List<WaveletIF>> cap) {
 		List<CopyNumberInterval> list = new ArrayList<CopyNumberInterval>();
 		for (CopyNumberInterval cni : clist) {
-			boolean hit = false;
 //			if (cni.getCopynumber() >= highestcn - 2) {
 				if (!cni.isAllelic()) {
 					list.add(cni);
-					hit = true;
 				}
-//			}
-//			if (hit == false) {
-//
-//				int count = 0;
-//				for (List<WaveletIF> wlist : cap) {
-//
-//					for (WaveletIF wi : wlist) {
-//
-//						//
-//						CapInterval ci = ((CapInterval) wi);
-//						if (!ci.getChr().equals(cni.getChr())) {
-//							break;
-//						}
-//						if (ci.getDenioseValue() >= 3.0) {
-//							count++;
-//						}
-//
-//					}
-//
-//				}
-//				if (count >= 2) {
-//					list.add(cni);
-//				}
 //			}
 		}
 		return list;

@@ -95,14 +95,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			float tumorratioss, double copynumber, boolean highisoform, int normalTotal, Map<String, Integer> snppos,
 			float adjustedTumorAllereFreq, float normalAF, float oxoGratio, float ffpeRatio) throws IOException {
 
-		// boolean debug = false;
-
-		boolean debug = false;
-		int debugpos = 7577114;
-		if (pos == debugpos) {
-			debug = true;
-		}
-
 		SupportReadsCheckResult ret = new SupportReadsCheckResult();
 		Set<Integer> filter = new LinkedHashSet<Integer>();
 		ret.setFilter(filter);
@@ -151,8 +143,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 				pileuplist.add(new BaseandQData(ch, qual));
 				//
 			}
-			int flg = sam.getFlags();
-			// System.out.println(flg);
 
 			if (samContatinMutation) {
 
@@ -638,8 +628,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 	//
 	private boolean normalCheck(String chr, int pos, PileUPResult pileUPResult) throws IOException {
-
-		boolean ret = false;
 
 		int s = 0;
 		int e = 1;
@@ -1246,10 +1234,8 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int seqidx = getCharIdx(pos, sam, indelInfo);
 		// tumor somatic mutation
 		char ch = 0;
-		byte qual = 0;
 		if ((seqidx >= 0) && (seqidx < sam.getReadLength())) {
 			ch = (char) sam.getReadBases()[seqidx];
-			qual = sam.getBaseQualities()[seqidx];
 		}
 
 		if (pileupFlg == PileUP.TumorINDEL) {

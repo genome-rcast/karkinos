@@ -53,13 +53,6 @@ public class SNVHolderPlusACnv {
 		int tumorref = snv.getTumor().getSeqCounter()[refidx]+1;
 		int tumoralt = snv.getTumor().getSeqCounter()[altidx]+1;
 		
-		int normaltotal = snv.getNormal().getTotalcnt();
-		int tumortotal = snv.getTumor().getTotalcnt();
-		
-//		float tr = ratio(tumortotal,normaltotal);		
-//		if(tr>1.25||tr>0.75){
-//			tr = 1;
-//		}
 		float r1 = ratio(tumorref,normalref,ntratio);
 		float r2 = ratio(tumoralt,normalalt,ntratio);
 		

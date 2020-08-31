@@ -196,9 +196,7 @@ public class WaveletDenoize {
 	private static double lohEstimate(List<List<WaveletIF>> dlist,
 			float startval, float endval,boolean include3n) {
 		float maxf = 0;
-		float maxf2 = 0;
 		double minsd = 10;
-		double minsd2 = 10;
 
 		List<double[]> l = new ArrayList<double[]>();
 		List<double[]> l_low = new ArrayList<double[]>();
@@ -259,13 +257,10 @@ public class WaveletDenoize {
 		List<double[]> peaks = new ArrayList<double[]>();
 		for (int n = 0; n + 2 < l.size(); n++) {
 
-			double f0 = l.get(n)[0];
 			double sd0 = l.get(n)[1];
 
-			double f1 = l.get(n + 1)[0];
 			double sd1 = l.get(n + 1)[1];
 
-			double f2 = l.get(n + 2)[0];
 			double sd2 = l.get(n + 2)[1];
 						
 			if ((sd0 > sd1) && (sd2 > sd1)) {
@@ -372,7 +367,6 @@ public class WaveletDenoize {
 	private static double getMA(int idx,int size, List<WaveletIF> dlist) {
 		//
 		double sumall = 0;
-		double sumbase = 0;
 		double weight = 0;
 		int half = size/2;
 		int start = idx-half;
@@ -396,7 +390,6 @@ public class WaveletDenoize {
 			
 			WaveletIF wi = dlist.get(n);
 			CapInterval ci = (CapInterval)wi;
-			//sumbase = sumbase + ci.getLength();
 			double localweight = 1;
 			try{				
 				localweight = Math.sqrt(ci.getCNVInfo().getNormalcnt());

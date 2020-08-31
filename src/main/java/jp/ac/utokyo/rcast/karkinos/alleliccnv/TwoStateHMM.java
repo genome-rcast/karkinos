@@ -222,12 +222,8 @@ public class TwoStateHMM {
 		Hmm<ObservationReal> hmm = new Hmm<ObservationReal>(2, factory);
 
 		SummaryStatistics ss = getCoreVariance(neighbors, cni);
-		double mean = ss.getMean();
 		double variance = ss.getVariance();
 		if (ss.getN() <= 1 || variance <= 0) {
-			//
-			if (ss.getN() == 0)
-				mean = 1;
 			variance = 0.5;
 		}
 		float minus = (float) (stepsize * 1.2);
@@ -304,7 +300,6 @@ public class TwoStateHMM {
 		//
 		int n = 0;
 		CopyNumberInterval cnin = null;
-		CapInterval cib4 = null;
 		SummaryStatistics ss2 = new SummaryStatistics();
 		int cnt = 0;
 		for (int state : hmmary) {
@@ -390,12 +385,8 @@ public class TwoStateHMM {
 		Hmm<ObservationReal> hmm = new Hmm<ObservationReal>(2, factory);
 
 		//
-		double mean = ss.getMean();
 		double variance = ss.getVariance();
 		if (ss.getN() <= 1 || variance <= 0) {
-			//
-			if (ss.getN() == 0)
-				mean = 1;
 			variance = 0.5;
 		}
 		float highmean2 = highmean + (2 * stepsize);

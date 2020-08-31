@@ -58,8 +58,6 @@ public class PileUPResult implements java.io.Serializable {
 		insersion = false;
 		totalcnt = 0;
 		mapqualRMS4Indel = 0;
-		double refp = 0;
-		double mutatep = 0;
 		lowqualratio = 0f;
 
 		for (int n = 0; n < 5; n++) {
@@ -380,13 +378,7 @@ public class PileUPResult implements java.io.Serializable {
 		if (indel) {
 
 			double indelr = calcRatio_Indel();
-			double snvr = calcRatio_SNV();
-			// if (snvr > indelr) {
-			// ratio = (float) snvr;
-			// indel = false;
-			// } else {
 			ratio = (float) indelr;
-			// }
 		} else {
 			calcRatio_SNV();
 		}

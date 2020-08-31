@@ -138,7 +138,6 @@ public class PileUP implements java.io.Serializable {
 
 		char genomeR = tgr.getGenomeNuc(chr, pos, true);
 
-		boolean repeatmask = Character.isLowerCase(genomeR);
 		genomeR = Character.toUpperCase(genomeR);
 
 		PileUPResult normal = PileUPPool.borrowObject();
@@ -312,8 +311,6 @@ public class PileUP implements java.io.Serializable {
 
 	private static int[] setPileUP(PileUPResult ret, String chr, int pos,
 			char genomeR, List<SamHolder> samList, int startidx) {
-
-		boolean debug = true;
 
 		int[] reta = new int[3];
 		boolean diff = false;

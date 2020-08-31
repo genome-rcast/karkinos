@@ -172,7 +172,6 @@ public class DistMedian implements java.io.Serializable{
 
 		double a1 = 0;
 		double b1 = 0;
-		double c1 = 0;
 
 		try {
 			DecompositionSolver solver = new LUDecompositionImpl(a).getSolver();
@@ -180,7 +179,6 @@ public class DistMedian implements java.io.Serializable{
 			RealVector x = solver.solve(b);
 			a1 = x.getEntry(2);
 			b1 = x.getEntry(1);
-			c1 = x.getEntry(0);
 		} catch (Exception ex) {
 			//ex.printStackTrace();
 		}

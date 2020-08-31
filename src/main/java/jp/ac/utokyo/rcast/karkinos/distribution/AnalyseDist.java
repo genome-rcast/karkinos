@@ -79,7 +79,6 @@ public class AnalyseDist implements java.io.Serializable {
 		
 		// calculate s.d for tumor n=2;
 		DataHolderByCN dh = map.get(1f);
-		double mean = dh.tumorhetrosnpMeanSd.getMean();
 		double tumorsd = dh.tumorhetrosnpMeanSd.getStandardDeviation();
 		tumorratioFromLOH = new TumorRatioBean();
 		float[] ret = DistributionFitting.getObserveRatio(map.get(LOH), LOH,
@@ -196,7 +195,6 @@ public class AnalyseDist implements java.io.Serializable {
 			cn = 2f;
 		}
 		DataHolderByCN dh = map.get(cn);
-		double mean = dh.tumorhetrosnpMeanSd.getMean();
 		double tumorsd = dh.tumorhetrosnpMeanSd.getStandardDeviation();
 		tumorratioFromSomatic = new TumorRatioBean();
 		float[] rets = DistributionFitting2.getObserveRatio(map.get(cn),

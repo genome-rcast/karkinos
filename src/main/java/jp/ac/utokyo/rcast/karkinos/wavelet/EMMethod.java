@@ -40,8 +40,6 @@ public class EMMethod {
 
 		PeaksInfo pi = new PeaksInfo();
 		// take over all bin distribution
-		double dmin = 0;
-		double dmax = 4;
 		int[] bininit = new int[4000];
 		int[] bin = new int[4000];
 
@@ -69,7 +67,6 @@ public class EMMethod {
 			}
 
 		}
-		double aved = total / 4000;
 		// remove unexcepted leap in data
 		for (int n = 0; n < 3998; n++) {
 
@@ -114,8 +111,6 @@ public class EMMethod {
 
 		// find peaks
 		double peaksum = 0;
-		double prevmin = 0;
-		double prevminy = 0;
 		double prevp = 0;
 		for (int n = 10; n < 3989; n++) {
 
@@ -156,8 +151,6 @@ public class EMMethod {
 					Peak p = new Peak(x, y);
 					p.setU(x);
 					p.setV(bean.getMostfittingvariance());
-					prevmin = 0;
-					prevminy = 0;
 					peaklist.add(p);
 					peaksum = peaksum + y;
 					prevp = x;
@@ -174,7 +167,6 @@ public class EMMethod {
 		}
 
 		// /
-		int cntflg = 0;
 		List<EMval> list = new ArrayList<EMval>();
 		for (List<WaveletIF> dlist : plist) {
 
@@ -188,21 +180,6 @@ public class EMMethod {
 
 		}
 
-		// EM not working well
-		// excute em
-		// int count = 0;
-		// while (cntflg == 0) {
-		//
-		// estep(list, peaklist);
-		// int ret = mstep(list, peaklist);
-		// if (ret < 0) {
-		// break;
-		// }
-		// if (count > 1) {
-		// break;
-		// }
-		// count++;
-		// }
 		pi.setSignalcount(bin);
 		pi.setPeaksignals(binma2);
 		pi.setPeaklist(peaklist);
@@ -216,14 +193,12 @@ public class EMMethod {
 
 		}
 		int pidx = 0;
-		int maxpeakidx = 0;
 		double maxr = 0;
 		double minu = 0;
 		for (Peak p : peaklist) {
 			double r = p.getR() / psum;
 			if (r > maxr) {
 				maxr = r;
-				maxpeakidx = pidx;
 			}
 			
 			if((minu==0)||(minu > p.getU())){
@@ -236,11 +211,6 @@ public class EMMethod {
 			System.out.println(p.getR() + "\t" + p.getU() + "\t" + p.getV());
 		}
 
-		// find peak distance
-//		float peakdist = getUnitPeakDist(peaklist, maxpeakidx,lohestimate);
-//		// add artifitial peaks 4 low 4 high
-//		List<Peak> peaklistn = addArtifitialLowPeaks(minu,peaklist, maxpeakidx, peakdist);
-//		pi.setPeaklist(peaklistn);
 		return pi;
 
 	}

@@ -16,10 +16,6 @@ public class GeneEachCNV {
 		
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
 		//
-		int mergin = 5000;
-		int mergin2 = 10000;
-		int mergin3 = 20000;
-		
 		long normaltotal=0;
 		long tumortotal=0;
 		
@@ -38,28 +34,7 @@ public class GeneEachCNV {
 				if(gen==null){
 					gen = ge.getGeneId(chr, (int)end);
 				}
-//				if(gen==null){
-//					gen = ge.getGeneId(chr, (int)start-mergin);
-//				}
-//				if(gen==null){
-//					gen = ge.getGeneId(chr, (int)end+mergin);
-//				}
-//				if(gen==null){
-//					gen = ge.getGeneId(chr, (int)start-mergin2);
-//				}
-//				if(gen==null){
-//					gen = ge.getGeneId(chr, (int)end+mergin2);
-//				}
-//				if(gen==null){
-//					gen = ge.getGeneId(chr, (int)start-mergin3);
-//				}
-//				if(gen==null){
-//					gen = ge.getGeneId(chr, (int)end+mergin3);
-//				}
 				
-				//				
-				//
-				int length = civ.getLength();
 				long normalcnt = civ.getCNVInfo().getNormalcnt();
 				long tumorcnt = civ.getCNVInfo().getTumorcnt();
 				

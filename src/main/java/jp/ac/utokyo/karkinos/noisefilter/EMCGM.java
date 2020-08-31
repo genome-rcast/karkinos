@@ -147,7 +147,6 @@ public class EMCGM {
 
 	private int checkreality(double[] d) {
 		
-		double u0 =d[1];
 		double v0 =d[2];
 		double u1 =d[3];
 		double v1 =d[4];

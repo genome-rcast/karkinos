@@ -193,7 +193,6 @@ public class PloidyResolve {
 			TheoreticalNodematch tnm = new TheoreticalNodematch();
 			mmb1 = tnm.matchPeak(pi, maxMagnatudeEvenIdx, map, cnvcount);
 			//
-			int ploidy = mmb1.getPloidyflg();
 			int tp = mmb1.getBestmme().getPurity();
 			double tpd = tp * 0.01;
 			//
@@ -212,7 +211,6 @@ public class PloidyResolve {
 		float ploidy = 0;
 		double totallen = 0;
 		double totalsum = 0;
-		float maxcn = 0;
 
 		//
 		for (Peak p : pi.getPeaklist()) {

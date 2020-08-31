@@ -178,7 +178,6 @@ public class MatchMatrix {
 			boolean hit = false;
 			int numhit = 0;
 			int idx = -1;
-			boolean largistpeakhit = false;
 			for (PeakPoint pp : list) {
 
 				idx++;
@@ -222,9 +221,6 @@ public class MatchMatrix {
 
 					// hit
 					hit = true;
-					if(idx==0){
-						largistpeakhit = true;
-					}
 					double eucliddist = dist(pp.peakpos - dist,
 							pp.imbalanceratio - imblance);
 					sumdist = sumdist + eucliddist;

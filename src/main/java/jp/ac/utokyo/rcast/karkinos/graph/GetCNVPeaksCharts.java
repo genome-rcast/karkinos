@@ -155,7 +155,6 @@ public class GetCNVPeaksCharts {
 
 		for (double x = 0; x < 4; x = x + 0.001) {
 
-			double y = pi.getVal(x);
 			series03.add(x, pi.getAcutualVal(x));
 			series04.add(x, pi.getArtifitialVal(x));
 

@@ -117,7 +117,6 @@ public class HMMACNV {
 			List<List<SNVHolderPlusACnv>> plist, boolean high, double adjust) {
 
 		int[] countn = new int[10];
-		Set<Double> checkReg = new HashSet<Double>();
 
 		double baseline = getBaseLine(plist, high,adjust);
 		double stepSize = getStepSize(plist, high);
@@ -150,7 +149,6 @@ public class HMMACNV {
 			hmm.setPi(idx, p);
 			idx++;
 		}
-		int multifuctor = 20;
 
 		double variance = Math.max((1 - baseline), stepSize) / 3;
 		// 1-0.2,

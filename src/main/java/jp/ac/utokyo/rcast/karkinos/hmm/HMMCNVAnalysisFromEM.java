@@ -62,12 +62,10 @@ public class HMMCNVAnalysisFromEM {
 			int[] hmmary = hmm.mostLikelyStateSequence(olist);
 						
 			int cnt = 0;
-			int mb4 = -1;
 			for (int m : hmmary) {
 
 				//
 				
-				mb4 = m;
 				WaveletIF wif = list.get(cnt);
 				CapInterval ci = (CapInterval)wif;
 				ci.setPeakIdx(plistidx.get(m));
@@ -182,25 +180,9 @@ public class HMMCNVAnalysisFromEM {
 				factory);
 		//
 		int n = 0;
-		int idxn0 = 0;
-		int idxn1 = 0;
-		int idxn2 = 0;
-		int idxn3 = 0;
 		for (Peak peak : peaks) {
 
 			hmm.setOpdf(n, new OpdfGaussian(peak.getU(), peak.getV()));
-			if(peak.getCn()==0.5f){
-				idxn0 = n;
-			}
-			if(peak.getCn()==1.0f){
-				idxn1 = n;
-			}
-			if(peak.getCn()==1.5f){
-				idxn2 = n;
-			}
-			if(peak.getCn()==2.0f){
-				idxn3 = n;
-			}			
 			n++;
 		}
 		

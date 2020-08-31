@@ -727,23 +727,12 @@ public class TumorGenotyper extends ReadWriteBase {
 			
 		}
 
-		// debug
-		int debugpos = 309750;
-		boolean debug = true;
-		//boolean debug = false;
-		//
-
 		int n = 0;
 		for (Interval iv : ivlist) {
 			n++;
 			//debug
 			//if(n==10)break;
 			
-//			if((iv.getStart() < debugpos) && (debugpos<iv.getEnd())){
-//				
-//			}else{
-//				continue;
-//			}
 				
 			
 			

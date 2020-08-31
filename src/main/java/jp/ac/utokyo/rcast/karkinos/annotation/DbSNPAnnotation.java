@@ -411,11 +411,9 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			fis.skip(fp);
 			br = new BufferedReader(new InputStreamReader(fis));
 			int totalcnt = 0;
-			long init = fis.available();
 			int loadtotal = 0;
 			int cntignore = 0;
 			for (;;) {
-				long filepos = init - fis.available();
 				String line = br.readLine();
 				if (line == null)
 					break;

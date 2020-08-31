@@ -274,7 +274,6 @@ public class FilterResult implements java.io.Serializable {
 			boolean exonSNP = (dbSNPbean.getMode() == DbSNPAnnotation.MODEexonSNP);
 
 			boolean lowdapthLow = normaldepth < KarkinosProp.low_normal_depth_thresLow;
-			boolean lowdapthHigh = normaldepth < KarkinosProp.low_normal_depth_thresHigh;
 
 			// if (dbSNPbean.isCosmic()) {
 			//
@@ -330,10 +329,8 @@ public class FilterResult implements java.io.Serializable {
 					filter.add(SNP);
 				}
 				boolean validated = dbSNPbean.isValid();
-				// if (lowdapthHigh) {
 				// if (validated) {
 				// filter.add(SNP);
-				// }
 				// }
 				// change v4.1.10
 				if (validated) {

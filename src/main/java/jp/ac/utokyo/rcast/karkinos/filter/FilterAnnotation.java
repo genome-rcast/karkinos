@@ -75,7 +75,6 @@ public class FilterAnnotation {
 
 		// BayesianFilter bfilter = new
 		// BayesianFilter(dataset.getAnalyseDist());
-		NormalSNPCounter nsnpC = new NormalSNPCounter(dataset);
 
 		Map<String, Integer> snppos = new HashMap<String, Integer>();
 		// float tumorContentsRatio = dataset.getAnalyseDist().getTumorratio();
@@ -129,7 +128,6 @@ public class FilterAnnotation {
 
 			boolean initFilterFalse = originalTratio < KarkinosProp.mintumorratio;
 			boolean highnormalAfterTCadjust = false;
-			boolean lowtumorAfterTCadjust = false;
 			boolean lowdepthafterTCadjust = false;
 
 			boolean lowdepthafterTCadjustInfo = false;
@@ -329,21 +327,10 @@ public class FilterAnnotation {
 
 			char ref = snv.getNormal().getGenomeR();
 			char alt = snv.getNormal().getALT();
-			String key = ref + "to" + alt;
 			// double adjustratio
 			// =
-			// nsnpC.getLogRefHetroSNPRatio(key,readsSummary.getNucCountRef(ref));
-
-			// double snpratio = nsnpC.getHetroSNPRatio(key);
-			// System.out.println("snpratio="+snpratio);
-			// double adjustratio = Math.log10(snpratio / 0.1666);
-			// double adjustratio = Math.log10(1-snpratio);
-			// double adjustedLogn = adjustratio + logn;
-			// 20130322 kill snp prior adjustment. no good effect
 			double adjustedLogn = logn;
 
-			// double ar = nsnpC.getHetroSNPRatioRemain(key);
-			// double adjustedLogn = ar*logn;
 			double[] afs = RatioUtils.getRatio(snv, ref, alt);
 			fr.setSupportreadsBAlleleFeqquency(srr.getSupportreadsBAlleleFeqquency());
 			fr.setRefreadsBAlleleFeqquency(srr.getRefreadsBAlleleFeqquency());
@@ -374,7 +361,6 @@ public class FilterAnnotation {
 
 			// TC adjust
 			fr.setHighnormalAfterTCadjust(highnormalAfterTCadjust);
-			// fr.setLowtumorAfterTCadjust(lowtumorAfterTCadjust);
 			fr.setLowdepthafterTCadjust(lowdepthafterTCadjust);
 			fr.setLognAjusted(adjustedLogn);
 
@@ -390,7 +376,6 @@ public class FilterAnnotation {
 		}
 
 		// recaluculate psotrior probability of SNV
-		SNVHighDepthCounter snvc = new SNVHighDepthCounter(dataset);
 		na = new NoiseAnalysis();
 		na.analysisNoiseRegion(dataset, ploidy);
 
@@ -405,7 +390,6 @@ public class FilterAnnotation {
 			char alt = snv.getNormal().getALT();
 			String key = ref + "to" + alt;
 			key = GenotypeKeyUtils.aggrigateKeys(key);
-			double snvratio = snvc.getSNVRatio(key);
 			FilterResult fr = snv.getFilterResult();
 			float originalTratio = snv.getTumor().getRatio();
 			boolean initFilterFalse = originalTratio < KarkinosProp.mintumorratio;
@@ -424,11 +408,6 @@ public class FilterAnnotation {
 							snv.getChr() + "\t" + snv.getPos() + "\t" + snv.getTumor().getRatio() + "\t" + reject);
 
 				}
-				// 20130322 kill snv prior adjustment. no good effect
-				// double adjustratio = Math.log10(snvratio);
-				// //double adjustratio = Math.log10(1-snpratio);
-				// double adjustedLogt = adjustratio + fr.getLogtAjusted();
-				// fr.setLogtAjusted(adjustedLogt);
 				fr.getPassFilterFlgForce();
 
 			}

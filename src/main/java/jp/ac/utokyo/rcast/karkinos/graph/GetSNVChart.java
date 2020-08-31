@@ -360,10 +360,6 @@ public class GetSNVChart {
 								PileUPResult pir = snv.getTumor();
 								float ratio = pir.getRatio();
 								float fpval = (float) snv.getPvalFisher();
-								float normallogodd = snv.getNormal()
-										.getRefLogLikeHood();
-								float adgustedmutateodds = (float) snv
-										.getFilterResult().getLogtAjusted();
 								if (fpval == 0) {
 									fpval = 0.0000000000000001f;
 								}

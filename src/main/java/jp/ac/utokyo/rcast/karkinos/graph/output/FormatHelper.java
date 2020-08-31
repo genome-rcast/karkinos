@@ -477,9 +477,7 @@ public class FormatHelper {
 		// qual
 		data[5] = String.valueOf(".");
 		// filter
-		FilterResult fr = snv.getFilterResult();
 
-		Set<Integer> flgs = null;
 		String fs = FilterSNP.filterIndel(pir);
 		data[6] = fs;
 		// info
