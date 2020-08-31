@@ -15,11 +15,7 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.filter;
 
-import java.io.File;
-import java.io.IOException;
-
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
-import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 public class IlluminaSysError {
 	public static boolean checkTypicalError(char genomeR, char altTumor,

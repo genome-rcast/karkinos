@@ -21,12 +21,6 @@ import java.util.List;
 
 import org.apache.commons.math.distribution.NormalDistribution;
 import org.apache.commons.math.distribution.NormalDistributionImpl;
-import org.apache.commons.math.linear.Array2DRowRealMatrix;
-import org.apache.commons.math.linear.ArrayRealVector;
-import org.apache.commons.math.linear.DecompositionSolver;
-import org.apache.commons.math.linear.LUDecompositionImpl;
-import org.apache.commons.math.linear.RealMatrix;
-import org.apache.commons.math.linear.RealVector;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;

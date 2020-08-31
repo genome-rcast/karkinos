@@ -17,8 +17,6 @@ package jp.ac.utokyo.rcast.karkinos.annotation;
 
 import java.io.IOException;
 
-import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
-
 import org.broad.igv.bbfile.BBFileReader;
 import org.broad.igv.bbfile.BigWigIterator;
 import org.broad.igv.bbfile.WigItem;

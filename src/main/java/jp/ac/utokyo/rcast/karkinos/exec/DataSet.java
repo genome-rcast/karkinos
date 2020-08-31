@@ -28,7 +28,6 @@ import java.util.Set;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.distribution.AnalyseDist;
-import jp.ac.utokyo.rcast.karkinos.distribution.DataHolderByCN;
 import jp.ac.utokyo.rcast.karkinos.utils.Interval;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 import jp.ac.utokyo.rcast.karkinos.wavelet.FunctionRegression;

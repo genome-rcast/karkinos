@@ -18,21 +18,16 @@ package jp.ac.utokyo.rcast.karkinos.graph;
 import java.awt.geom.Ellipse2D;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -49,9 +44,6 @@ import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
-import jp.ac.utokyo.rcast.karkinos.readssummary.CounterA;
-import jp.ac.utokyo.rcast.karkinos.readssummary.DepthCounter;
-import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 
 public class SNPGraph {
 

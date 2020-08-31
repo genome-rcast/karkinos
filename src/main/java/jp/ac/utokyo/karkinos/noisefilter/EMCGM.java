@@ -19,10 +19,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.math.MathException;
-import org.apache.commons.math.distribution.NormalDistribution;
-import org.apache.commons.math.distribution.NormalDistributionImpl;
-
 public class EMCGM {
 	public static final double u1Min = 0.35;
 	public static final double u1Max = 0.75;

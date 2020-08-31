@@ -15,8 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.distribution;
 
-import java.util.Map;
-
 public class TumorRateCalculator {
 
 	private static final float LOH = 0.5f;

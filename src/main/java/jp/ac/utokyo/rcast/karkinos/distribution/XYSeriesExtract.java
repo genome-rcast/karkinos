@@ -15,7 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.distribution;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.jfree.data.xy.IntervalXYDataset;

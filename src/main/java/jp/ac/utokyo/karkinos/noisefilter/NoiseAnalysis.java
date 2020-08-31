@@ -20,20 +20,15 @@ import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_SUPPORTED_BY_
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 import jp.ac.utokyo.rcast.karkinos.exec.PileUP;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 import jp.ac.utokyo.rcast.karkinos.filter.SupportReadsCheck;
-import jp.ac.utokyo.rcast.karkinos.readssummary.SNPDepthCounter;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
-import jp.ac.utokyo.rcast.karkinos.utils.GenotypeKeyUtils;
 
 public class NoiseAnalysis {
 	//

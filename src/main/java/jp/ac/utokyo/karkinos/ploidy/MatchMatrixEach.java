@@ -15,7 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.karkinos.ploidy;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MatchMatrixEach {

@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.PileUP;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 import jp.ac.utokyo.rcast.karkinos.readssummary.SNPDepthCounter;

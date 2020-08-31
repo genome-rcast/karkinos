@@ -1,8 +1,6 @@
 package jp.ac.utokyo.rcast.karkinos.utils;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;

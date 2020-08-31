@@ -20,8 +20,6 @@ import java.util.Map;
 
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-
 public class MutationCounter implements java.io.Serializable{
 	
 	int total=0;

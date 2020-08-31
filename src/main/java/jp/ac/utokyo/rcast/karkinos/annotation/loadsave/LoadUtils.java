@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 
 public class LoadUtils {

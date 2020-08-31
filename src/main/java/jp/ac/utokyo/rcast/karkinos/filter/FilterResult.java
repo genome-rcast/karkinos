@@ -15,13 +15,8 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.filter;
 
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_LOW_refOddsRatio;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_LOW_tumorOddsRatio;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;

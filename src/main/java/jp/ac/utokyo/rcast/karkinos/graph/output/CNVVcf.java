@@ -16,24 +16,13 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph.output;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
-import java.util.Map;
-import java.util.Properties;
 
-import com.lowagie.text.Table;
-
-import jp.ac.utokyo.rcast.karkinos.distribution.AnalyseDist;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
-import jp.ac.utokyo.rcast.karkinos.readssummary.CounterA;
-import jp.ac.utokyo.rcast.karkinos.readssummary.DepthCounter;
-import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsCounter;
-import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 
 public class CNVVcf {
 

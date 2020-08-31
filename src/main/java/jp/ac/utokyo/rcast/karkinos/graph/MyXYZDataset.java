@@ -20,11 +20,7 @@ import java.util.List;
 import jp.ac.utokyo.karkinos.ploidy.PeakPoint;
 import jp.ac.utokyo.karkinos.ploidy.TheoreticalNodes;
 
-import org.jfree.data.DomainOrder;
-import org.jfree.data.general.DatasetChangeListener;
-import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.xy.AbstractXYZDataset;
-import org.jfree.data.xy.XYZDataset;
 
 public class MyXYZDataset extends AbstractXYZDataset {
 

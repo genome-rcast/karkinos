@@ -17,7 +17,6 @@ package jp.ac.utokyo.rcast.karkinos.graph;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.jfree.chart.ChartColor;
@@ -34,8 +33,6 @@ import org.jfree.ui.Layer;
 
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.AllelicCNV;
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.SNVHolderPlusACnv;
-import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class GetAllelicCNVGraph {
 

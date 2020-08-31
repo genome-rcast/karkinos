@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.distribution;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,7 +24,6 @@ import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import jp.ac.utokyo.rcast.karkinos.exec.PileUP;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
-import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.GenotypeKeyUtils;
 

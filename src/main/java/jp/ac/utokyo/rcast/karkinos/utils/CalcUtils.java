@@ -15,7 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.utils;
 
-import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 

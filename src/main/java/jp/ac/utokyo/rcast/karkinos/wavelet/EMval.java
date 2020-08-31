@@ -15,8 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.wavelet;
 
-import java.util.List;
-
 public class EMval {
 	
 	double value;

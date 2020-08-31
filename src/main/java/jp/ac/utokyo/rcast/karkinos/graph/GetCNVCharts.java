@@ -16,12 +16,9 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.JFreeChart;
@@ -35,14 +32,12 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.Layer;
-import org.jfree.ui.RectangleInsets;
 
 import com.lowagie.text.Table;
 
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsCounter;
 import jp.ac.utokyo.rcast.karkinos.wavelet.Peak;
 import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;

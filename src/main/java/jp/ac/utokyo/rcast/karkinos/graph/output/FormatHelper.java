@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph.output;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import jp.ac.utokyo.karkinos.noisefilter.NoiseAnalysis;

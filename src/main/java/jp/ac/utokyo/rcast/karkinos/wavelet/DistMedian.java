@@ -17,7 +17,6 @@ package jp.ac.utokyo.rcast.karkinos.wavelet;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;

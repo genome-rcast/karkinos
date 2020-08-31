@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.ploidy;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -25,7 +24,6 @@ import java.util.Map;
 
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.AllelicCNV;
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.SNVHolderPlusACnv;
-import jp.ac.utokyo.rcast.karkinos.distribution.DataHolderByCN;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.PileUP;

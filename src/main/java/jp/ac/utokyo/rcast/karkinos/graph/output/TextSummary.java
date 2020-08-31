@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 
-import com.lowagie.text.Table;
-
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.distribution.AnalyseDist;

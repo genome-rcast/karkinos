@@ -17,12 +17,8 @@ package jp.ac.utokyo.rcast.karkinos.hmm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationReal;

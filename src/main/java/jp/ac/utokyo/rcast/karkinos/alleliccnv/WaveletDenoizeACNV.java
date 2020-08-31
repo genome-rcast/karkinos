@@ -20,9 +20,6 @@ import java.util.List;
 
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 import jp.ac.utokyo.rcast.karkinos.wavelet.DistMedian;
-import jwave.Transform;
-import jwave.transforms.FastWaveletTransform;
-import jwave.transforms.wavelets.haar.Haar1;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 

@@ -15,16 +15,9 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.graph;
 
-import java.awt.Font;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
 
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
@@ -33,25 +26,11 @@ import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.LogAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.labels.BoxAndWhiskerToolTipGenerator;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
-import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.CombinedRangeXYPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.urls.StandardXYURLGenerator;
-import org.jfree.chart.urls.XYURLGenerator;
-import org.jfree.data.statistics.BoxAndWhiskerCalculator;
-import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
-import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;

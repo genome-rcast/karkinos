@@ -15,13 +15,8 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.filter;
 
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_LOW_refOddsRatio;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,19 +24,14 @@ import jp.ac.utokyo.karkinos.noisefilter.NoiseAnalysis;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.MappabilityAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.stats.Fisher;
-import jp.ac.utokyo.rcast.karkinos.distribution.AnalyseDist;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 import jp.ac.utokyo.rcast.karkinos.exec.PileUP;
-import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
-import jp.ac.utokyo.rcast.karkinos.readssummary.SNPDepthCounter;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.GenotypeKeyUtils;
-import jp.ac.utokyo.rcast.karkinos.utils.NormalSNPCounter;
-import jp.ac.utokyo.rcast.karkinos.utils.SNVHighDepthCounter;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 public class FilterAnnotation {

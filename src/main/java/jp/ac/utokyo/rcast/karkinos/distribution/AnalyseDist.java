@@ -19,14 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-
-import jp.ac.utokyo.rcast.karkinos.alleliccnv.AllelicCNV;
-import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
-import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 
 public class AnalyseDist implements java.io.Serializable {

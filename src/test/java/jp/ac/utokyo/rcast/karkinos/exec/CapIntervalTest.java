@@ -1,15 +1,12 @@
 package jp.ac.utokyo.rcast.karkinos.exec;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 import htsjdk.samtools.SAMRecord;
 import htsjdk.samtools.SAMFileReader;
-import htsjdk.samtools.util.CloseableIterator;
 import java.io.File;
 
 public class CapIntervalTest {

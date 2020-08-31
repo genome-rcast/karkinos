@@ -18,14 +18,11 @@ package jp.ac.utokyo.rcast.karkinos.graph;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import jp.ac.utokyo.karkinos.noisefilter.AFDepthMatrix;
 import jp.ac.utokyo.karkinos.noisefilter.BinData;
 import jp.ac.utokyo.karkinos.noisefilter.NoiseAnalysis;
-import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 
 import org.jfree.chart.ChartColor;
@@ -36,7 +33,6 @@ import org.jfree.chart.plot.CombinedRangeXYPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;

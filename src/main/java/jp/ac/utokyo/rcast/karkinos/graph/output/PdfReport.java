@@ -16,19 +16,14 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph.output;
 
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import org.jfree.chart.JFreeChart;
 
 import com.lowagie.text.Annotation;
-import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;

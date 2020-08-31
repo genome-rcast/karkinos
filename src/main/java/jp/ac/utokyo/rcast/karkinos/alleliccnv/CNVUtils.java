@@ -21,7 +21,6 @@ import java.util.List;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class CNVUtils {

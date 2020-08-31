@@ -17,20 +17,12 @@ package jp.ac.utokyo.rcast.karkinos.wavelet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import jp.ac.utokyo.rcast.karkinos.cntwavelet.CTWaveletBean;
 import jp.ac.utokyo.rcast.karkinos.cntwavelet.GaussianWavelet;
-import jp.ac.utokyo.rcast.karkinos.cntwavelet.MexicanHatWavelet;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 
 public class EMMethod {

@@ -15,9 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.cntwavelet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GaussianWavelet {
 
 	public static void main(String[] arg) {

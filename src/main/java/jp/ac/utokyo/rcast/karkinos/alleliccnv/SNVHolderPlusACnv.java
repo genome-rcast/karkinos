@@ -17,7 +17,6 @@ package jp.ac.utokyo.rcast.karkinos.alleliccnv;
 
 import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
-import jp.ac.utokyo.rcast.karkinos.wavelet.FunctionRegression;
 
 public class SNVHolderPlusACnv {
 	

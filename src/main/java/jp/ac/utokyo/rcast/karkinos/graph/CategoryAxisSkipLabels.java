@@ -18,7 +18,6 @@ package jp.ac.utokyo.rcast.karkinos.graph;
 
 //package com.pilotsw.pw.chart;
 import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.Effect3D;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.chart.axis.AxisState;
@@ -28,14 +27,12 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Point2D;
-import org.jfree.ui.Size2D;
 import java.awt.geom.Line2D;
 import java.awt.Shape;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.axis.CategoryAnchor;
-import org.jfree.chart.axis.CategoryLabelWidthType;
 import org.jfree.chart.axis.CategoryTick;
 import org.jfree.chart.axis.CategoryLabelPosition;
 import org.jfree.chart.axis.Tick;
@@ -43,12 +40,9 @@ import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.entity.TickLabelEntity;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.text.TextBlock;
-import org.jfree.text.TextLine;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 /*
  CategoryAxisSkipLabels skips category axis labels. Essentially this class extends
  the existing CategoryAxis class in JFreeChart, and overrides

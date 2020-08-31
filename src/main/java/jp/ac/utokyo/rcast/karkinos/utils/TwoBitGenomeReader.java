@@ -17,15 +17,11 @@ package jp.ac.utokyo.rcast.karkinos.utils;
 
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 public class TwoBitGenomeReader {
 

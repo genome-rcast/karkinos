@@ -18,8 +18,6 @@ package jp.ac.utokyo.rcast.karkinos.bean;
 import java.io.Serializable;
 import static jp.ac.utokyo.rcast.karkinos.bean.BaitSampling.*;
 
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-
 public class BailSamplingBean implements Serializable {
 
 	

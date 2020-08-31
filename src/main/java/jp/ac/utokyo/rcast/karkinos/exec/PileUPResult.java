@@ -20,10 +20,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.math.MathException;
-import org.apache.commons.math.distribution.BinomialDistribution;
-import org.apache.commons.math.distribution.BinomialDistributionImpl;
-
 public class PileUPResult implements java.io.Serializable {
 	boolean diff = false;
 	int[] seqCounter = new int[5];

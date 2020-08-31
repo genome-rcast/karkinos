@@ -15,7 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.graph;
 
-import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;

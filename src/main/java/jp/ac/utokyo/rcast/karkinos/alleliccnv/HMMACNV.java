@@ -17,15 +17,9 @@ package jp.ac.utokyo.rcast.karkinos.alleliccnv;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.wavelet.DistMedian;
-import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
-
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationReal;

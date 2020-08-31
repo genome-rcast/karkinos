@@ -19,9 +19,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.xy.IntervalXYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 public class XYSeriesForReadsDepth {
 	

@@ -23,9 +23,6 @@ import java.util.List;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
-import jwave.Transform;
-import jwave.transforms.FastWaveletTransform;
-import jwave.transforms.wavelets.haar.Haar1;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 

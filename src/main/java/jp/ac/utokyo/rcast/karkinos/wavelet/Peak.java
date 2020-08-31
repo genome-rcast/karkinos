@@ -18,7 +18,6 @@ package jp.ac.utokyo.rcast.karkinos.wavelet;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.ac.utokyo.karkinos.noisefilter.NDist;
 import jp.ac.utokyo.karkinos.ploidy.PeakAnalysisComponent;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 

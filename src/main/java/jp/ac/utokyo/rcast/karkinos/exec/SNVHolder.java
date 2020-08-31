@@ -16,9 +16,7 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.exec;
 
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
-import jp.ac.utokyo.rcast.karkinos.annotation.stats.Fisher;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
-import jp.ac.utokyo.rcast.karkinos.graph.output.FormatHelper;
 
 public class SNVHolder implements java.io.Serializable{
 	
