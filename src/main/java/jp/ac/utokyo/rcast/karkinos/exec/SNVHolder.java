@@ -19,17 +19,15 @@ import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 
 public class SNVHolder implements java.io.Serializable{
-	
-
 	String chr;
 	int pos;
 	CapInterval ci;
 	DbSNPBean dbSNPbean;
-	FilterResult filterResult;	
-	
+	FilterResult filterResult;
+
 	double pvalFisher = 0;
-	boolean fisherTestSignif = false;		
-	
+	boolean fisherTestSignif = false;
+
 	public double getPvalFisher() {
 		return pvalFisher;
 	}
@@ -54,54 +52,68 @@ public class SNVHolder implements java.io.Serializable{
 	public DbSNPBean getDbSNPbean() {
 		return dbSNPbean;
 	}
+
 	public void setDbSNPbean(DbSNPBean dbSNPbean) {
 		this.dbSNPbean = dbSNPbean;
 	}
+
 	public CapInterval getCi() {
 		if(ci==null){
 			return new CapInterval("chr0", 0, 0, false);
 		}
 		return ci;
 	}
+
 	public void setCi(CapInterval ci) {
 		this.ci = ci;
 	}
+
 	public int getPos() {
 		return pos;
 	}
+
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
+
 	public String getChr() {
 		return chr;
 	}
+
 	int flg;
 	PileUPResult normal;
 	PileUPResult tumor;
-	
+
 	public int getFlg() {
 		return flg;
 	}
+
 	public void setFlg(int flg) {
 		this.flg = flg;
 	}
+
 	public PileUPResult getNormal() {
 		return normal;
 	}
+
 	public void setNormal(PileUPResult normal) {
 		this.normal = normal;
 	}
+
 	public PileUPResult getTumor() {
 		return tumor;
 	}
+
 	public void setTumor(PileUPResult tumor) {
 		this.tumor = tumor;
 	}
+
 	public void setChr(String _chr) {
 		chr = _chr;		
 	}
 
 	boolean hetroSNP = false;
+
 	public void serHetroSNP(boolean _hetroSNP) {
 		hetroSNP = _hetroSNP;	
 	}
@@ -109,9 +121,4 @@ public class SNVHolder implements java.io.Serializable{
 	public boolean isHetroSNP() {
 		return hetroSNP;
 	}
-
-	
-	
-
-	
 }

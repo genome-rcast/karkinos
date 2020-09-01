@@ -64,7 +64,6 @@ import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class SupportReadsCheck extends ReadWriteBase {
-
 	String bam;
 	String normalbam;
 	SAMFileReader bamr = null;
@@ -73,7 +72,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 	DbSNPAnnotation dbAnno = null;
 
 	public SupportReadsCheck(String normalbam, String bam, TwoBitGenomeReader tgr, DbSNPAnnotation dbAnno) {
-
 		this.normalbam = normalbam;
 		this.bam = bam;
 		bamr = getReader(bam);
@@ -93,7 +91,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 	public SupportReadsCheckResult checkSupportReads(String chr, int pos, PileUPResult pileUPResult, int pileupFlg,
 			float tumorratioss, double copynumber, boolean highisoform, int normalTotal, Map<String, Integer> snppos,
 			float adjustedTumorAllereFreq, float normalAF, float oxoGratio, float ffpeRatio) throws IOException {
-
 		SupportReadsCheckResult ret = new SupportReadsCheckResult();
 		Set<Integer> filter = new LinkedHashSet<Integer>();
 		ret.setFilter(filter);
@@ -123,7 +120,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int f2r1else = 0;
 
 		while (ite.hasNext()) {
-
 			SAMRecord sam = ite.next();
 			// System.out.println(sam.getReadString());
 			allreads.add(sam);
@@ -140,11 +136,9 @@ public class SupportReadsCheck extends ReadWriteBase {
 				}
 
 				pileuplist.add(new BaseandQData(ch, qual));
-				//
 			}
 
 			if (samContatinMutation) {
-
 				// System.out.println(sam.getReadName());
 				// if (sam.getFirstOfPairFlag()) {
 				if (sam.getReadNegativeStrandFlag()) {
@@ -155,7 +149,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					} else {
 						f1r2support++;
 					}
-
 				} else {
 					rightsupport++;
 
@@ -164,7 +157,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					} else {
 						f2r1support++;
 					}
-
 				}
 
 				if (sam.getReadPairedFlag()) {
@@ -192,9 +184,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 				}
 
 				supportreads.add(sam);
-
 			} else {
-
 				// if (sam.getFirstOfPairFlag()) {
 				if (sam.getReadNegativeStrandFlag()) {
 					leftelse++;
@@ -204,7 +194,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					} else {
 						f1r2else++;
 					}
-
 				} else {
 					rightelse++;
 
@@ -213,7 +202,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					} else {
 						f2r1else++;
 					}
-
 				}
 				// } else {
 				// if (sam.getReadNegativeStrandFlag()) {
@@ -222,9 +210,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 				// leftelse++;
 				// }
 				// }
-
 			}
-
 		}
 		ite.close();
 
@@ -237,7 +223,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 				}
 				if (!isindel) {
 					double r = (double) pileUPResult.indelcnt() / (double) supportreads.size();
-					//
+
 					if (r > 0.1) {
 						filter.add(NEARINDEL);
 					}
@@ -272,8 +258,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 				filter.add(TNQualityDiff);
 			}
 		}
-		//
-		//
 
 		String mtypeparent = pileUPResult.getGenomeR() + "-" + pileUPResult.getALT();
 
@@ -297,13 +281,10 @@ public class SupportReadsCheck extends ReadWriteBase {
 			double thres = KarkinosProp.Fisher_Thres_For_Reads_Direction;
 
 			if (oxoGCand) {
-
 				if (f1r2support <= 6 && f2r1support <= 6) {
-
 					if (oxoGratio > 0.1) {
 						thres = KarkinosProp.Fisher_Thres_For_Reads_Direction2;
 					}
-
 				}
 
 				// if (oxoGratio > 0.2) {
@@ -313,12 +294,9 @@ public class SupportReadsCheck extends ReadWriteBase {
 				// System.out.println("oxoG" + pileUPResult.getGenomeR() +" "
 				// +pileUPResult.getALT() + "P=" + fisherP2+" " +f1r2else+" "
 				// +f2r1else+" "+ f1r2support+" "+f2r1support);
-
 			}
 			if (ffpeCand) {
-
 				if (f1r2support <= 8 && f2r1support <= 8) {
-
 					if (ffpeRatio > 0.1) {
 						thres = KarkinosProp.Fisher_Thres_For_Reads_Direction2;
 					}
@@ -326,8 +304,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 						thres = KarkinosProp.Fisher_Thres_For_Reads_Direction3;
 					}
 				}
-				
-				
+
 				// if (f1r2support >= 6 || f2r1support >= 6) {
 				// thres = 1;
 				// }
@@ -335,13 +312,10 @@ public class SupportReadsCheck extends ReadWriteBase {
 				// System.out.println("ffpe" + pileUPResult.getGenomeR() +" "
 				// +pileUPResult.getALT() + "P=" + fisherP2+" " +f1r2else+" "
 				// +f2r1else+" "+ f1r2support+" "+f2r1support);
-
 			}
-			//
 
 			boolean fisherSignif = (fisherP2 <= thres);
 			if (fisherSignif) {
-				
 				if (ffpeCand) {
 					filter.add(INFO_ffpe);
 				}else if(oxoGCand){
@@ -375,7 +349,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					filter.add(MutationAtSameCycle);
 				}
 			}
-
 		}
 		ret.setPval4directionCheck((float) fisherP);
 
@@ -386,7 +359,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 		
 		//For todai top SNV
 		if (supportreads != null && supportreads.size() <= 5) {
-
 			float readratiothres = KarkinosProp.falseReadratio;
 			if ((oxoGCand)||(ffpeCand)) {
 				readratiothres = KarkinosProp.falseReadratio2;
@@ -395,12 +367,11 @@ public class SupportReadsCheck extends ReadWriteBase {
 			float falseReadRatio = getFalseReadRate(supportreads, pos, KarkinosProp.falseReadMismatchratio);
 			if (falseReadRatio >= readratiothres) {
 				filter.add(TooManyMismatchReads);
-			}			
-			
-			if (ffpeRatio > 0.2 && supportreads.size() <= 4 && ffpeCand) {
-				filter.add(INFO_ffpe);			
 			}
-			
+
+			if (ffpeRatio > 0.2 && supportreads.size() <= 4 && ffpeCand) {
+				filter.add(INFO_ffpe);
+			}
 		}
 
 		float softCliprate = getSoftClipRate(supportreads);
@@ -409,7 +380,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 		}
 
 		for (SAMRecord sam : allreads) {
-
 			if (!supportreads.contains(sam)) {
 				referencereads.add(sam);
 			}
@@ -418,7 +388,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int size = supportreads.size();
 		int rangestart = supportreads.get(0).getAlignmentStart();
 		int rangeend = supportreads.get(size - 1).getAlignmentEnd();
-		//
+
 		List[] la = getPairList(bamr, supportreads, referencereads, chr, rangestart, rangeend,
 				KarkinosProp.pairReadsMaxdist);
 		List<SAMRecord> supportreadsPair = la[0];
@@ -430,21 +400,17 @@ public class SupportReadsCheck extends ReadWriteBase {
 			return ret;
 		}
 		if (pairedend) {
-
 			double properratio = (double) proper / (double) sizep;
 			if (properratio < 0.3) {
 				filter.add(LOW_PROPER);
 			}
-
 		}
 		// normal bam check
 		if (isindel) {
-
 			boolean normalUnClear = normalCheck(chr, pos, pileUPResult);
 			if (normalUnClear) {
 				filter.add(NOISE_IN_NORMAL);
 			}
-
 		}
 
 		int rangestartp = supportreadsPair.get(0).getAlignmentStart();
@@ -455,10 +421,8 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int recnt = 0;
 		int diffcountneighbor = 0;
 		int diffrecnt = 0;
-		//
-		//
-		for (int n = rangestartp; n <= rangeendp; n++) {
 
+		for (int n = rangestartp; n <= rangeendp; n++) {
 			// debugpos = 26671523;
 			// //System.out.println(n);
 			// if (n == debugpos) {
@@ -472,7 +436,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			genomerefn = Character.toUpperCase(genomerefn);
 			mutationsupport.setGenomeRef(genomerefn);
 			refsupport.setGenomeRef(genomerefn);
-			// /
 
 			int readsendmutation = setPileup(chr, n, genomerefn, mutationsupport, supportreadsPair, isindel);
 			if (n == pos) {
@@ -500,7 +463,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			}
 
 			if (mismatchng) {
-
 				// System.out.println(n+"\t"+mutationsupport.getRefAltCnt()[0]+"\t"+mutationsupport.getRefAltCnt()[1]);
 
 				boolean enoughrefreads = refsupport.getTotalcnt() > 2;
@@ -510,9 +472,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 				boolean snpPosE = snppos.containsKey(poss);
 
 				if (enoughmismatch && enoughrefreads) {
-
 					if (!dbSNP && !snpPosE) {
-
 						recnt++;
 						// only count different substitution type
 						String mtype = genomerefn + "-" + mutationsupport.getALT();
@@ -529,7 +489,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					bothsnp = (snppos.get(poss) == PileUP.REGBOTH || snppos.get(poss) == PileUP.BothINDEL);
 				}
 				if (dbSNPBean != null && bothsnp) {
-
 					filter.add(INFO_AllelicInfoAvailable);
 					boolean candidatehetro = (adjustedTumorAllereFreq <= 0.5);
 					float supportreadsBAlleleFeqquency = mutationsupport.getRatio();
@@ -540,17 +499,11 @@ public class SupportReadsCheck extends ReadWriteBase {
 					if (candidatehetro && hetro(mutationsupport) && hetro(refsupport)) {
 						filter.add(noStrandSpecific);
 					}
-
 				}
-
 			}
 
-			//
-
-			//
 			PileUPPool.returnObject(mutationsupport);
 			PileUPPool.returnObject(refsupport);
-
 		}
 
 		// boolean regrec = false;
@@ -583,11 +536,9 @@ public class SupportReadsCheck extends ReadWriteBase {
 		// }
 
 		return ret;
-
 	}
 
 	public static boolean ffpe(char genomeR, char alt, boolean f1r2) {
-
 		// if (genomeR == 'C' && alt == 'T' && f1r2) {
 		// return true;
 		// }
@@ -604,7 +555,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	public static boolean oxoG(char genomeR, char alt, boolean f1r2) {
-
 		if (genomeR == 'C' && alt == 'A' && f1r2) {
 			return true;
 		}
@@ -612,7 +562,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			return true;
 		}
 		return false;
-
 	}
 
 	public static boolean oxoG(char genomeR, char alt) {
@@ -621,19 +570,15 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	public static boolean ffpe(char genomeR, char alt) {
-
 		return ffpe(genomeR, alt, true) || ffpe(genomeR, alt, false);
 	}
 
-	//
 	private boolean normalCheck(String chr, int pos, PileUPResult pileUPResult) throws IOException {
-
 		int s = 0;
 		int e = 1;
 		int len = 0;
 		String insstr = "";
 		if (pileUPResult.isInsersion()) {
-
 			Iterator<String> ite = pileUPResult.getInsersionmap().keySet().iterator();
 			while (ite.hasNext()) {
 				String ss = ite.next();
@@ -645,7 +590,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			s = -len;
 			e = len;
 		} else {
-
 			Iterator<Integer> ite = pileUPResult.getDelmap().keySet().iterator();
 
 			while (ite.hasNext()) {
@@ -656,53 +600,45 @@ public class SupportReadsCheck extends ReadWriteBase {
 			}
 			s = 0;
 			e = len;
-
 		}
 
 		CloseableIterator<SAMRecord> ite = normalbamr.query(chr, pos + s, pos + e, false);
 
 		List<SAMRecord> list = new ArrayList<SAMRecord>();
 		List<SAMRecord> mismatchL = new ArrayList<SAMRecord>();
-		//
-		while (ite.hasNext()) {
 
+		while (ite.hasNext()) {
 			SAMRecord sam = ite.next();
 			list.add(sam);
 			Integer nm = sam.getIntegerAttribute("NM");
 			if (nm != null && nm >= 3) {
 				mismatchL.add(sam);
 			}
-
 		}
 		ite.close();
 
 		// try mismatch resque
 		int resquedbase = 0;
 		for (SAMRecord sam : mismatchL) {
-
 			int mismatchb4 = sam.getIntegerAttribute("NM");
 			int mismatchafter = mismatchb4;
 
 			try {
 				mismatchafter = mismatchAfterIndel(chr, pos, sam, pileUPResult, mismatchb4, len, insstr);
 			} catch (Exception ex) {
-
 			}
 
 			int diff = mismatchb4 - mismatchafter;
 			if (diff > 0) {
 				resquedbase = resquedbase + diff;
 			}
-
 		}
 		if (resquedbase >= 8) {
 			return true;
 		}
-		//
+
 		int cnt = 0;
 		for (int n = pos + s; n <= pos + e; n++) {
-
-			//
 			PileUPResult pu = PileUPPool.borrowObject();
 			// private int setPileup(String chr, int pos, char genomeR,
 			// PileUPResult ret,
@@ -712,7 +648,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			pu.setGenomeRef(genomerefn);
 			setPileup(chr, n, genomerefn, pu, list, false);
 			if (pu.getRatio() > 0.05) {
-
 				boolean dbSNP = false;
 				if (dbAnno != null) {
 					DbSNPBean dbSNPBean = dbAnno.lookup(chr, n);
@@ -722,18 +657,14 @@ public class SupportReadsCheck extends ReadWriteBase {
 					cnt++;
 				}
 			}
-
 		}
 		// false if more than 5% freq
 		return cnt >= 2;
-
 	}
 
 	private int mismatchAfterIndel(String chr, int pos, SAMRecord sam, PileUPResult pileUPResult, int mismatchb4,
 			int len, String insstr) throws IOException {
-
 		for (CigarElement ce : sam.getCigar().getCigarElements()) {
-
 			if (ce.getOperator().equals(CigarOperator.DELETION)) {
 				return mismatchb4;
 			}
@@ -745,38 +676,29 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 		int mism = 0;
 		if (pileUPResult.isInsersion()) {
-
 			int start = sam.getAlignmentStart();
 			int end = sam.getAlignmentEnd();
 
 			for (int n = start; n <= end; n++) {
-
 				if (n < pos) {
-
 					int cidx = getCharIdx(n, sam, new IndelInfo());
 					char genomerefn = tgr.getGenomeNuc(chr, n, true);
 					if ((cidx >= 0) && (cidx < sam.getReadLength())) {
 						char c = sam.getReadString().charAt(cidx);
 						if (c != genomerefn) {
-
 							mism++;
 						}
 					}
-
 				} else if (n > pos) {
-
 					int cidx = getCharIdx(n + len, sam, new IndelInfo());
 					char genomerefn = tgr.getGenomeNuc(chr, n, true);
 					if ((cidx >= 0) && (cidx < sam.getReadLength())) {
 						char c = sam.getReadString().charAt(cidx);
 						if (c != genomerefn) {
-
 							mism++;
 						}
 					}
-
 				} else {
-
 					// n
 					int cidx = getCharIdx(n, sam, new IndelInfo());
 					int id = 0;
@@ -791,34 +713,25 @@ public class SupportReadsCheck extends ReadWriteBase {
 						id++;
 					}
 				}
-
 			}
-
 		} else {
-
 			if (pos <= sam.getAlignmentStart() && sam.getAlignmentStart() <= pos + len) {
-
 				int start = sam.getAlignmentStart() - len;
 				int end = sam.getAlignmentEnd();
 				// System.out.println(sam.getReadName());
 				// System.out.println(sam.getReadString());
 
 				for (int n = start; n <= end; n++) {
-
 					if (n > pos + len) {
-
 						char genomerefn = tgr.getGenomeNuc(chr, n, true);
 						int cidx = getCharIdx(n, sam, new IndelInfo());
 						if ((cidx >= 0) && (cidx < sam.getReadLength())) {
 							char c = sam.getReadString().charAt(cidx);
 							if (c != genomerefn) {
-
 								mism++;
 							}
 						}
-
 					} else {
-
 						if (n < pos + len) {
 							continue;
 						}
@@ -830,32 +743,25 @@ public class SupportReadsCheck extends ReadWriteBase {
 								mism++;
 							}
 						}
-
 					}
 				}
-
 			} else {
-
 				int start = sam.getAlignmentStart();
 				int end = sam.getAlignmentEnd() + len;
 				// System.out.println(sam.getReadName());
 				// System.out.println(sam.getReadString());
 
 				for (int n = start; n <= end; n++) {
-
 					if (n < pos) {
-
 						char genomerefn = tgr.getGenomeNuc(chr, n, true);
 						int cidx = getCharIdx(n, sam, new IndelInfo());
 						if ((cidx >= 0) && (cidx < sam.getReadLength())) {
 							char c = sam.getReadString().charAt(cidx);
 							if (c != genomerefn) {
-
 								mism++;
 							}
 						}
 					} else {
-
 						if (n < pos + len) {
 							continue;
 						}
@@ -867,22 +773,16 @@ public class SupportReadsCheck extends ReadWriteBase {
 								mism++;
 							}
 						}
-
 					}
-
 				}
-
 			}
-
 		}
 		System.out.println(sam.getAlignmentStart() + " " + sam.getAlignmentEnd() + " " + "mismatchb4=" + mismatchb4
 				+ " mismatch" + mism + " " + sam.getReadName());
 		return mism;
-
 	}
 
 	private boolean isSNP(DbSNPBean dbSNPBean) {
-
 		if (dbSNPBean == null) {
 			return false;
 		} else {
@@ -894,18 +794,14 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	private float getNTQDiff(char genomeR, char alt, List<BaseandQData> pileuplist) {
-
 		SummaryStatistics ssref = new SummaryStatistics();
 		SummaryStatistics ssalt = new SummaryStatistics();
 		for (BaseandQData data : pileuplist) {
-
-			//
 			if (data.base == genomeR) {
 				ssref.addValue(data.qual);
 			} else if (data.base == alt) {
 				ssalt.addValue(data.qual);
 			}
-
 		}
 
 		double refave = 10;
@@ -919,20 +815,16 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	private float sameCycleRatio(Map<Integer, SCounter> cycleCheck) {
-
 		Iterator<Integer> ite = cycleCheck.keySet().iterator();
 		int max = 0;
 		int total = 0;
 		while (ite.hasNext()) {
-
-			//
 			SCounter sc = cycleCheck.get(ite.next());
 			total = total + sc.n;
 
 			if (sc.n > max) {
 				max = sc.n;
 			}
-
 		}
 		double r = (double) max / (double) total;
 		return (float) r;
@@ -945,7 +837,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 	private List<SAMRecord>[] getPairList(SAMFileReader bamr2, List<SAMRecord> supportreads,
 			List<SAMRecord> referencereads, String chr, int start, int end, int margin) {
-
 		CloseableIterator<SAMRecord> ite = null;
 		List[] rary = new List[2];
 		rary[0] = supportreads;
@@ -964,16 +855,12 @@ public class SupportReadsCheck extends ReadWriteBase {
 			int e = end + margin;
 			ite = bamr.query(chr, s, e, false);
 			while (ite.hasNext()) {
-
 				SAMRecord sam = ite.next();
 				if (nameset.contains(sam.getReadName())) {
-					//
 					supportreadsPair.add(sam);
 				} else {
-					//
 					otherPair.add(sam);
 				}
-
 			}
 			rary[0] = supportreadsPair;
 			rary[1] = otherPair;
@@ -986,30 +873,24 @@ public class SupportReadsCheck extends ReadWriteBase {
 				// should not happen
 				rary[1] = referencereads;
 			}
-
 		} catch (Exception ex) {
-
 		} finally {
 			if (ite != null) {
 				try {
 					ite.close();
 				} catch (Exception ex) {
-
 				}
 			}
 		}
 
 		return rary;
-
 	}
 
 	private boolean neighborIndelExist(List<SAMRecord> allreads, int pos) {
-
 		int mergin = KarkinosProp.nearindelbt;
 		int total = 0;
 		int indelc = 0;
 		for (SAMRecord sam : allreads) {
-
 			int[] indelIndex = getIndelIdx(sam);
 			total++;
 			if (indelIndex == null) {
@@ -1028,7 +909,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 					indelc++;
 				}
 			}
-
 		}
 		double ratio = (double) indelc / (double) total;
 		return ratio > 0.05;// more than 5%
@@ -1037,17 +917,13 @@ public class SupportReadsCheck extends ReadWriteBase {
 	// culculate adjusted tumor ratio
 	private float getAdjuatedLogt(char genomeR, char alt, List<BaseandQData> pileuplist, double tumorratio,
 			double copynumber, double normalAF) {
-		//
-
 		return OddRatioCalculator.getAdjuatedLogt(genomeR, alt, pileuplist, tumorratio, copynumber, normalAF);
 	}
 
 	private float getSoftClipRate(List<SAMRecord> supportreads) {
-
 		try {
 			int scc = 0;
 			for (SAMRecord sam : supportreads) {
-
 				boolean sc = false;
 				for (CigarElement ce : sam.getCigar().getCigarElements()) {
 					if (ce.getOperator().equals(CigarOperator.SOFT_CLIP)) {
@@ -1058,37 +934,31 @@ public class SupportReadsCheck extends ReadWriteBase {
 				if (sc) {
 					scc++;
 				}
-
 			}
 			double d = (double) scc / (double) supportreads.size();
 			return (float) d;
 		} catch (Exception e) {
-
 		}
 		return 0f;
 	}
 
 	private float getFalseReadRate(List<SAMRecord> supportreads, int pos, float falseReadMismatchratio)
 			throws IOException {
-
 		int okread = 0;
 		int ngread = 0;
-		//
-		for (SAMRecord sam : supportreads) {
 
+		for (SAMRecord sam : supportreads) {
 			boolean isngread = ngread(sam, falseReadMismatchratio);
 			if (isngread) {
 				ngread++;
 			} else {
 				okread++;
 			}
-
 		}
 		return (float) ((double) ngread / (double) (okread + ngread));
 	}
 
 	private boolean ngread(SAMRecord sam, float falseReadMismatchratio) {
-
 		Integer nm = sam.getIntegerAttribute("NM");
 		if (nm == null) {
 			return false;// no info
@@ -1105,8 +975,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 			if (ce.getOperator().equals(CigarOperator.SOFT_CLIP)) {
 				sclen = sclen + ce.getLength();
 			}
-			//
-
 		}
 		nm = nm - indellen - 1;
 		if (nm < 0)
@@ -1120,13 +988,11 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	private float getMismatchRate(List<SAMRecord> supportreads, int pos) throws IOException {
-
 		int totalbase = 0;
 		int mismatchbase = 0;
 		IndelInfo indelinfo = new IndelInfo();
-		//
-		for (SAMRecord sam : supportreads) {
 
+		for (SAMRecord sam : supportreads) {
 			int start = sam.getAlignmentStart();
 			int end = sam.getAlignmentEnd();
 			String reads = sam.getReadString();
@@ -1134,7 +1000,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 				end = start + sam.getReadLength();
 			}
 			for (int n = start; n <= end; n++) {
-
 				if (n == pos)
 					continue;
 				int cidx = getCharIdx(n, sam, indelinfo);
@@ -1148,19 +1013,15 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 					totalbase++;
 					if (notEqualChar(read, ref)) {
-
 						mismatchbase++;
 					}
 				}
 			}
-
 		}
 		return (float) ((double) mismatchbase / (double) totalbase);
-
 	}
 
 	private boolean notEqualChar(char c1, char c2) {
-
 		c1 = Character.toUpperCase(c1);
 		c2 = Character.toUpperCase(c2);
 		return c1 != c2;
@@ -1175,7 +1036,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	private float getTratio(PileUPResult mutationsupport, PileUPResult refsupport) {
-
 		int total = mutationsupport.getTotalcnt() + refsupport.getTotalcnt();
 		int diffcnt = getTcnt(mutationsupport);
 
@@ -1183,7 +1043,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	private int setPileup(String chr, int pos, char genomeR, PileUPResult ret, List<SAMRecord> reads, boolean isindel) {
-
 		int maxreadsend = -1;
 		boolean diff = false;
 		IndelInfo indelinfo = new IndelInfo();
@@ -1192,7 +1051,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int depth = 0;
 
 		for (SAMRecord sam : reads) {
-
 			indelinfo.clear();
 			indelinfo.refpos = -1;
 			int seqidx = getCharIdx(pos, sam, indelinfo);
@@ -1218,7 +1076,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 				}
 				depth++;
 			}
-
 		}
 		ret.setDiff(diff);
 
@@ -1227,7 +1084,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 	// return index
 	private int[] containTargetMutation(int pos, PileUPResult pileUPResult, SAMRecord sam, int pileupFlg) {
-
 		boolean ret = false;
 		IndelInfo indelInfo = new IndelInfo();
 		int seqidx = getCharIdx(pos, sam, indelInfo);
@@ -1238,7 +1094,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 		}
 
 		if (pileupFlg == PileUP.TumorINDEL) {
-
 			if (indelInfo.isIndel()) {
 				String insersion = indelInfo.getInsersion();
 				if (insersion == null) {
@@ -1258,14 +1113,10 @@ public class SupportReadsCheck extends ReadWriteBase {
 						ret = m.containsKey(insersion);
 					}
 				}
-
 			}
-
 		} else {
-
 			boolean targetEqual = (ch == pileUPResult.getALT());
 			ret = targetEqual;
-
 		}
 		int[] retary = new int[3];
 		if (seqidx < 0)
@@ -1282,7 +1133,6 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	private static int getCharIdx(int pos, SAMRecord sam, IndelInfo indelinfo) {
-
 		indelinfo.indel = false;
 		int start = sam.getAlignmentStart();
 		int relpos = pos - start;
@@ -1295,16 +1145,13 @@ public class SupportReadsCheck extends ReadWriteBase {
 		List<CigarElement> list = sam.getCigar().getCigarElements();
 		int l = 0;
 		for (CigarElement ce : list) {
-
 			int len = ce.getLength();
 			if (len == sam.getReadLength()) {
 				return relpos;
 			}
 
 			if (ce.getOperator().consumesReferenceBases() && ce.getOperator().consumesReadBases()) {
-
 				if (relpos <= refidx + len) {
-
 					int readidxr = readidx + (relpos - refidx);
 					// check if insersion exsist in next cigar
 					if (relpos == refidx + len) {
@@ -1327,9 +1174,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 				}
 				refidx += len;
 				readidx += len;
-
 			} else if (ce.getOperator().consumesReferenceBases()) {
-
 				if (ce.getOperator() == CigarOperator.DELETION) {
 					if (relpos == refidx + len) {
 						indelinfo.indel = true;
@@ -1341,57 +1186,44 @@ public class SupportReadsCheck extends ReadWriteBase {
 					}
 				}
 				if (ce.getOperator() == CigarOperator.N) {
-
 					if (relpos < refidx + len) {
 						return -1;
 					}
 				}
 				refidx += len;
 			} else {
-
 				readidx += len;
-
 			}
 			l++;
 		}
 		return readidx;
-
 	}
 
 	private int[] getIndelIdx(SAMRecord sam) {
 		List<CigarElement> list = sam.getCigar().getCigarElements();
 		int relpos = 0;
 		for (CigarElement ce : list) {
-
 			int len = ce.getLength();
 			if (len == sam.getReadLength()) {
 				return null;
 			}
 
 			if ((ce.getOperator() == CigarOperator.DELETION) || (ce.getOperator() == CigarOperator.INSERTION)) {
-
 				int dellen = ce.getOperator() == CigarOperator.DELETION ? len : 0;
 				return new int[] { relpos, dellen };
-
 			} else if (ce.getOperator().consumesReadBases()) {
-
 				relpos += len;
-
 			}
 		}
 
 		return null;
-
 	}
 
 	private static String substring(String str, int s, int e) {
-
 		if (e >= str.length()) {
 			return str.substring(s);
 		} else {
 			return str.substring(s, e);
 		}
-
 	}
-
 }

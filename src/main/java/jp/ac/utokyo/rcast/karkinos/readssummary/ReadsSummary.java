@@ -27,7 +27,6 @@ import java.util.Set;
 import jp.ac.utokyo.rcast.karkinos.utils.Interval;
 
 public class ReadsSummary implements java.io.Serializable {
-
 	public DepthCounter getNormalDepth() {
 		return normalDepth;
 	}
@@ -105,7 +104,6 @@ public class ReadsSummary implements java.io.Serializable {
 	Map<String, ReadsCounter> tumorPerChrom = new LinkedHashMap<String, ReadsCounter>();
 
 	public void regN(SAMRecord sam, boolean onTarget, Interval iv) {
-		//
 		if (areadyCounts(sam, iv)) {
 			return;
 		}
@@ -123,7 +121,6 @@ public class ReadsSummary implements java.io.Serializable {
 	}
 
 	private boolean areadyCounts(SAMRecord sam, Interval iv) {
-
 		if (iv == null)
 			return false;
 
@@ -145,7 +142,6 @@ public class ReadsSummary implements java.io.Serializable {
 	}
 
 	public void regT(SAMRecord sam, boolean onTarget, Interval iv) {
-		//
 		if (areadyCounts(sam, iv)) {
 			return;
 		}
@@ -159,11 +155,9 @@ public class ReadsSummary implements java.io.Serializable {
 			tumorPerChrom.put(chr, rc);
 		}
 		rc.inc(sam, onTarget);
-
 	}
 
 	public boolean isPairStats() {
-
 		return normalCounter.isPairStats() && tumorCounter.isPairStats();
 	}
 
@@ -197,7 +191,6 @@ public class ReadsSummary implements java.io.Serializable {
 	}
 
 	public void merge(ReadsSummary rs2) {
-
 		try{
 			normalCounter.merge(rs2.getNormalCounter());
 			tumorCounter.merge(rs2.getTumorCounter());
@@ -207,41 +200,31 @@ public class ReadsSummary implements java.io.Serializable {
 			normalDepth.merge(rs2.getNormalDepth());
 			tumorDepth.merge(rs2.getTumorDepth());
 		}catch(Exception ex){}
-		//
+
 		Iterator<String> ite = rs2.getNormalPerChrom().keySet().iterator();
 		while(ite.hasNext()){
-			
 			String chrom = ite.next();
 			ReadsCounter rcn = rs2.getNormalPerChrom().get(chrom);
 			if(normalPerChrom.containsKey(chrom)){
-				
-				ReadsCounter rcno = normalPerChrom.get(chrom);			
-				//
-				rcno.merge(rcn);				
-				
+				ReadsCounter rcno = normalPerChrom.get(chrom);
+
+				rcno.merge(rcn);
 			}else{
 				normalPerChrom.put(chrom, rcn);
-			
 			}
-		}		
-		
+		}
+
 		ite = rs2.getTumorPerChrom().keySet().iterator();
 		while(ite.hasNext()){
-			
 			String chrom = ite.next();
 			ReadsCounter rct = rs2.getTumorPerChrom().get(chrom);
 			if(tumorPerChrom.containsKey(chrom)){
-
 				ReadsCounter rcto = tumorPerChrom.get(chrom);
 				rcto.merge(rct);
-				
 			}else{
 				tumorPerChrom.put(chrom,rct);
 			}
-		}		
-		
-
-
+		}
 	}
 
 	long[] nucrefcount = new long[4];
@@ -252,8 +235,9 @@ public class ReadsSummary implements java.io.Serializable {
 			nucrefcount[idx] = nucrefcount[idx]+1;
 		}
 	}
-	
+
 	long[] nuccount = new long[4];
+
 	public void setNucCount(char genomeR) {
 		int idx = getNucIndex(genomeR);
 		if(idx>=0){
@@ -263,7 +247,6 @@ public class ReadsSummary implements java.io.Serializable {
 
 	public int getNucIndex(char genomeR) {
 		switch (genomeR) {
-
 		case 'A':
 			return 0;
 		case 'a':
@@ -280,17 +263,20 @@ public class ReadsSummary implements java.io.Serializable {
 			return 3;
 		case 'c':
 			return 3;
-
 		}
 		return -1;
 	}
+
 	int readslenn = 0;
+
 	public void setReadslenn(int readslen) {
 		if(readslen>this.readslenn){
 			this.readslenn = readslen;
 		}
 	}
+
 	int readslent = 0;
+
 	public void setReadslent(int readslen) {
 		if(readslen>this.readslent){
 			this.readslent = readslen;
@@ -298,6 +284,7 @@ public class ReadsSummary implements java.io.Serializable {
 	}
 
 	String refflat = null;
+
 	public void setRefFlat(String refflat) {
 		this.refflat = refflat;	
 		try {
@@ -308,17 +295,11 @@ public class ReadsSummary implements java.io.Serializable {
 			System.out.println("could not read `" + refflat + "`: " + e.getMessage());
 			return;
 		}
-		
 	}
+
 	public void clearGeneExon() {
-		this.refflat = null;	
+		this.refflat = null;
 		normalDepth.setGeneExons(null);
 		tumorDepth.setGeneExons(null);
-		
 	}
-	//
-	
-	
-	
-
 }

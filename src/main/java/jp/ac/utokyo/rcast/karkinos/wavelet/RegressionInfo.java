@@ -19,7 +19,6 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 public class RegressionInfo implements java.io.Serializable {
-
 	List<Point2D> gcMedianList = null;
 	// y=ae^bx+c
 	double a = 0, b = 0, c = 0, d=0;
@@ -60,7 +59,6 @@ public class RegressionInfo implements java.io.Serializable {
 	}
 
 	public double getReg(double x) {
-		
 		if (funcflg==FunctionRegression.Exp) {
 			double y = a * Math.exp(b * x) + c;
 			return y+baseAdjust;
@@ -93,5 +91,4 @@ public class RegressionInfo implements java.io.Serializable {
 		}
 		return 0;
 	}
-
 }

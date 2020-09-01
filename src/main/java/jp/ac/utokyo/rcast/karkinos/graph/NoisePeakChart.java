@@ -38,76 +38,60 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class NoisePeakChart {
-	
 	public static List<DisplayObject> getChartLists(NoiseAnalysis na,double tc) {
-		
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		//init filter
 		double border = KarkinosProp.mintumorratio/tc;
 		System.out.println("AF fixed border ="+border);
-			
-		AFDepthMatrix afm = na.getAfm();	
+
+		AFDepthMatrix afm = na.getAfm();
 	    XYSeriesCollection data = new XYSeriesCollection();
 	    XYSeriesCollection data0 = new XYSeriesCollection();
 	    XYSeries series01 = new XYSeries("rejected with filter2");
 	    XYSeries series02 = new XYSeries("rejected with filter1");
 	    XYSeries series03 = new XYSeries("accepted");
-	    
+
 	    XYSeries series = new XYSeries("p="+KarkinosProp.pvalforNoisepeak);
 		for(BinData bd:na.getBinlist()){
-			
 			if(bd.getDepth()<100){
 				series.add(bd.getAFBorder(),bd.getDepth());
-			}	
+			}
 			for(Point2D p2d:bd.getAfdepth()){
-				
 				boolean rejected = na.reject(p2d);
 				if(p2d.getX()>border){
-					rejected = false;		
-				}				
+					rejected = false;
+				}
 				if(rejected){
 					series01.add(p2d.getX(),p2d.getY());
 				}else{
-					
 					if(p2d.getX()<0.15){
 						series02.add(p2d.getX(),p2d.getY());
-					}else{				
+					}else{
 						series03.add(p2d.getX(),p2d.getY());
-					}	
+					}
 				}
-				
 			}
-			
 		}
 		data.addSeries(series);
 		data0.addSeries(series03);
 		data0.addSeries(series01);
 		data0.addSeries(series02);
-		
-		
+
 		XYSeries series2 = new XYSeries("predicted noise border");
 		for(float f = 0;f<=1;f=f+0.01f){
-			
-			//
 			series2.add(f, afm.func(f));
-			
-		}		
+		}
 		data.addSeries(series2);
 		JFreeChart jfc = getGraph(data,data0,PlotOrientation.VERTICAL);		
 		list.add(new DisplayObject(jfc, 2, "noise peak limits estimates"));
 		return list;
-					
-		
 	}
-	
-	
-	private static JFreeChart getGraph(XYDataset dataset0,XYDataset dataset1,PlotOrientation orientation) {
 
+	private static JFreeChart getGraph(XYDataset dataset0,XYDataset dataset1,PlotOrientation orientation) {
 		NumberAxis yAxis = new NumberAxis("reads depth(TC adjusted)");
 		yAxis.setRange(0, 1000);
 		CombinedRangeXYPlot parent = new CombinedRangeXYPlot(yAxis);
-	
-		
+
 		JFreeChart chart = ChartFactory.createScatterPlot("noise peaks estimates",
 				"AF (adjusted)", "depth (adjusted)",
 				dataset0, PlotOrientation.VERTICAL, true, false, false);
@@ -118,14 +102,14 @@ public class NoisePeakChart {
 		NumberAxis xAxis = new NumberAxis("AF (TC adjusted)");
 		xAxis.setRange(0, 1);
 		plot.setDomainAxis(xAxis);
-		
+
 		final XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
 		renderer1.setSeriesShapesVisible(0, true);
 		renderer1.setSeriesShapesVisible(1, false);
 		//renderer1.setSeriesLinesVisible(0, false);
-		plot.setRenderer(renderer1);		
+		plot.setRenderer(renderer1);
 		parent.add(plot, 1);
-		
+
 		JFreeChart chart2 = ChartFactory.createScatterPlot("SNV candidate",
 				"AF (adjusted)", "depth (adjusted)",
 				dataset1, PlotOrientation.VERTICAL, true, false, false);
@@ -134,7 +118,7 @@ public class NoisePeakChart {
 		plot2.setRangeCrosshairVisible(false);
 		plot2.setBackgroundPaint(Color.WHITE);
 		plot2.setDomainAxis(xAxis);
-		
+
 		final XYLineAndShapeRenderer renderer0 = new XYLineAndShapeRenderer();
 		renderer0.setSeriesShapesVisible(0, true);
 		renderer0.setSeriesLinesVisible(0, false);
@@ -146,15 +130,11 @@ public class NoisePeakChart {
 		renderer0.setSeriesPaint(1, ChartColor.RED);
 		plot2.setRenderer(0, renderer0);
 
-		
 		parent.add(plot2, 1);
-		
+
 		JFreeChart chart0= new JFreeChart("AF/depth plot",
 				JFreeChart.DEFAULT_TITLE_FONT, parent, false);
 
 		return chart0;
-
-
 	}
-
 }

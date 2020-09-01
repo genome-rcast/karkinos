@@ -43,9 +43,8 @@ public class AnalyseDist implements java.io.Serializable {
 	private int lohcount = 0;
 	boolean n2havemorepeakdist = false;
 	boolean exceedTC = false;
-	
-	public void analyseDist(DataSet dataset) {
 
+	public void analyseDist(DataSet dataset) {
 		initmap();
 		cntCNV = dataset.getCniVaridateList().size();
 		lohcount = 0;
@@ -55,12 +54,11 @@ public class AnalyseDist implements java.io.Serializable {
 				lohcount++;
 			}
 		}
-		//
-		for (SNVHolder snv : dataset.getSnvlist()) {
 
+		for (SNVHolder snv : dataset.getSnvlist()) {
 			float f = (float) snv.getCi().getVaridateVal();
 			DataHolderByCN dh = map.get(f);
-			//
+
 			if(f==LOH){
 				if(overlapWithAllelicGain(snv,dataset.getCniVaridateList())){
 					continue;
@@ -70,7 +68,7 @@ public class AnalyseDist implements java.io.Serializable {
 				dh.add(snv);
 			}
 		}
-		
+
 		// calculate s.d for tumor n=2;
 		DataHolderByCN dh = map.get(1f);
 		double tumorsd = dh.tumorhetrosnpMeanSd.getStandardDeviation();
@@ -87,12 +85,10 @@ public class AnalyseDist implements java.io.Serializable {
 				tumorratioFromLOH.setMode(2);
 				observedRLOH = 55;
 			}
-
 		} else {
 			tumorratioFromLOH.setMode(0);
 		}
-		
-		//
+
 		float[] ret2n = DistributionFitting.getObserveRatio(map.get(twoN), LOH,
 				tumorsd);
 		if(ret[0] < ret2n[0]){
@@ -109,7 +105,6 @@ public class AnalyseDist implements java.io.Serializable {
 		tumorratioFromLOH.setTumorratio(tumorratioLOH);
 		tumorratioFromLOH.setCorrel(correl);
 
-		//
 		tumorratioFromGAIN = new TumorRatioBean();
 		float[] ret0 = DistributionFitting.getObserveRatio(map.get(GAIN), GAIN,
 				tumorsd, 50, 67);
@@ -123,12 +118,9 @@ public class AnalyseDist implements java.io.Serializable {
 		float tumorratioGAIN = TumorRateCalculator.getTumorRatio(GAIN,
 				observedRGAIN);
 		tumorratioFromGAIN.setTumorratio(tumorratioGAIN);
-
 	}
 
 	private boolean overlapWithAllelicGain(SNVHolder snv, List<CopyNumberInterval> list) {
-		
-		//
 		if(list==null){
 			return false;
 		}
@@ -142,19 +134,17 @@ public class AnalyseDist implements java.io.Serializable {
 					}
 				}
 			}
-		}	
+		}
 		return false;
 	}
 
-	
 	public int getTcflg() {
 		return tcflg;
 	}
 
 	public void reanalyseTC(DataSet dataset) {
-
 		initmap();
-		//
+
 		double tcnow = getTumorratio();
 		if(tcnow==0){
 			tcnow=1;
@@ -162,7 +152,6 @@ public class AnalyseDist implements java.io.Serializable {
 		int totalpass = 0;
 		int exceed1 = 0;
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			float f = (float) snv.getCi().getVaridateVal();
 			DataHolderByCN dh = map.get(f);
 			if (dh != null) {
@@ -174,15 +163,14 @@ public class AnalyseDist implements java.io.Serializable {
 					if((snv.getTumor().getRatio()/tcnow) > 1){
 						exceed1++;
 					}
-			}			
-
+			}
 		}
 		if(ratiodev(exceed1,totalpass)>0.05){
 			exceedTC = true;
 		}else{
 			exceedTC = false;
 		}
-		//
+
 		int baseploidy = dataset.getBaseploidy();
 		float cn = 1f;
 		if(baseploidy == 4){
@@ -199,12 +187,11 @@ public class AnalyseDist implements java.io.Serializable {
 		tumorratioFromSomatic.setObservedratio(observedS);
 		int nums = count(map.get(cn).mutationDistTFinalFilter100xdepth);
 		tumorratioFromSomatic.setNumber(nums);
-		//
+
 		tumorratioFromSomatic.setSd((float) tumorsd);
 		float tumorratioSomatic = TumorRateCalculator
 				.getTumorRatioSomatic(observedS);
 		tumorratioFromSomatic.setTumorratio(tumorratioSomatic);
-
 	}
 
 	private double ratiodev(int exceed1, int totalpass) {
@@ -225,7 +212,6 @@ public class AnalyseDist implements java.io.Serializable {
 			}
 			return (int) sum;
 		} catch (Exception ex) {
-
 		}
 		return 0;
 	}
@@ -235,7 +221,6 @@ public class AnalyseDist implements java.io.Serializable {
 	}
 
 	private float toObserveRatio(double baselineLOHEstimate) {
-
 		double d = (baselineLOHEstimate - 0.5);
 		return (float) ((1 - d) * 100);
 	}
@@ -257,17 +242,14 @@ public class AnalyseDist implements java.io.Serializable {
 	}
 
 	private void initmap() {
-
 		for (float f = 0.5f; f <= 2; f = f + 0.25f) {
 			map.put(f, new DataHolderByCN());
 		}
-
 	}
 
-
 	int tcflg = 0;
-	public float getTumorratio() {
 
+	public float getTumorratio() {
 		float tr1 = tumorratioFromLOH.getTumorratio();
 		float tr2 = tumorratioFromGAIN.getTumorratio();
 
@@ -281,17 +263,14 @@ public class AnalyseDist implements java.io.Serializable {
 		if (!toomuchcnv && (tr1 > 0) && (tumorratioFromLOH.getNumber() >= 50)) {
 			ret = tr1;
 			tcflg = 1;
-
 		} else if (!toomuchcnv && (tr2 > 0) && (tumorratioFromGAIN.getNumber() >= 50)) {
 			ret = tr2;
 			tcflg = 2;
-
 		} else {
 			ret = tr0;
 			tcflg = 3;
-
 		}
-		
+
 		if (tcflg == 2) {
 			if (tr0 > 0 && tr0 < 0.5 && (ret > tr0) && (ret - tr0) > 0.3) {
 				ret = Math.min(tr1, tr2);
@@ -305,16 +284,13 @@ public class AnalyseDist implements java.io.Serializable {
 			if (tumorratioFromSomatic != null && n2havemorepeakdist) {
 				tr0 = tumorratioFromSomatic.getTumorratio();
 				if(tumorratioFromSomatic.number>=40){
-					
 					if(tr1+0.25 < tr0){
 					 ret = tr0;
 					 tcflg = 3;
 					}
-					
 				}
 			}
-
-		}		
+		}
 		if(exceedTC){
 			if(ret<tr0){
 			  ret = tr0;
@@ -331,7 +307,5 @@ public class AnalyseDist implements java.io.Serializable {
 		// }else{
 		// return tr2;
 		// }
-
 	}
-
 }

@@ -19,16 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListUtils {
-
 	public static List<Interval> getIntervalList(String chrom, String startend,
 			int length, int binbitsize) {
-
-		//
 		int s = 0;
 		int e = 0;
 		if (startend != null) {
 			String[] sa = startend.split("-");
-			
+
 			if(sa.length>1){
 				s = Integer.parseInt(sa[0]);
 				e = Integer.parseInt(sa[1]);
@@ -41,7 +38,6 @@ public class ListUtils {
 					return null;
 				}
 			}
-			
 		}
 
 		List<Interval> list = new ArrayList<Interval>();
@@ -54,19 +50,15 @@ public class ListUtils {
 		}
 		if (e != 0 && e < length) {
 			length = e;
-		}	
+		}
 		while (end < length) {
-
 			Interval iv = new Interval(chrom, start, end);
 			list.add(iv);
 			start = end + 1;
 			end = end + binsize;
-			
 		}
 		Interval iv = new Interval(chrom, start, length);
 		list.add(iv);
 		return list;
-
 	}
-
 }

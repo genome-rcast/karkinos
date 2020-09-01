@@ -27,9 +27,7 @@ import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class WaveletDenoize {
-
 	public static double calc(DataSet dataset) throws IOException {
-
 		List<List<WaveletIF>> plist = dataset.getCapInterval();
 		int denoiselevel = getDenoiseLevel(plist);
 		for (List<WaveletIF> list : plist) {
@@ -44,11 +42,9 @@ public class WaveletDenoize {
 		}
 		return baselineLOHEstimate;
 		// System.out.println(firstEstimateTumorRate);
-
 	}
 
 	private static int getDenoiseLevel(List<List<WaveletIF>> plist) {
-
 		int samplingsize = 4096;
 		int denoizemax = KarkinosProp.maxdenoiseLevel;
 		double[] testsampling = getSamplingData(plist, samplingsize);
@@ -58,23 +54,19 @@ public class WaveletDenoize {
 
 		int n = 1;
 		for (; n < denoizemax; n++) {
-
 			SummaryStatistics ss = getSD(testsampling);
 			double sd = ss.getStandardDeviation();
 			System.out.println("mean=" + ss.getGeometricMean() + "sd=" + sd);
 			if (sd < KarkinosProp.denozeToSD)
 				break;
 			testsampling = downsampling(testsampling);
-
 		}
 		System.out.println("denoise level = " + (n));
 		return n;
-
 	}
 
 	private static double[] getSamplingData(List<List<WaveletIF>> plist,
 			int samplingsize) {
-
 		double minmeandiff = 0;
 		double[] testsamplingr = null;
 		// take sampling data where no CNV occurring
@@ -82,14 +74,12 @@ public class WaveletDenoize {
 		// take minimum difference sampleset from n=1
 		int m = 0;
 		for (int chridx = 0; chridx < 5; chridx++) {
-
 			SummaryStatistics ss = new SummaryStatistics();
 			double[] testsampling = new double[samplingsize];
 			int cnt = 0;
 			if (m == chridx)
 				continue;
 			for (List<WaveletIF> list : plist) {
-
 				if (cnt >= samplingsize)
 					break;
 				for (WaveletIF wif : list) {
@@ -99,7 +89,6 @@ public class WaveletDenoize {
 					ss.addValue(wif.getValue());
 					cnt++;
 				}
-
 			}
 			if (minmeandiff == 0) {
 				minmeandiff = (1 - ss.getMean());
@@ -115,10 +104,8 @@ public class WaveletDenoize {
 	}
 
 	private static double[] downsampling(double[] testsampling) {
-
 		double[] newa = new double[testsampling.length / 2];
 		for (int n = 0; n + 1 < testsampling.length; n = n + 2) {
-
 			double d0 = testsampling[n];
 			double d1 = testsampling[n + 1];
 			double mean = (d0 + d1) / 2;
@@ -136,20 +123,15 @@ public class WaveletDenoize {
 	}
 
 	private static void setcn(List<WaveletIF> list, double baselineLOHEstimate) {
-
 		for (WaveletIF wif : list) {
-
 			double denoise = wif.getDenioseValue();
 			double nval = step(denoise, baselineLOHEstimate);
 			wif.setCN(nval);
-
 		}
 		adjustBoundary(list);
-
 	}
 
 	private static double lohEstimate(List<List<WaveletIF>> dlist) {
-		
 		//interval0
 		boolean detected0 = true;
 		float startval0 = 0.45f;
@@ -159,34 +141,32 @@ public class WaveletDenoize {
 			loh0 = endval0;
 			detected0 = false;
 		}
-		
+
 		//interval1	
-		
+
 		boolean detected = true;
 		float startval = 0.40f;
 		float endval = 0.9f;
-		double loh = lohEstimate(dlist, startval, endval,true);		
+		double loh = lohEstimate(dlist, startval, endval,true);
 		if (loh == startval||loh0 == endval) {
 			loh = endval;
 			detected = false;
 		}
-		
+
 		float margin = 0.05f;
-		
+
 		if(detected0&&detected){
-			
 			boolean morelwpeak = moreThanParcentLowArea(0.02f,loh-margin, dlist);
 			if(morelwpeak){
 				return Math.min(loh0,loh);
 			}else{
 				return Math.max(loh0,loh);
 			}
-			
 		}else if(detected){
 			return loh;
 		}else if(detected0){
 			return loh0;
-		}		
+		}
 		return loh;
 	}
 
@@ -197,25 +177,19 @@ public class WaveletDenoize {
 
 		List<double[]> l = new ArrayList<double[]>();
 		List<double[]> l_low = new ArrayList<double[]>();
-		
-		for (float f = startval; f <= endval; f = f + 0.01f) {
 
+		for (float f = startval; f <= endval; f = f + 0.01f) {
 			SummaryStatistics ss = new SummaryStatistics();
 			SummaryStatistics sslow = new SummaryStatistics();
-						
-			for (List<WaveletIF> list : dlist) {
 
+			for (List<WaveletIF> list : dlist) {
 				for (WaveletIF wif : list) {
-					//
 					double val = wif.getDenioseValue();
 					if (val <= endval) {
-
 						double diff = Math.abs(f - val);
 						ss.addValue(diff);
 						sslow.addValue(diff);
-
 					} else if (val >= 1+Math.abs(1-endval)) {
-
 						double interval = Math.abs(1 - f);
 						double nearlistline = getNearistLine(interval, val,include3n);
 						//double nearlistline = 1 + interval;
@@ -223,23 +197,17 @@ public class WaveletDenoize {
 						if(diff<interval){
 							ss.addValue(diff);
 						}
-						
 					}
-
 				}
-
 			}
 			//System.out.println(f + "\t" + ss.getStandardDeviation());
 			if (minsd > ss.getStandardDeviation()) {
-
 				minsd = ss.getStandardDeviation();
 				System.out.println(f + "\t" + ss.getStandardDeviation());
 				maxf = f;
 			}
 			l.add(new double[] { f, ss.getStandardDeviation() });
 			l_low.add(new double[] { f, sslow.getStandardDeviation() });
-			
-
 		}
 		float lowpeak = getLowerPeak(l,l_low,dlist);
 		if (lowpeak > 0) {
@@ -250,29 +218,22 @@ public class WaveletDenoize {
 
 	private static float getLowerPeak(List<double[]> l,List<double[]> l_low,
 			List<List<WaveletIF>> dlist) {
-
 		List<double[]> peaks = new ArrayList<double[]>();
 		for (int n = 0; n + 2 < l.size(); n++) {
-
 			double sd0 = l.get(n)[1];
 
 			double sd1 = l.get(n + 1)[1];
 
 			double sd2 = l.get(n + 2)[1];
-						
+
 			if ((sd0 > sd1) && (sd2 > sd1)) {
-				
 				peaks.add(l.get(n + 1));
 			}
-
 		}
-			
 
 		if (peaks.size() <= 1) {
 			return -1;
 		} else {
-
-			//
 			sort(peaks);
 			double[] firstPeak = peaks.get(0);
 			double[] secondPeak = peaks.get(1);
@@ -283,16 +244,12 @@ public class WaveletDenoize {
 				float margin = 0.05f;
 				if (firstPeak[0] - margin> secondPeak[0]) {
 					if (moreThanParcentLowArea(parcent, firstPeak[0]-margin, dlist)) {
-
 						return (float) secondPeak[0];
-
 					}
 				}
-
 			}
 			return (float) firstPeak[0];
 		}
-
 	}
 
 	private static boolean moreThanParcentLowArea(float f, double firstPeak,
@@ -301,9 +258,7 @@ public class WaveletDenoize {
 			long total = 0;
 			long lowcounts = 0;
 			for (List<WaveletIF> list : dlist) {
-
 				for (WaveletIF wif : list) {
-					//
 					double val = wif.getDenioseValue();
 					total++;
 					if (val < firstPeak) {
@@ -312,21 +267,17 @@ public class WaveletDenoize {
 //					if (val > 1+(1-firstPeak)) {
 //						lowcounts++;
 //					}
-					
 				}
 			}
 			double ratio = (double) lowcounts / (double) total;
 			return ratio > f;
 		} catch (Exception ex) {
-
 		}
 		return false;
 	}
 
 	private static void sort(List<double[]> peaks) {
-
 		Collections.sort(peaks, new MyCompPeak());
-
 	}
 
 	private static double getNearistLine(double interval, double val, boolean include3n) {
@@ -334,9 +285,9 @@ public class WaveletDenoize {
 		double l1 = 1 + interval;
 		if(include3n=false){
 			return l1;
-		}		
+		}
 		double l2 = 1 + 2 * interval;
-		//
+
 		double diff1 = Math.abs(l1 - val);
 		double diff2 = Math.abs(l2 - val);
 
@@ -344,25 +295,18 @@ public class WaveletDenoize {
 	}
 
 	public static void _calcMovingAverage(List<WaveletIF> dlist, int denoiseLevel){
-		
-		//
 		int size = (int) Math.pow(2, denoiseLevel);
 		for (int n = 0; n < dlist.size(); n++) {
-			
-			
-			WaveletIF wif = dlist.get(n);			
-			double ave = getMA(n,size,dlist);	
+			WaveletIF wif = dlist.get(n);
+			double ave = getMA(n,size,dlist);
 			if(Double.isNaN(ave)){
 				ave = wif.getValue();
-			}			
-			wif.setDenioseValue(ave);			
-			
-		}		
-	
+			}
+			wif.setDenioseValue(ave);
+		}
 	}
-	
+
 	private static double getMA(int idx,int size, List<WaveletIF> dlist) {
-		//
 		double sumall = 0;
 		double weight = 0;
 		int half = size/2;
@@ -374,7 +318,6 @@ public class WaveletDenoize {
 		}
 		int end = idx + half+addend;
 		if(end>=dlist.size()){
-			
 			int minusstart = end-dlist.size();
 			start = start - minusstart;
 			if(start<0){
@@ -382,52 +325,45 @@ public class WaveletDenoize {
 			}
 			end = dlist.size();
 		}
-		
+
 		for(int n=start;n<end;n++){
-			
 			WaveletIF wi = dlist.get(n);
 			CapInterval ci = (CapInterval)wi;
 			double localweight = 1;
-			try{				
+			try{
 				localweight = Math.sqrt(ci.getCNVInfo().getNormalcnt());
-			}catch(Exception ex){}			
+			}catch(Exception ex){}
 			weight  = weight + localweight;
-			
+
 			double val = wi.getValue();
 			//sumall = sumall+(val*ci.getLength());
 			sumall = sumall+(val*localweight);
-		}		
+		}
 		double ave = sumall/weight;
 		return ave;
-		
-	}	
+	}
 
 	private static void adjustBoundary(List<WaveletIF> list) {
-
 		int m = 0;
 		double cnb4 = 0;
 		for (WaveletIF wif : list) {
-
 			double copynumber = wif.getCN();
 			if (cnb4 == 0) {
 				cnb4 = copynumber;
 			}
-			//
+
 			if (cnb4 != copynumber) {
 				boundCheck(list, m);
 			}
 			cnb4 = copynumber;
 			m++;
 		}
-
 	}
 
 	private static void boundCheck(List<WaveletIF> list, int n) {
-
 		int len = list.size();
 		int m = n;
 		while (m > 0) {
-
 			WaveletIF da1 = list.get(m);
 			double copynumber1 = da1.getCN();
 			WaveletIF da0 = list.get(m - 1);
@@ -442,7 +378,6 @@ public class WaveletDenoize {
 		}
 		int m2 = n - 1;
 		while (m2 + 1 < len) {
-
 			WaveletIF da1 = list.get(m2);
 			double copynumber1 = da1.getCN();
 			WaveletIF da2 = list.get(m2 + 1);
@@ -455,7 +390,6 @@ public class WaveletDenoize {
 			}
 			m2++;
 		}
-
 	}
 
 	private static double step(double d, double lohbase) {
@@ -466,7 +400,6 @@ public class WaveletDenoize {
 		int out = 0;
 		int cnt = 0;
 		for (; stepd <= 5; stepd = stepd + stepsize) {
-
 			double diff = Math.abs(stepd - d);
 			if (mindiff == 0) {
 				mindiff = diff;
@@ -480,5 +413,4 @@ public class WaveletDenoize {
 		}
 		return (out + 1) * 0.5;
 	}
-
 }

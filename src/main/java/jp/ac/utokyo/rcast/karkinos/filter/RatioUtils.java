@@ -19,25 +19,19 @@ import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 
 public class RatioUtils {
-
 	public static double[] getRatio(SNVHolder snv,char ref,char alt) {
-
 		double tumorAF = snv.getTumor().getRatio();
 		double normalAF = snv.getNormal().getRatio();
 		try {
 			if (!snv.getTumor().isIndel()) {
-
 				double[] fqs = snv.getNormal().getPhredQual();
 				int idxr = PileUPResult.seqALL.indexOf(ref);
 				int idxa = PileUPResult.seqALL.indexOf(alt);
-				//
+
 				normalAF = fqs[idxa]/fqs[idxr];
 			}
 		} catch (Exception ex) {
-			
 		}
 		return new double[] { tumorAF, normalAF };
-
 	}
-
 }

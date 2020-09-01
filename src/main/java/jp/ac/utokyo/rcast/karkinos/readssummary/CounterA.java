@@ -16,13 +16,13 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.readssummary;
 
 public class CounterA implements java.io.Serializable{
-	
 	int cnt;
+
 	public void inc(){
 		cnt++;
 	}
+
 	public int getCnt() {
 		return cnt;
 	}
-
 }

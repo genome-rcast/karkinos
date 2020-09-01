@@ -16,17 +16,14 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.cntwavelet;
 
 public class GaussianWavelet {
-
 	public static void main(String[] arg) {
-
-		//
 		double data[] = new double[4000];
 		int idx  =0;
 		for(double d:data){
 			data[idx]= 1;
 			idx++;
 		}
-		
+
 //		double sum = 0;
 //		for(double d= -1;d<1;d=d+0.001){
 //			
@@ -36,19 +33,14 @@ public class GaussianWavelet {
 //		}
 //		System.out.println(sum);
 	}
-	
-	public static CTWaveletBean getWaveletTransform(double[] data) {
 
-		//
+	public static CTWaveletBean getWaveletTransform(double[] data) {
 		CTWaveletBean bean = new CTWaveletBean();
 		tf(bean, data);
 		return bean;
-
 	}
 
 	private static void tf(CTWaveletBean bean, double[] data) {
-
-		//
 		// start sd = 0.15 to 0.01
 		double sumd = 0;
 		for(double dd:data){
@@ -59,7 +51,7 @@ public class GaussianWavelet {
 			data[l] = d/sumd;
 			l++;
 		}
-		
+
 		double sds = 0.001;
 		double sd = sds;
 		double sde = 0.03;
@@ -68,16 +60,12 @@ public class GaussianWavelet {
 		double maxpeak = -10;
 		double[] data2 = null;
 
-		
 		int m = 0;
-		
-		for (sd = sds; sd < sde; sd = sd + sdintv) {
 
-			//			
-			data2 = new double[data.length];	
+		for (sd = sds; sd < sde; sd = sd + sdintv) {
+			data2 = new double[data.length];
 			double sumval = 0;
 			for (int n = 0; n < 3999; n = n + 1) {
-				//
 				double val = tf(data, sd, n);
 				//System.out.println(val);
 				data2[n] = val;
@@ -88,31 +76,23 @@ public class GaussianWavelet {
 //					bean.setMostfittingvariance(mostfittingvariance);
 //					System.out.println("val="+val+"\t"+sd);
 //				}
-
 			}
 
 			if (sumval  > maxpeak) {
 				maxpeak = sumval ;
 				double mostfittingvariance = Math.pow(sd, 2);
-				bean.setMostfittingvariance(mostfittingvariance);				
+				bean.setMostfittingvariance(mostfittingvariance);
 				sumval = 0;
 				System.out.println("sum="+sumval+"\t"+sd);
 				bean.setData(data2);
 				bean.setSd(sd);
-				
-			}			
-	
-			
+			}
+
 			m++;
-
 		}
-		
-		
-
 	}
 
 	private static double tf(double[] data, double sd, int n) {
-
 		int start = n - 300;
 		int end = n + 300;
 
@@ -128,15 +108,14 @@ public class GaussianWavelet {
 			xe = 4;
 			end = 3999;
 		}
-		//
+
 		double sum = 0;
 		for (double d = xs; d <= xe; d = d + 0.001) {
-			//
 			int idx = (int) (d * 1000);
 			if (idx > data.length - 1) {
 				idx = data.length - 1;
 			}
-			//
+
 			if(start>=data.length){
 				break;
 			}
@@ -148,13 +127,11 @@ public class GaussianWavelet {
 			double product = (v * val);
 			//System.out.println("product="+product+"\t"+idx+"\t"+x);
 			sum = sum + product;
-
 		}
 		return sum;
 	}
 
 	private static double getGaussian(double sd, double diff) {
-		
 		double x = (diff / sd);
 		double x2 = pow2(x);
 		double c = 1.0 / sqrt((Math.PI));
@@ -162,8 +139,8 @@ public class GaussianWavelet {
 		//double f2 = (1 - x2);
 		double ev = Math.exp(-0.5 * x2);
 		return (c* f1 * ev);
-	
 	}
+
 	public static double pow2(double d) {
 		return Math.pow(d, 2);
 	}
@@ -171,5 +148,4 @@ public class GaussianWavelet {
 	public static double sqrt(double d) {
 		return Math.sqrt(d);
 	}
-
 }

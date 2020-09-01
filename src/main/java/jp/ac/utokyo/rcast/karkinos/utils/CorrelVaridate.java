@@ -26,81 +26,67 @@ import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 
 public class CorrelVaridate {
-
 	final static int FINALV =9;
+
 	public static void recheck(DataSet dataset) {
-		
 		List<CopyNumberInterval> cniListb4 = dataset.getCniVaridateList();
 		ArrayList<CopyNumberInterval> cniListb4c = new ArrayList<CopyNumberInterval>();
 		cniListb4c.addAll(cniListb4);
-		
+
 		List<CopyNumberInterval> cniList = dataset
 		.getCopyNumberIntervalList(FINALV);
-		
+
 		//HDcheck
 		CopyNumberInterval cnib4 =null;
 		for(CopyNumberInterval cni: cniList){
-			
-			//
 			if(!cni.isHdeletion()){
 				if(cni.length()<1000000){
 					if(cni.getCopynumber()>6){
-						
 						if(cnib4!=null){
 							if((cnib4.getCopynumber()-cni.getCopynumber())>1){
 								cni.setHdeletion(true);
 							}
 						}
-						
 					}
 				}
 			}
 			cnib4 = cni;
-			
 		}
-		
+
 		dataset.setVaridatedCNlist(cniList);
-		
+
 		for(CopyNumberInterval cni:cniListb4c){
 			if(cni.isHdeletion()){
 				if(!cniList.contains(cni)){
 					cniList.add(cni);
 				}
-			}			
+			}
 		}
-		
 	}
-	
-	//
-	public static void varidate(DataSet dataset, AllelicCNV alCNV) {
 
+	public static void varidate(DataSet dataset, AllelicCNV alCNV) {
 		List<CopyNumberInterval> cniList = dataset
 				.getCopyNumberIntervalList(DataSet.MODE_HMM);
 		//to integrate allelic and nonallelic CNA call
-		//
-		List<CopyNumberInterval> allelicCNAs = alCNV.getSortedList();
-		
-		
-		for (CopyNumberInterval cni : cniList) {
 
+		List<CopyNumberInterval> allelicCNAs = alCNV.getSortedList();
+
+		for (CopyNumberInterval cni : cniList) {
 			List<Point2D.Float> list = new ArrayList<Point2D.Float>();
 			List<SNVHolder> holderL = new ArrayList<SNVHolder>();
-			//
+
 			int noSNP = 0;
 			for (SNVHolder holder : dataset.getSnvlist()) {
-
 				if (!include(holder, cni))
 					continue;
-				
+
 				holderL.add(holder);
 				if (holder.isHetroSNP()) {
-
 					float nr = holder.getNormal().getRatio();
 					float tr = holder.getTumor().getRatio();
 					list.add(new Point2D.Float(nr, tr));
-					noSNP++;					
+					noSNP++;
 				}
-
 			}
 			cni.setNoSNP(noSNP);
 			float snpcorrel = (float)getPearsonCorrelation(list);
@@ -109,16 +95,15 @@ public class CorrelVaridate {
 //				System.out.println(d.getX()+"\t"+d.getY());
 //			}
 			//System.out.println("correl="+snpcorrel);
-			
+
 			//correlation corpse because of CNA
 			boolean varidated = snpcorrel < 0.7;
 			if(noSNP<50){
 				varidated = true;// cannot varidate
 			}
 
-			//
+
 			for(SNVHolder holder :holderL){
-				//
 				if(!varidated){
 					double hmmv = holder.getCi().getHMMValue();
 					if(1<hmmv && hmmv<=1.5){
@@ -129,29 +114,23 @@ public class CorrelVaridate {
 					}
 				}
 			}
-			
 		}
 
 		//check posiible amplification/delation
-				
-		
-		
-		//
+
 //		for(CopyNumberInterval cni:lowList){
 //			//
 //			if(!cni.isRecurrent()){
 //				cniList.add(cni);
 //			}
 //		}
-		
+
 		cniList.addAll(allelicCNAs);
 		// set to dlist
 		dataset.setVaridatedCNlist(cniList);
-
 	}
 
 	public static double getPearsonCorrelation(List<Float> list) {
-		
 		if(list.size()==0)return 0;
 		double result = 0;
 		double sum_sq_x = 0;
@@ -177,7 +156,6 @@ public class CorrelVaridate {
 	}
 
 	private static boolean include(SNVHolder holder, CopyNumberInterval cni) {
-
 		if (holder.getChr().equals(cni.getChr())) {
 			if (cni.getStart() <= holder.getPos()
 					&& cni.getEnd() >= holder.getPos()) {
@@ -186,9 +164,4 @@ public class CorrelVaridate {
 		}
 		return false;
 	}
-
-
-
-	
-
 }

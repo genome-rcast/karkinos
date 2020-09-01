@@ -35,19 +35,16 @@ import jp.ac.utokyo.rcast.karkinos.alleliccnv.AllelicCNV;
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.SNVHolderPlusACnv;
 
 public class GetAllelicCNVGraph {
-
 	private final static int SIZE = 2;
 
 	public static List<DisplayObject> getChartLists(AllelicCNV alCNV, String id) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
-		//
+
 		list.add(new DisplayObject(cnvList(alCNV), SIZE, "Allelic CNV "+id));
 		return list;
 	}
 
 	private static JFreeChart cnvList(AllelicCNV alCNV) {
-
 		int tsize = 0;
 		int cnt = 0;
 		XYSeries series1 = new XYSeries("allele1 row");
@@ -84,7 +81,6 @@ public class GetAllelicCNVGraph {
 			}
 		}
 
-		// //
 		// make a common vertical axis for all the sub-plots
 		NumberAxis xAxis = new NumberAxis("pos");
 		// xAxis.setRange(0, tsize);
@@ -118,7 +114,7 @@ public class GetAllelicCNVGraph {
 		subplot2.setRangeCrosshairVisible(true);
 		addChrMaker(subplot2, chrMark);
 		parent.add(subplot2, 1);
-//
+
 		XYSeriesCollection data2 = new XYSeriesCollection();
 		data2.addSeries(series5); // add subplot 1...
 		data2.addSeries(series6); // add subplot 1...
@@ -142,11 +138,9 @@ public class GetAllelicCNVGraph {
 				JFreeChart.DEFAULT_TITLE_FONT, parent, true);
 
 		return chart;
-
 	}
 
 	private static void addChrMaker(XYPlot xyplot, List<Integer> chrMark) {
-
 		for (int cnt = 0; cnt + 1 < chrMark.size(); cnt++) {
 			Marker marker = new IntervalMarker(chrMark.get(cnt),
 					chrMark.get(cnt + 1));
@@ -158,7 +152,5 @@ public class GetAllelicCNVGraph {
 			marker.setAlpha(0.1f);
 			xyplot.addDomainMarker(marker, Layer.BACKGROUND);
 		}
-
 	}
-
 }

@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TwoBitGenomeReader {
-
 	File twoBitRef = null;
 	boolean checkNmask = true;
 	boolean checkRepeat = true;
@@ -32,7 +31,6 @@ public class TwoBitGenomeReader {
 	Map<String, Integer> index = null;
 
 	public TwoBitGenomeReader(File f) {
-
 		twoBitRef = f;
 		try {
 			index = readIndex();
@@ -43,7 +41,6 @@ public class TwoBitGenomeReader {
 	}
 
 	public Map<String, Integer> readIndex() throws IOException {
-
 		Map<String, Integer> m = new LinkedHashMap<String, Integer>();
 		RandomAccessFile raf = new RandomAccessFile(twoBitRef, "r");
 		LittleEndian la = new LittleEndian(raf);
@@ -71,11 +68,9 @@ public class TwoBitGenomeReader {
 		}
 		raf.close();
 		return m;
-
 	}
-	
-	public Map<String, Integer> getReadSizes() throws IOException {
 
+	public Map<String, Integer> getReadSizes() throws IOException {
 		Map<String, Integer> m = new LinkedHashMap<String, Integer>();
 		Map<String, Integer> m2 = new LinkedHashMap<String, Integer>();
 		RandomAccessFile raf = new RandomAccessFile(twoBitRef, "r");
@@ -101,28 +96,25 @@ public class TwoBitGenomeReader {
 			String chrom = ite.next();
 			raf.seek(m.get(chrom));
 			int dnaSize = la.readInt();
-			m2.put(chrom, dnaSize);			
-		}		
+			m2.put(chrom, dnaSize);
+		}
 		raf.close();
 		return m2;
-
 	}
-	
+
 	private byte genomeBuf[] = null;
 	private String lastloadchr = "";
 	private PositionBrocks nBlock = null, maskBlock = null;
 
 	public boolean isRefExsist(String chrom){
-		
 		boolean contain = index.containsKey(chrom);
 		if(!contain){
 			contain = index.containsKey("chr"+chrom);
 		}
 		return contain;
 	}
-	
+
 	public boolean readRef(String chrom) throws IOException {
-		
 		//System.out.println(chrom);
 		RandomAccessFile raf = new RandomAccessFile(twoBitRef, "r");
 		LittleEndian la = new LittleEndian(raf);
@@ -131,7 +123,7 @@ public class TwoBitGenomeReader {
 			genomeBuf=null;
 			lastloadchr = chrom;
 			return false;
-		}		
+		}
 		raf.seek(getIdx(index,chrom));
 		int dnaSize = la.readInt();
 		int nBlockCount = la.readInt();
@@ -160,34 +152,30 @@ public class TwoBitGenomeReader {
 	}
 
 	private long getIdx(Map<String, Integer> index, String chrom) {
-		
 		boolean contain = index.containsKey(chrom);
 		if(contain){
 			return index.get(chrom);
 		}
-		Integer i = index.get("chr"+chrom);		
+		Integer i = index.get("chr"+chrom);
 		if(i==null){
 			i=0;
 		}
 		return i;
-		
 	}
 
 	public char getGenomeNuc(String chrom, int pos, boolean strand)
 			throws IOException {
-
 		if (genomeBuf == null || (!lastloadchr.equals(chrom)&&(!chrom.equals("*")))) {
 			System.out.println(chrom);
 			readRef(chrom);
 		}
 		return getGenomeNuc(pos, strand);
 	}
-	
+
 	/**
 	 * The argument range is closed range [start, end]
 	 */
 	public float getCGParcent(String chrom, int start, int end) throws IOException{
-		
 		int total = end - start + 1;
 		float cg = 0;
 		for(int n= start;n<=end;n++){
@@ -203,7 +191,6 @@ public class TwoBitGenomeReader {
 	}
 
 	public char getGenomeNuc(int pos, boolean strand) {
-
 		char nuc = _getGenomeNuc(pos, strand);
 		//NMask
 		if (checkNmask&&nBlock.inBlock(pos)) nuc= 'N';
@@ -213,17 +200,14 @@ public class TwoBitGenomeReader {
 		} else {
 			return nuc;
 		}
-
 	}
 
 	public char _getGenomeNuc(int pos, boolean strand) {
-
 		if (genomeBuf == null)return 0;
-		
+
 		try {
-			//
 			int arypos = (pos - 1) / 4;
-			//
+
 			if(arypos>=genomeBuf.length){
 				return 0;
 			}
@@ -231,7 +215,6 @@ public class TwoBitGenomeReader {
 			int narrowPos = (pos - 1) % 4;
 			// T-00,C-01,A-10,G-11
 			return getNuc(byteofpos, narrowPos, strand);
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -240,18 +223,15 @@ public class TwoBitGenomeReader {
 
 	public String getGenomicSeq(String chrom, int start, int end, boolean strand)
 			throws IOException {
-
 		StringBuffer sb = new StringBuffer();
 		try{
 			for (int n = start; n <= end; n++)
 				sb.append(getGenomeNuc(chrom, n, strand));
-		}catch (ArrayIndexOutOfBoundsException ex){}	
+		}catch (ArrayIndexOutOfBoundsException ex){}
 		return strand ? sb.toString() : sb.reverse().toString();
-
 	}
 
 	private char getNuc(byte byteofpos, int narrowPos, boolean strand) {
-
 		int nucint = getNucInt(byteofpos, narrowPos);
 		if (strand) {
 			switch (nucint) {
@@ -275,13 +255,11 @@ public class TwoBitGenomeReader {
 			case 3:
 				return 'C';
 			}
-
 		}
 		return 0;
 	}
 
 	private int getNucInt(byte byteofpos, int narrowPos) {
-
 		switch (narrowPos) {
 		case 0:
 			return (byteofpos & 192) >> 6;
@@ -296,22 +274,15 @@ public class TwoBitGenomeReader {
 	}
 
 	public static void main(String[] args) {
-		//
 		File f = new File("/data/Genomes/hg18_mito/hg18.2bit");
 		TwoBitGenomeReader inst = new TwoBitGenomeReader(f);
 		try {
-
 			String seq = inst.getGenomicSeq("chr1",100000,100550,true);
-				
+
 			System.out.println(seq);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	
-
-	
-
 }

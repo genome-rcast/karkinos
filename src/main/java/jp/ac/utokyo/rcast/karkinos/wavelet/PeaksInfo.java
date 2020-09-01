@@ -21,13 +21,12 @@ import java.util.List;
 import jp.ac.utokyo.karkinos.ploidy.MatchMatrixBean;
 
 public class PeaksInfo {
-
 	List<Peak> peaklist;
 	int[] signalcount;
 	double[] ma;
 	double[] peaksignals;
 	float ploidy =0;
-	
+
 	public float getPloidy() {
 		return ploidy;
 	}
@@ -99,25 +98,21 @@ public class PeaksInfo {
 				double d = getNdistP(x, p.getU(), p.getV());
 				sum = sum + (r * d);
 			}
-
 		}
 		return sum;
 	}
 
 	public static double getNdistP(double x, double u, double v) {
-
 		double p = Math.exp(-0.5 * (Math.pow((x - u), 2) / v))
 				/ Math.sqrt(2 * Math.PI * v);
 		return p;
 	}
 
 	public List<Peak> getCopy() {
-
 		List<Peak> list = new ArrayList<Peak>();
 		for (Peak p : peaklist) {
 			list.add(p.deepCopy());
 		}
 		return list;
 	}
-
 }

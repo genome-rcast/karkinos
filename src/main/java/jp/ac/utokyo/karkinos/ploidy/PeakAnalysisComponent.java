@@ -25,21 +25,17 @@ import jp.ac.utokyo.rcast.karkinos.alleliccnv.SNVHolderPlusACnv;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 
 public class PeakAnalysisComponent {
-
 	public float getHpeakdistance() {
 		return hpeakdistance;
 	}
 
-
-
 	AFCounter normalSNP = new AFCounter();
 	AFCounter tumorSNP = new AFCounter();
 	Map<String,ChrAllelicPeak> ap = new LinkedHashMap<String,ChrAllelicPeak>();
-	
-	
+
 	AFCounter tumorSNPEven = new AFCounter();
 	AFCounter tumorSNPOdd = new AFCounter();
-	
+
 	boolean evenpeak = true;
 	float hpeakdistance = 0;
 	int numdistpeak =0;
@@ -47,19 +43,14 @@ public class PeakAnalysisComponent {
 	double sdnormal = 0;
 
 	public void setSNPInfo(SNVHolder snv) {
-
 		double normalAF = snv.getNormal().getRatio();
 		normalSNP.setValue(normalAF);
 		double tumorAF = snv.getTumor().getRatio();
 		tumorSNP.setValue(tumorAF);
-
 	}
 
 	public void setSNPPlus(SNVHolderPlusACnv snvHolderPlusACnv) {
-
 		if (snvHolderPlusACnv != null) {
-			
-			//
 			String chr = snvHolderPlusACnv.getSnv().getChr();
 			ChrAllelicPeak cap = null;
 			if(ap.containsKey(chr)){
@@ -69,52 +60,45 @@ public class PeakAnalysisComponent {
 				ap.put(chr, cap);
 			}
 			cap.add(snvHolderPlusACnv);
-			
 		}
-
 	}
-	
+
 	Set<String> evenChrSet = new HashSet<String>();
 	Set<String> oddChrSet = new HashSet<String>();
-	
-	private static final float eventhres = 0.525f;
-	public void analyse() {
 
-		//
+	private static final float eventhres = 0.525f;
+
+	public void analyse() {
 		sdnormal = normalSNP.getSs().getStandardDeviation();
 		Set<String> set = ap.keySet();
 		Iterator<String> ite = set.iterator();
-		//
+
 		Set<Boolean> sb = new HashSet<Boolean>();
 		int evencnt = 0;
 		int oddcnt = 0;
-		
+
 		while(ite.hasNext()){
-			
 			String chr = ite.next();
 			if(chr.toUpperCase().contains("X")||chr.toUpperCase().contains("Y")){
 				continue;
-			}			
+			}
 			ChrAllelicPeak cap = ap.get(chr);
-			float pd = cap.getTumorSNP().getPeakDistance(sdnormal)[0];			
+			float pd = cap.getTumorSNP().getPeakDistance(sdnormal)[0];
 			int np = (int)cap.getTumorSNP().getPeakDistance(sdnormal)[1];
 			System.out.println(pd+"\t"+chr);
 			boolean even = (pd < eventhres) && (np <= 1);
-			//
+
 			cap.setEven(even);
-			sb.add(even);		
+			sb.add(even);
 			if(even){
 				evenChrSet.add(chr);
 			}else{
 				oddChrSet.add(chr);
 			}
-			
 
 			for(SNVHolderPlusACnv snv:cap.list){
 				double d = snv.getSnv().getTumor().getRatio();
 				if(even){
-					
-					//					
 					if(middle(d)){
 						tumorSNPEven.setValue(d);
 						evencnt++;
@@ -122,18 +106,12 @@ public class PeakAnalysisComponent {
 						tumorSNPOdd.setValue(d);
 						oddcnt++;
 					}
-					
 				}else{
-					
-					//
 					tumorSNPOdd.setValue(d);
 					oddcnt++;
 				}
 			}
-			
-		
-			
-		}		
+		}
 		if(sb.size()>1){
 			complexpeak = true;
 			evenpd = tumorSNPEven.getPeakDistance(sdnormal)[0];
@@ -141,19 +119,12 @@ public class PeakAnalysisComponent {
 			evenr = ((double)evencnt/(double)(evencnt+oddcnt));
 			oddr = ((double)oddcnt/(double)(evencnt+oddcnt));
 		}
-		
-		//
+
 		hpeakdistance = tumorSNP.getPeakDistance(sdnormal)[0];
 		numdistpeak = (int)tumorSNP.getPeakDistance(sdnormal)[1];
-		evenpeak = (hpeakdistance < eventhres) && (numdistpeak <= 1);		
-		
-		
-		
+		evenpeak = (hpeakdistance < eventhres) && (numdistpeak <= 1);
 	}
-	///
-	
-	
-	
+
 	private boolean middle(double d) {
 		if(d<0.55 && d > 0.45){
 			return true;
@@ -170,34 +141,30 @@ public class PeakAnalysisComponent {
 	}
 
 	double evenpd;
+
 	public double getEvenPD() {
-		// 
 		return evenpd;
 	}
-	
+
 	double evenr;
+
 	public double getEvenR() {
-		// 
 		return evenr;
 	}
-	
+
 	double oddr;
+
 	public double getOddR() {
-		// 
 		return oddr;
 	}
-	
+
 	double oddpd;
+
 	public double getOddPD() {
-		// 
 		return oddpd;
 	}
 
 	public boolean isComplexPeak() {
-		
 		return complexpeak;
 	}
-
-
-
 }

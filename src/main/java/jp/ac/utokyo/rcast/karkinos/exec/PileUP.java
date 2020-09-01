@@ -36,12 +36,11 @@ public class PileUP implements java.io.Serializable {
 	//static final int debugpos = 18640448;
 
 	//static boolean debug = false;
-	
+
 	public static void pileup(Interval iv, DataSet dataset,
 			List<SamHolder> normalList, List<SamHolder> tumorList,
 			TwoBitGenomeReader tgr, ReadsSummary readsSummary, DefinedSites ds)
 			throws IOException {
-
 		//
 		// LinkedList<SAMRecord> normalSubList = new LinkedList<SAMRecord>();
 		// LinkedList<SAMRecord> tumorSubList = new LinkedList<SAMRecord>();
@@ -57,8 +56,6 @@ public class PileUP implements java.io.Serializable {
 
 		int lastpileup = 0;
 		while (ite.hasNext()) {
-
-			//
 			int key = ite.next();
 			CapInterval ci = sm.get(key);
 			int start = ci.getStart() - mergin;
@@ -68,20 +65,17 @@ public class PileUP implements java.io.Serializable {
 			int end = ci.getEnd() + mergin;
 			String chr = ci.getChr();
 			int[] indexes = new int[2];
-			
-			boolean definedpos = false;
-			
-			
-			for (int n = start; n <= end; n++) {
 
+			boolean definedpos = false;
+
+			for (int n = start; n <= end; n++) {
 				if(ds!=null){
 					definedpos = ds.contains(n);
 				}
-				
-				boolean ontag = ((n >= ci.getStart()) && (n <= ci.getEnd()));
-				
-				if (iv.getStart() <= n && n <= iv.getEnd()) {
 
+				boolean ontag = ((n >= ci.getStart()) && (n <= ci.getEnd()));
+
+				if (iv.getStart() <= n && n <= iv.getEnd()) {
 					indexes = _pileup(chr, n, dataset, normalList, tumorList,
 							tgr, readsSummary, indexes, false,definedpos,ontag);
 
@@ -93,11 +87,8 @@ public class PileUP implements java.io.Serializable {
 
 					lastpileup = n;
 				}
-
 			}
-
 		}
-
 	}
 
 	public static final int NONSignif = 0;
@@ -107,11 +98,9 @@ public class PileUP implements java.io.Serializable {
 	public static final int NormalINDEL = 4;
 	public static final int TumorINDEL = 5;
 	public static final int BothINDEL = 6;
-	
 	public static final int DISIGNATE = 7;
 
 	private static String flgtoStr(int flg) {
-
 		if (flg == 1) {
 			return "NormalSNP";
 		} else if (flg == 2) {
@@ -133,7 +122,6 @@ public class PileUP implements java.io.Serializable {
 			List<SamHolder> normalList, List<SamHolder> tumorList,
 			TwoBitGenomeReader tgr, ReadsSummary readsSummary, int[] indexes,
 			boolean debug, boolean definedpos, boolean ontag) throws IOException {
-
 		int[] ret = new int[2];
 
 		char genomeR = tgr.getGenomeNuc(chr, pos, true);
@@ -147,7 +135,7 @@ public class PileUP implements java.io.Serializable {
 		int nidx = nret[1];
 		//int nontarget = nret[2];
 		int nontarget = ontag?1:0;
-		
+
 		ret[0] = nidx;
 		readsSummary.setNormalDepth(chr, pos, ndepth, nontarget);
 
@@ -156,25 +144,24 @@ public class PileUP implements java.io.Serializable {
 		int tdepth = tret[0];
 		int tidx = tret[1];
 		//int tontarget = nret[2];
-		
+
 		ret[1] = tidx;
 		readsSummary.setTumorDepth(chr, pos, tdepth, nontarget);
 		readsSummary.setNucCount(genomeR);
-		
+
 		boolean targetSeq = dataset.targetSeq;
 		boolean indelreg = false;
 		if (tumor.indel || normal.indel) {
-
 			PileUPResult tumor2 = tumor.getIndelCopy();
 			tumor2.setDiff(true);
 			PileUPResult normal2 = normal.getIndelCopy();
 			normal2.setDiff(true);
 			int flg2 = checkReg(normal2, tumor2,targetSeq);
-					
+
 			if(definedpos&&flg2 == NONSignif){
 				flg2 = DISIGNATE;
-			}			
-			
+			}
+
 			if (flg2 != NONSignif) {
 				SNVHolder snvHolder = new SNVHolder();
 				snvHolder.setChr(chr);
@@ -197,27 +184,20 @@ public class PileUP implements java.io.Serializable {
 						+ tumor2.getIndelStr() + "\t" + normal2.getRatio()
 						+ "\t" + tumor2.getIndelStr() + "\t"
 						+ tumor2.getRatio() + "\t");
-
 			}
 		}
 
 		if (indelreg == false) {
-			
 			int flg = checkReg(normal, tumor,targetSeq);
 			if(definedpos&&flg == NONSignif){
 				flg = DISIGNATE;
-			}		
-			
+			}
+
 			if (flg == NONSignif) {
-
-
-
 				PileUPPool.returnObject(normal);
 				PileUPPool.returnObject(tumor);
 				readsSummary.setNucCountRef(genomeR);
-
 			} else {
-
 				SNVHolder snvHolder = new SNVHolder();
 				snvHolder.setChr(chr);
 				snvHolder.setPos(pos);
@@ -229,15 +209,12 @@ public class PileUP implements java.io.Serializable {
 				System.out.println("register " + flg + "\t" + flgtoStr(flg)
 						+ "\t" + chr + "\t" + pos + "\t" + genomeR + "\t"
 						+ normal.getRatio() + "\t" + tumor.getRatio());
-
-	
 			}
 		}
 		return ret;
 	}
 
 	private static int checkReg(PileUPResult normal, PileUPResult tumor,boolean targetSeq) {
-
 		boolean regnormal = false;
 		if (normal.isDiff()) {
 			regnormal = normalCheck(normal);
@@ -251,7 +228,6 @@ public class PileUP implements java.io.Serializable {
 		boolean depthcheck = depthcheckn && depthcheckt;
 
 		if (!depthcheck) {
-
 			// this block add 2012/10/18
 			// need hetro snp info even where thre is
 			// no tumor reads
@@ -268,9 +244,7 @@ public class PileUP implements java.io.Serializable {
 		if (regnormal && regTumor) {
 			return REGBOTH;
 		} else if (regnormal) {
-
 			if (targetSeq) {
-
 				if (normal.getRatio() < KarkinosProp.minNormalRatioForRegNormal) {
 					return NONSignif;
 				}
@@ -281,15 +255,12 @@ public class PileUP implements java.io.Serializable {
 		} else {
 			return NONSignif;
 		}
-
 	}
 
 	private static boolean tumorCheck(PileUPResult normal, PileUPResult tumor) {
-
-
 		boolean tr = tumor.haveHigherRatio(KarkinosProp.min_initial_tumorratio);
 		boolean nr = normal.haveLowerRatio(KarkinosProp.maxnormalratio);
-		
+
 		boolean rcheck = tr && nr;
 		boolean morethanminsupport = true;
 		if (!tumor.indel) {
@@ -301,7 +272,6 @@ public class PileUP implements java.io.Serializable {
 	}
 
 	private static boolean normalCheck(PileUPResult normal) {
-
 		boolean rcheck = normal.getRatio() > KarkinosProp.normalSNPthres;
 		// System.out.print("nr="+normal.getRatio());
 		return rcheck;
@@ -311,7 +281,6 @@ public class PileUP implements java.io.Serializable {
 
 	private static int[] setPileUP(PileUPResult ret, String chr, int pos,
 			char genomeR, List<SamHolder> samList, int startidx) {
-
 		int[] reta = new int[3];
 		boolean diff = false;
 		ret.setGenomeRef(genomeR);
@@ -323,7 +292,6 @@ public class PileUP implements java.io.Serializable {
 		int ontarget = 0; 
 
 		for (int n = startidx; n < samList.size(); n++) {
-
 			SamHolder sh = samList.get(n);
 			if(sh.getOi()!=null){
 				if(sh.getOi().isOntag()){
@@ -353,7 +321,6 @@ public class PileUP implements java.io.Serializable {
 			byte qual = 0;
 			int mapq = sam.getMappingQuality();
 			if (seqidx >= 0) {
-
 				try {
 					ch = (char) sam.getReadBases()[seqidx];
 					qual = sam.getBaseQualities()[seqidx];
@@ -362,7 +329,6 @@ public class PileUP implements java.io.Serializable {
 					ex.printStackTrace();
 					continue;
 				}
-
 			}
 
 			boolean diffread = isBase(ch) && ch != genomeR;
@@ -383,18 +349,16 @@ public class PileUP implements java.io.Serializable {
 		float lowqualratio = getRatio(lowqual, (lowqual + depth));
 		ret.setLowqualratio(lowqualratio);
 		ret.checkIndel();
-		
+
 		ret.setDiff(diff);
 		reta[0] = depth;
 		reta[1] = retindex;
 		reta[2] = ontarget;
-		
-		return reta;
 
+		return reta;
 	}
 
 	private static float getRatio(int n, int m) {
-
 		if (n == 0 || m == 0) {
 			return 0f;
 		}
@@ -407,7 +371,6 @@ public class PileUP implements java.io.Serializable {
 	}
 
 	private static int getCharIdx(int pos, SAMRecord sam, IndelInfo indelinfo) {
-
 		indelinfo.indel = false;
 		int start = sam.getAlignmentStart();
 		int relpos = pos - start;
@@ -425,11 +388,10 @@ public class PileUP implements java.io.Serializable {
 			} else {
 				return 0;
 			}
-
 		}
 
 		List<CigarElement> list = sam.getCigar().getCigarElements();
-		//
+
 		if (list == null || list.size() == 0) {
 			// Cigar does not exist which should not happen
 			// assgin
@@ -439,7 +401,6 @@ public class PileUP implements java.io.Serializable {
 
 		int l = 0;
 		for (CigarElement ce : list) {
-
 			int len = ce.getLength();
 			if (len == sam.getReadLength()) {
 				return relpos;
@@ -447,9 +408,7 @@ public class PileUP implements java.io.Serializable {
 
 			if (ce.getOperator().consumesReferenceBases()
 					&& ce.getOperator().consumesReadBases()) {
-
 				if (relpos <= refidx + len) {
-
 					int readidxr = readidx + (relpos - refidx);
 					// check if insersion exsist in next cigar
 					if (relpos == refidx + len) {
@@ -473,9 +432,7 @@ public class PileUP implements java.io.Serializable {
 				}
 				refidx += len;
 				readidx += len;
-
 			} else if (ce.getOperator().consumesReferenceBases()) {
-			
 				if ((ce.getOperator() == CigarOperator.DELETION)||(ce.getOperator() == CigarOperator.N) ) {
 					if (relpos == refidx + len) {
 						indelinfo.indel = true;
@@ -492,28 +449,22 @@ public class PileUP implements java.io.Serializable {
 				}
 				refidx += len;
 			} else {
-
 				readidx += len;
-
 			}
 			l++;
 		}
 		return readidx;
-
 	}
 
 	private static String substring(String str, int s, int e) {
-
 		if (e >= str.length()) {
 			return str.substring(s);
 		} else {
 			return str.substring(s, e);
 		}
-
 	}
 
 	private static boolean include(int pos, SAMRecord sam) {
-
 		int start = sam.getAlignmentStart();
 		int end = sam.getAlignmentEnd();
 		if (end == 0 || end == start) {
@@ -521,5 +472,4 @@ public class PileUP implements java.io.Serializable {
 		}
 		return pos >= start && pos <= end;
 	}
-
 }

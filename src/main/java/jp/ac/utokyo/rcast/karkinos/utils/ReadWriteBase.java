@@ -23,9 +23,7 @@ import htsjdk.samtools.ValidationStringency;
 import java.io.File;
 
 public abstract class ReadWriteBase {
-
 	public static SAMFileReader getReader(File INPUT) {
-		
 //		boolean validextension = INPUT.getName().endsWith("sam")||INPUT.getName().endsWith("bam");
 //		if(!validextension){
 //			
@@ -37,14 +35,12 @@ public abstract class ReadWriteBase {
 			sfh.setSortOrder(SortOrder.coordinate);
 		}
 		reader.setValidationStringency(ValidationStringency.SILENT);
-		
+
 		return reader;
 	}
 
 	public static SAMFileReader getReader(String in) {
-
 		File INPUT = new File(in);
 		return getReader(INPUT);
 	}
-
 }

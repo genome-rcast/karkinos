@@ -25,7 +25,6 @@ import java.util.TreeMap;
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 
 public class DepthCounter implements java.io.Serializable {
-
 	Map<Integer, CounterA> map = new TreeMap<Integer, CounterA>();
 	List<Interval> lowcoverageList = new ArrayList<Interval>();
 
@@ -34,54 +33,43 @@ public class DepthCounter implements java.io.Serializable {
 
 	double sumcdsdepth = 0;
 	long totalcds;
-	
+
 	double sumontagdepth = 0;
 	long totalontag=0;
-	
+
 	long over20x;
 	long over10x;
-	
-	public float getMeanOntagDepth() {
 
+	public float getMeanOntagDepth() {
 		double mean = sumontagdepth / (double) totalontag;
 		return (float) mean;
-
 	}
-	
-	public float getMeanDepth() {
 
+	public float getMeanDepth() {
 		double mean = sumdepth / (double) total;
 		return (float) mean;
-
 	}
-	
-	public float getMeanCDSDepth() {
 
+	public float getMeanCDSDepth() {
 		double mean =  sumcdsdepth  / (double) totalcds;
 		return (float) mean;
-
 	}
-	
-	public float getOver10X() {
 
+	public float getOver10X() {
 		double mean =  over10x  / (double) totalcds;
 		return (float) (mean*100);
-
 	}
-	public float getOver20X() {
 
+	public float getOver20X() {
 		double mean =  over20x  / (double) totalcds;
 		return (float) (mean*100);
-
 	}
 
 	public void add(String chr, int pos, int depth, int ontarget) {
-
 //		if(ontarget==1){
 //		 System.out.println("ontag=" + ontarget +" " + chr +" " + pos  +" " + depth);
 //		}
 		if (depth < KarkinosProp.mindepth) {
-
 			boolean extendInterval = false;
 			if (lowcoverageList.size() > 0) {
 				int lastidx = lowcoverageList.size() - 1;
@@ -119,12 +107,10 @@ public class DepthCounter implements java.io.Serializable {
 		counter.inc();
 		
 		if(ontarget==1){
-			
 			sumontagdepth = sumontagdepth +depth;
 			totalontag++;
-			
 		}
-		
+
 		if(onCDS(chr,pos)&&ontarget==1){
 			sumcdsdepth = sumcdsdepth + depth;
 			 totalcds++;
@@ -135,15 +121,12 @@ public class DepthCounter implements java.io.Serializable {
 				 over20x++;
 			 }
 		}
-
 	}
 
 	private boolean onCDS(String chr, int pos) {
-		
 		if(ge!=null){
 			return ge.onCDS(chr,pos);
-						
-		}		
+		}
 		return false;
 	}
 
@@ -160,23 +143,21 @@ public class DepthCounter implements java.io.Serializable {
 	}
 
 	public void merge(DepthCounter dc) {
-
 		sumdepth = sumdepth + dc.sumdepth;
 		total = total + dc.total;
-		
+
 		sumcdsdepth = sumcdsdepth +dc.sumcdsdepth;
 		totalcds = totalcds + dc.totalcds;
-		//
+
 		sumontagdepth = sumontagdepth +dc.sumontagdepth;
 		totalontag = totalontag + dc.totalontag;
-		
+
 		over20x  = over20x +dc.over20x;
 		over10x  = over10x + dc.over10x;
-		
+
 		try {
 			Set<Entry<Integer, CounterA>> set = dc.getMap().entrySet();
 			for (Entry<Integer, CounterA> et : set) {
-
 				int key = et.getKey();
 				CounterA value = et.getValue();
 				if (map.containsKey(key)) {
@@ -185,22 +166,18 @@ public class DepthCounter implements java.io.Serializable {
 				} else {
 					map.put(key, value);
 				}
-
-			}			
+			}
 		} catch (Exception ex) {
 		}
 		try{
-			
 			lowcoverageList.addAll(dc.getLowcoverageList());
 		}catch(Exception ex){
-			
 		}
-		
 	}
 
 	GeneExons ge;
+
 	public void setGeneExons(GeneExons ge) {
 		this.ge = ge;	
 	}
-
 }

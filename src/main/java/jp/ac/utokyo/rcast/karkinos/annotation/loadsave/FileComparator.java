@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FileComparator implements Comparator<File> {
-
 	List<SAMSequenceRecord> ssrList = null;
 
 	public FileComparator(List<SAMSequenceRecord> _ssrList) {
@@ -41,10 +40,8 @@ public class FileComparator implements Comparator<File> {
 	}
 
 	private int getIndex(List<SAMSequenceRecord> ssrList2, File f1) {
-
 		int idx = 0;
 		for (SAMSequenceRecord ssr : ssrList2) {
-
 			String fname = f1.getName();
 			int chridx = fname.indexOf("_");
 			if (chridx < 0)
@@ -58,32 +55,25 @@ public class FileComparator implements Comparator<File> {
 		return idx;
 	}
 
-	
 	private int comp(File f1,File f2) {
-
 		String fname = f1.getName();
 		int lastidx = fname.lastIndexOf("_");
 		String ss = fname.substring(lastidx-2,lastidx);
 		ss = ss.replaceAll("_","");
-		
+
 		String fname2 = f2.getName();
 		int lastidx2 = fname2.lastIndexOf("_");
 		String ss2 = fname2.substring(lastidx2-2,lastidx2);
 		ss2 = ss2.replaceAll("_","");
-		
+
 		try{
 			return Integer.parseInt(ss) - Integer.parseInt(ss2);
 		}catch(Exception ex){}
-		
+
 		return ss.compareTo(ss2);
-		
-		
 	}
 
-	
 	private boolean equals(String s1, String s2) {
-
 		return s1.replaceAll("chr", "").equals(s2.replaceAll("chr", ""));
 	}
-
 }

@@ -43,12 +43,10 @@ import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class GetCNVCharts {
-
 	private final static int SIZE = 2;
 
 	public static List<DisplayObject> getChartLists(DataSet dataset,
 			PeaksInfo pi,String id) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		//
 		// list.add(cnvList(dataset));
@@ -59,7 +57,6 @@ public class GetCNVCharts {
 	}
 
 	public static List<DisplayObject> getTables(DataSet dataset) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		list.add(new DisplayObject(cnvSummaryTable(dataset, 1), SIZE,
 				"CNV summary table"));
@@ -71,10 +68,8 @@ public class GetCNVCharts {
 	}
 
 	private static Object cnvSummaryTable(DataSet dataset, int dispFlg) {
-
 		Table table;
 		try {
-
 			if (dispFlg == 1) {
 				table = new Table(8);
 			} else {
@@ -96,7 +91,6 @@ public class GetCNVCharts {
 			// table.addCell("rejected");
 
 			for (CopyNumberInterval cni : dataset.getCopyNumberIntervalList(9)) {
-
 				if (cni.getCopynumber() == dataset.getBaseploidy()){
 					if(cni.getAaf()==dataset.getBaseploidy()/2){
 						continue;
@@ -123,7 +117,6 @@ public class GetCNVCharts {
 					if(cni.getCopynumber()!=0 && cni.isHdeletion()){
 						continue;
 					}
-					
 				}
 				table.addCell(cni.getChr());
 				table.addCell(format(cni.getStart()) + "");
@@ -140,20 +133,16 @@ public class GetCNVCharts {
 
 				// table.addCell(format(cni.getSnpclrrel())+"");
 				// table.addCell(cni.getRejected()+"");
-
 			}
 			return table;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 
 	private static JFreeChart cnvList(DataSet dataset, PeaksInfo pi) {
-
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
 		int tsize = 0;
 		int cnt = 0;
@@ -177,7 +166,6 @@ public class GetCNVCharts {
 			tsize = tsize + list.size();
 			chrMark.add(tsize);
 			for (WaveletIF wi : list) {
-
 				if (cnt % 2 == 0) {
 					// row data too heavy
 					// draw half
@@ -205,7 +193,7 @@ public class GetCNVCharts {
 				cnt++;
 			}
 		}
-		// //
+
 		// make a common vertical axis for all the sub-plots
 		NumberAxis xAxis = new NumberAxis("pos");
 		xAxis.setRange(0, tsize);
@@ -219,7 +207,7 @@ public class GetCNVCharts {
 		renderer0.setSeriesPaint(0, ChartColor.BLUE);
 
 		CombinedDomainXYPlot parent = new CombinedDomainXYPlot(xAxis);
-		
+
 		XYSeriesCollection data0 = new XYSeriesCollection();
 		data0.addSeries(series1); // add subplot 1...
 		XYPlot subplot1 = new XYPlot(data0, xAxis, yAxis, renderer0);
@@ -298,7 +286,6 @@ public class GetCNVCharts {
 		addChrMaker(subplot5, chrMark, dataset.getChromList());
 		parent.add(subplot5, 1);
 
-
 		final XYLineAndShapeRenderer renderer5 = new XYLineAndShapeRenderer();
 		renderer5.setSeriesShapesVisible(0, false);
 		renderer5.setSeriesPaint(0, ChartColor.RED);
@@ -318,12 +305,10 @@ public class GetCNVCharts {
 				JFreeChart.DEFAULT_TITLE_FONT, parent, true);
 
 		return chart;
-
 	}
 
 	private static void addChrMaker(XYPlot xyplot, List<Integer> chrMark,
 			List<String> labels) {
-
 		for (int cnt = 0; cnt + 1 < chrMark.size(); cnt++) {
 			Marker marker = new IntervalMarker(chrMark.get(cnt),
 					chrMark.get(cnt + 1));
@@ -339,22 +324,18 @@ public class GetCNVCharts {
 			marker.setAlpha(0.1f);
 			xyplot.addDomainMarker(marker, Layer.BACKGROUND);
 		}
-
 	}
 
 	private static void addMaker(XYPlot xyplot, List<Peak> list) {
-
 		for (Peak peak : list) {
 			Marker marker0 = new ValueMarker(peak.getU());
 			marker0.setPaint(Color.RED);
 			xyplot.addRangeMarker(marker0);
 		}
-
 	}
 
 	private static String format(int num) {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);
 	}
-
 }

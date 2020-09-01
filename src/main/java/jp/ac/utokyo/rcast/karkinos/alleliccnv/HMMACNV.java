@@ -27,17 +27,12 @@ import be.ac.ulg.montefiore.run.jahmm.OpdfGaussian;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianFactory;
 
 public class HMMACNV {
-
 	public static void calc(List<List<SNVHolderPlusACnv>> plist)
 			throws IOException {
-
-		
 		DistMedian low = new DistMedian(0.5,1.5,true);
 		for(List<SNVHolderPlusACnv> list : plist){
 			for (SNVHolderPlusACnv sc : list) {
-
 				low.addValue(sc.getLowera().getWtval());
-
 			}
 		}
 		double d = low.getDistributionMedian();
@@ -50,8 +45,6 @@ public class HMMACNV {
 		Hmm<ObservationReal> hmmlow = getHMM(plist, false,adjust);
 
 		for (List<SNVHolderPlusACnv> list : plist) {
-
-			//
 			List<ObservationReal> olisthigh = getList(list, true);
 			List<ObservationReal> olistlow = getList(list, false);
 			int[] hmmaryhigh = initAry(list.size());
@@ -68,33 +61,25 @@ public class HMMACNV {
 			}
 			int cnt = 0;
 			for (SNVHolderPlusACnv sc : list) {
-
-				//
 				sc.getHighera().setHmmval(hmmaryhigh[cnt] + 1);
 				sc.getLowera().setHmmval(hmmarylow[cnt] + 1);
 				cnt++;
-
 			}
-
 		}
-
 	}
 
 	private static int[] initAry(int i) {
-		
 		int[] ary = new int[i];
 		for(int n=0;n<i;n++){
 			ary[n]=1;
 		}
 		return ary;
-		
 	}
 
 	private static List<ObservationReal> getList(List<SNVHolderPlusACnv> list,
 			boolean high) {
 		List<ObservationReal> olist = new ArrayList<ObservationReal>();
 		for (SNVHolderPlusACnv wi : list) {
-
 			double d = 0;
 			if (high) {
 				d = wi.getHighera().getWtval();
@@ -109,7 +94,6 @@ public class HMMACNV {
 
 	private static Hmm<ObservationReal> getHMM(
 			List<List<SNVHolderPlusACnv>> plist, boolean high, double adjust) {
-
 		int[] countn = new int[10];
 
 		double baseline = getBaseLine(plist, high,adjust);
@@ -128,7 +112,6 @@ public class HMMACNV {
 		Hmm<ObservationReal> hmm = new Hmm<ObservationReal>(4, factory);
 		int idx = 0;
 		for (int m : countn) {
-
 			double p = (double) m / (double) total;
 			System.out.println(idx + "\t" + p);
 			if (idx >= nodesize)
@@ -179,15 +162,11 @@ public class HMMACNV {
 	}
 
 	private static boolean between(double d, double s, double e) {
-
-		//
 		return (d >= s) && (d <= e);
-
 	}
 
 	private static double getStepSize(List<List<SNVHolderPlusACnv>> plist,
 			boolean high) {
-
 		double s = 1.3;
 		double e = 2;
 		double sl = getMinSDLine(plist, true, s, e);
@@ -199,7 +178,6 @@ public class HMMACNV {
 
 	private static double getBaseLine(List<List<SNVHolderPlusACnv>> plist,
 			boolean high, double adjust) {
-
 		double s = 0.1;
 		double e = 0.7-adjust;
 		double bl = getMinSDLine(plist, false, s, e);
@@ -211,7 +189,6 @@ public class HMMACNV {
 
 	private static double getMinSDLine(List<List<SNVHolderPlusACnv>> plist,
 			boolean high, double s, double e) {
-
 		List<Double> vals = new ArrayList<Double>();
 		for (List<SNVHolderPlusACnv> list : plist) {
 			for (SNVHolderPlusACnv sc : list) {

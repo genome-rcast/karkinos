@@ -16,23 +16,24 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.exec;
 
 public class IndelInfo implements java.io.Serializable{
-	
 	public boolean indel = false;
 	public String insersion;
 	public int length;
 	public boolean reg = false;
 	public int refpos;;
+
 	public void clear() {
 		reg = true;
 		indel = false;
 		insersion=null;
 		length = 0;
 	}
+
 	public boolean isIndel() {
 		return indel;
 	}
+
 	public String getInsersion() {
 		return insersion;
 	}
-	
 }

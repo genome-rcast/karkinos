@@ -22,36 +22,29 @@ import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 
 public class LoadUtils {
-
 	public static void merge(SaveBean sb, SaveBean sbToAdd){
-		
-		//
 		DataSet ds1 = sb.getDataset();
 		DataSet ds2 = sbToAdd.getDataset();
-		
+
 		ReadsSummary rs1 = sb.getReadsSummary();
 		ReadsSummary rs2 = sbToAdd.getReadsSummary();
-		
+
 		DataSet dataset = merge(ds1,ds2);
 		ReadsSummary readsSummary = merge(rs1,rs2);
-		
+
 		sb.setDataset(dataset);
 		sb.setReadsSummary(readsSummary);
-		
 	}
 
-
-
 	private static DataSet merge(DataSet ds1, DataSet ds2) {
-		
 		if(ds1==null)return ds2;
 		addall(ds1.getSnvlist(),ds2.getSnvlist());
 		ds1.getNormal().merge(ds2.getNormal());
 		ds1.getTumor().merge(ds2.getTumor());
-		
+
 		return ds1;
 	}
-	
+
 	private static void addall(List list, List list2) {
 		if(list!=null&&list2!=null){
 			list.addAll(list2);
@@ -63,14 +56,10 @@ public class LoadUtils {
 		}
 	}
 
-
-
 	private static ReadsSummary merge(ReadsSummary rs1, ReadsSummary rs2) {
-		
 		if(rs1==null)return rs2;
-		//
-		rs1.merge(rs2);		
+
+		rs1.merge(rs2);
 		return rs1;
 	}
-
 }

@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.annotation;
 
 public class DbSNPBean implements java.io.Serializable{
-
 	String[] sa;
 	int mode;
 	float freq =0;
@@ -28,12 +27,15 @@ public class DbSNPBean implements java.io.Serializable{
 	public boolean isCosmicvalid() {
 		return cosmicvalid || cosmiccount>=8;
 	}
+
 	public void setCosmicvalid(boolean cosmicvalid) {
 		this.cosmicvalid = cosmicvalid;
 	}
+
 	public int getCosmiccount() {
 		return cosmiccount;
 	}
+
 	public void setCosmiccount(int cosmiccount) {
 		this.cosmiccount = cosmiccount;
 	}
@@ -44,9 +46,11 @@ public class DbSNPBean implements java.io.Serializable{
 	public String getVaridationStr() {
 		return varidationStr;
 	}
+
 	public void setVaridationStr(String varidationStr) {
 		this.varidationStr = varidationStr;
 	}
+
 	public boolean isCosmic() {
 		return cosmic;
 	}
@@ -89,10 +93,10 @@ public class DbSNPBean implements java.io.Serializable{
 			if(id.length()==1){
 				id =".";
 			}
-			return id;			
-		}else if(mode==DbSNPAnnotation.MODEcosmic){	
+			return id;
+		}else if(mode==DbSNPAnnotation.MODEcosmic){
 			return "cosmic_"+sa[3];
-		}else if(mode==DbSNPAnnotation.MODE1000g){	
+		}else if(mode==DbSNPAnnotation.MODE1000g){
 			return "1000g_"+sa[5];
 		}else{
 			return "exomeSNP "+ freq;
@@ -102,5 +106,4 @@ public class DbSNPBean implements java.io.Serializable{
 	public void inc() {
 		cnt++;		
 	}
-	
 }

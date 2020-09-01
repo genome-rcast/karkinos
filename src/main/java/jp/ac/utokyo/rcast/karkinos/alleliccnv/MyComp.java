@@ -20,19 +20,15 @@ import java.util.Comparator;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 
 public class MyComp implements Comparator<CopyNumberInterval> {
-
 	public int compare(CopyNumberInterval arg0, CopyNumberInterval arg1) {
-
 		if (arg0.getChr().equals(arg1.getChr())) {
 			return arg0.getStart() - arg1.getStart();
 		} else {
 			return getIndex(arg0.getChr()) - getIndex(arg1.getChr());
 		}
-
 	}
 
 	private int getIndex(String chr) {
-
 		chr = chr.replace("chr", "");
 		if (isNumber(chr)) {
 			return Integer.parseInt(chr);
@@ -44,20 +40,14 @@ public class MyComp implements Comparator<CopyNumberInterval> {
 			return 103;
 		}
 		return chr.hashCode();
-
 	}
 
 	private boolean isNumber(String chr) {
-
 		try {
-
 			int n = Integer.parseInt(chr);
 			return true;
-
 		} catch (Exception ex) {
 			return false;
 		}
-
 	}
-
 }

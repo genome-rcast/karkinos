@@ -28,21 +28,16 @@ import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 
 public class AFDepthMatrix {
-
 	List<BinData> binlist;
 	int binsize = 20;
 
 	public AFDepthMatrix(List<BinData> binlist, int binsize) {
-
 		this.binlist = binlist;
 		this.binsize = binsize;
-
 	}
 
 	public float getPval(float adjusttedAF, float readdepth) {
-
 		try {
-
 			double x = Math.log(readdepth - c1) / (Math.log(a1) * b1);
 			double sd = Math.abs(x * 0.5);
 			if (x < 0) {
@@ -50,38 +45,28 @@ public class AFDepthMatrix {
 			}
 			NormalDistribution nd = new NormalDistributionImpl(0, sd);
 			return (float) (1 - nd.cumulativeProbability(adjusttedAF));
-
 		} catch (Exception ex) {
-
 		}
 		return 1;
 	}
 
 	public void regSNV(SNVHolder snv, float tratio) {
-
 		int depth = (int) (snv.getTumor().getTotalcnt() * tratio);
 		double tr = CalcUtils.getTumorrateAdjustedRatio(snv, tratio);
 		int depthindex = getDIndex(depth);
-		//
 		BinData bd = binlist.get(depthindex);
-		//
 		bd.setSNV(depth, tr);
-
 	}
 
 	public void sortList() {
-
 		for (BinData bd : binlist) {
 			bd.sortList();
 		}
-
 	}
 
 	public void EMmethod(float tratio) {
-
 		int idx = 0;
 		for (BinData bd : binlist) {
-
 			boolean firstBin = (idx == 0);
 			boolean lastBin = (idx >= getMaxBinIdx(tratio));
 			//boolean lastBin = false;
@@ -109,7 +94,6 @@ public class AFDepthMatrix {
 		SummaryStatistics ss = new SummaryStatistics();
 		boolean atleast_one = false;
 		for (BinData bd : binlist) {
-			//
 			if (bd.isEmExcuted()) {
 				atleast_one = true;
 				ss.addValue(bd.getNumCandidate());
@@ -117,12 +101,9 @@ public class AFDepthMatrix {
 		}
 		if (atleast_one) {
 			for (BinData bd : binlist) {
-				//
 				bd.setPredictedCandnum((int) ss.getMean());
 			}
 		}
-		//
-
 	}
 
 	private int getMaxBinIdx(float tratio) {
@@ -134,8 +115,6 @@ public class AFDepthMatrix {
 		int dpethadj = Math.round((ld * tratio));
 		int idx = 0;
 		for (BinData bd : binlist) {
-
-			//
 			if (bd.includepeth(dpethadj)) {
 				return idx;
 			}
@@ -145,37 +124,29 @@ public class AFDepthMatrix {
 	}
 
 	public void regHetroSNP(SNVHolder snv, float tumorContentsRatio) {
-
 		int depth = (int) snv.getTumor().getTotalcnt();
 		double tr = getTR(snv, tumorContentsRatio);
 		double secondAlleleF = getSecondAlleleF(snv, tumorContentsRatio);
 		int depthindex = getDIndex(depth);
 
 		BinData bd = binlist.get(depthindex);
-		//
 		bd.setHetroSNPAF(depth, tr);
 		bd.setSecondAF(depth, secondAlleleF);
-
 	}
 
 	private double getTR(SNVHolder snv, float tumorContentsRatio) {
-
 		double tAF = snv.getTumor().getRatio();
 		double diffr = (0.5 - tAF) / tumorContentsRatio;
 		return diffr + 0.5;
-
 	}
 
 	private double getSecondAlleleF(SNVHolder snv, float tumorContentsRatio) {
-
 		double tAF = snv.getTumor().getSecondRatio();
 		double diffr = (0.5 - tAF) / tumorContentsRatio;
 		return diffr + 0.5;
-
 	}
 
 	private int getDIndex(int depth) {
-
 		int ret = 0;
 		for (int n = 0; n < binlist.size(); n++) {
 			int deptht = binlist.get(n).getUdepth();
@@ -189,15 +160,12 @@ public class AFDepthMatrix {
 		if (ret >= binsize)
 			ret = binsize - 1;
 		return ret;
-
 	}
 
 	public void calcregresion() {
-
 		// border cond
 		List<Point2D> raiodapthlist = new ArrayList<Point2D>();
 		for (BinData bd : binlist) {
-			//
 			if (bd.getDepth() <= 100) {
 				raiodapthlist.add(new Point2D.Double(bd.getAFBorder(), bd
 						.getDepth()));
@@ -211,7 +179,6 @@ public class AFDepthMatrix {
 	double c1 = 0;
 
 	private void calcRegression(List<Point2D> list) {
-
 		// 1.regression by 2nd degree polynomial
 		// int n = 0;
 		double X = 0;
@@ -270,7 +237,6 @@ public class AFDepthMatrix {
 		double zmin = Integer.MAX_VALUE;
 		// 3 regression by exponental
 		for (float z0 = 0f; z0 < 0.1; z0 = z0 + 0.01f) {
-			//
 			X = 0;
 			X2 = 0;
 			double InY = 0;
@@ -289,7 +255,6 @@ public class AFDepthMatrix {
 				double x2 = Math.pow(x0, 2);
 				X += x0;
 				X2 += x2;
-
 			}
 
 			if (n != size) {
@@ -301,7 +266,6 @@ public class AFDepthMatrix {
 
 			double z = 0;
 			for (Point2D point : list) {
-
 				double x0 = point.getX();
 				double y0 = point.getY();
 
@@ -309,22 +273,17 @@ public class AFDepthMatrix {
 
 				double diff = y0 - y;
 				z = z + Math.pow(diff, 2);
-
 			}
 			if (zmin == 0 || zmin > z) {
 				zmin = z;
 				a1 = ea;
 				b1 = eb;
 				c1 = z0;
-
 			}
-
 		}
-
 	}
 
 	public double func(float x) {
-
 		// double y = _func(x);
 		// double localmin = (-1*b1)/(2*a1);
 		// if(x>localmin){
@@ -345,17 +304,13 @@ public class AFDepthMatrix {
 
 	public boolean reject(int depth_c, float adjusttedAF,
 			boolean highErrorSample) {
-
 		boolean reject = _reject(depth_c, adjusttedAF);
-		
-		
-		if (!reject) {
 
+		if (!reject) {
 			if ((depth_c <= 100)
 					&& (adjusttedAF < KarkinosProp.mintumorratioForFilter1)) {
 				reject = true;
 			}
-
 		}
 		if (highErrorSample) {
 			if (reject) {
@@ -377,11 +332,9 @@ public class AFDepthMatrix {
 			}
 		}
 		return reject;
-
 	}
 
 	public boolean _reject(int depth_c, float adjusttedAF) {
-
 		if ((a1 == 0) && (b1 == 0) && (c1 == 0) || (b1 > 0)) {
 			return defultreject(depth_c, adjusttedAF);
 		}
@@ -399,14 +352,12 @@ public class AFDepthMatrix {
 		// }else{
 		// return false;
 		// }
-
 	}
 
 	static final double a1fix = 1.51;
 	static final double b1fix = -1.68;
 
 	public static boolean defultreject(int depth_c, float x) {
-
 		// y=-500x+200
 		// double y = (-500*adjusttedAF)+200;
 		// if(y<0)y=0;
@@ -418,7 +369,5 @@ public class AFDepthMatrix {
 		if (y < 0)
 			y = 0;
 		return depth_c < y;
-
 	}
-
 }

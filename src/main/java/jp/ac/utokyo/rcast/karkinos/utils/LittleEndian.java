@@ -19,18 +19,15 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class LittleEndian {
-
 	RandomAccessFile raf;
 	byte buf[] = null;
+
 	public LittleEndian(RandomAccessFile _raf){
-		
 		raf = _raf;
 		buf = new byte[4];
-		
 	}
-	
+
 	public int readInt() throws IOException{
-		
 		int i = 0;
 		raf.read(buf);
 		i = (buf[0] & 0xff)
@@ -38,7 +35,5 @@ public class LittleEndian {
 			+((buf[2] & 0xff)<<16)
 			+((buf[3] & 0xff)<<24);
 		return i;
-		
 	}
-	
 }

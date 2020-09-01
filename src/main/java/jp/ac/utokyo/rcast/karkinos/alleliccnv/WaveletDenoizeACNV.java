@@ -24,10 +24,8 @@ import jp.ac.utokyo.rcast.karkinos.wavelet.DistMedian;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class WaveletDenoizeACNV {
-
 	public static void calc(List<List<SNVHolderPlusACnv>> plist)
 			throws IOException {
-
 		int denoiselevel = getDenoiseLevel(plist) - 3;
 		if (denoiselevel < 3) {
 			denoiselevel = 3;
@@ -36,7 +34,7 @@ public class WaveletDenoizeACNV {
 			//_calc(list, denoiselevel);
 			_calcMovingAverage(list, denoiselevel);
 		}
-		//
+
 		DistMedian high = new DistMedian(0.5,1.5,true);
 		DistMedian low = new DistMedian(0.5,1.5,true);
 		for (List<SNVHolderPlusACnv> list : plist) {
@@ -51,86 +49,78 @@ public class WaveletDenoizeACNV {
 		System.out.println("low median =" + low.getDistributionMedian());
 		double adjusth = high.getDistributionMedian() - 1;
 		double adjustl = low.getDistributionMedian() - 1;
-		//
-		
+
 		// adjust average
 		double lowremove = 0;
 		boolean norev = true;
 		double mindiff  = 100;
 		for (List<SNVHolderPlusACnv> list : plist) {
 			for (SNVHolderPlusACnv sc : list) {
-
 				double highv = sc.getHighera().getWtval();
 				double lowv = sc.getLowera().getWtval();
 
 				// remove value which moves in same direction
 				// up to 0.2
 				double highad = highv - adjusth;
-				double lowad = lowv - adjustl;				
+				double lowad = lowv - adjustl;
 				if(lowad>highad){
 					double diff = (lowad-highad);
 					if(diff>lowremove){
-						lowremove = diff;						
+						lowremove = diff;
 					}
 					norev = false;
 					if(diff<mindiff){
 						diff = mindiff;
 					}
 				}else{
-					
 					double diff = (highad-lowad);
 					if(diff<mindiff){
 						diff = mindiff;
 					}
-					
 				}
-				
 			}
 		}
-		
+
 		if(mindiff==100){
 			mindiff=0;
 		}
 		// adjust average
 		for (List<SNVHolderPlusACnv> list : plist) {
 			for (SNVHolderPlusACnv sc : list) {
-
 				double highv = sc.getHighera().getWtval();
 				double lowv = sc.getLowera().getWtval();
 
 				// remove value which moves in same direction
 				// up to 0.2
 				double highad = highv - adjusth;
-				double lowad = lowv - (adjustl + lowremove);	
+				double lowad = lowv - (adjustl + lowremove);
 				if(norev){
 					lowad = (lowv - adjustl) + mindiff;
-				}				
+				}
 				sc.getHighera().setWtval((float) (highad));
 				sc.getLowera().setWtval((float) (lowad));
 			}
 		}
-		//
+
 		boolean continuos = false;
 		int total=0;
 		int cnt =0;
 		SummaryStatistics ss = new SummaryStatistics();
 		for (List<SNVHolderPlusACnv> list : plist) {
 			for (SNVHolderPlusACnv sc : list) {
-
 				double highv = sc.getHighera().getWtval();
 				double lowv = sc.getLowera().getWtval();
-				total++;				
+				total++;
 				if(highv<lowv){
 					if(continuos){
 						cnt++;
 						ss.addValue(Math.abs(lowv-highv));
-					}	
-					
+					}
+
 					continuos = true;
 				}else{
 					continuos = false;
 				}
-
 			}
 		}
 		//correction if low value baseline is higher than highval
@@ -138,11 +128,10 @@ public class WaveletDenoizeACNV {
 		float readjust = 0;
 		if(rratio>0.2){
 			readjust = (float) ss.getMean();
-		}		
+		}
 		//remove same directinal draft
 		for (List<SNVHolderPlusACnv> list : plist) {
 			for (SNVHolderPlusACnv sc : list) {
-
 				double highv = sc.getHighera().getWtval();
 				double lowv = sc.getLowera().getWtval();
 				double highad = highv + readjust;
@@ -152,7 +141,6 @@ public class WaveletDenoizeACNV {
 				boolean bothlow = (highad < 1 && lowad < 1);
 				double denoizethre = 0.1;
 				if (bothhigh || bothlow) {
-
 					// same direction;
 					double dhigh = Math.abs(1 - highad);
 					double dlow = Math.abs(1 - lowad);
@@ -167,7 +155,6 @@ public class WaveletDenoizeACNV {
 						highad = highad + common;
 						lowad = lowad + common;
 					}
-
 				}
 				sc.getHighera().setWtval((float) highad);
 				sc.getLowera().setWtval((float) lowad);
@@ -176,7 +163,6 @@ public class WaveletDenoizeACNV {
 	}
 
 	private static int getDenoiseLevel(List<List<SNVHolderPlusACnv>> plist) {
-
 		int samplingsize = 4096;
 		int denoizemax = KarkinosProp.maxdenoiseLevel;
 		double[] testsampling = getSamplingData(plist, samplingsize);
@@ -186,23 +172,19 @@ public class WaveletDenoizeACNV {
 
 		int n = 1;
 		for (; n < denoizemax; n++) {
-
 			SummaryStatistics ss = getSD(testsampling);
 			double sd = ss.getStandardDeviation();
 			System.out.println("mean=" + ss.getGeometricMean() + "sd=" + sd);
 			if (sd < KarkinosProp.denozeToSD)
 				break;
 			testsampling = downsampling(testsampling);
-
 		}
 		System.out.println("denoise level = " + (n));
 		return n;
-
 	}
 
 	private static double[] getSamplingData(
 			List<List<SNVHolderPlusACnv>> plist, int samplingsize) {
-
 		double minmeandiff = 0;
 		double[] testsamplingr = null;
 		// take sampling data where no CNV occurring
@@ -210,14 +192,12 @@ public class WaveletDenoizeACNV {
 		// take minimum difference sampleset from n=1
 		int m = 0;
 		for (int chridx = 0; chridx < 5; chridx++) {
-
 			SummaryStatistics ss = new SummaryStatistics();
 			double[] testsampling = new double[samplingsize];
 			int cnt = 0;
 			if (m == chridx)
 				continue;
 			for (List<SNVHolderPlusACnv> list : plist) {
-
 				if (cnt >= samplingsize)
 					break;
 				for (SNVHolderPlusACnv wif : list) {
@@ -227,7 +207,6 @@ public class WaveletDenoizeACNV {
 					ss.addValue(wif.lowera.row);
 					cnt++;
 				}
-
 			}
 			if (minmeandiff == 0) {
 				minmeandiff = (1 - ss.getMean());
@@ -243,10 +222,8 @@ public class WaveletDenoizeACNV {
 	}
 
 	private static double[] downsampling(double[] testsampling) {
-
 		double[] newa = new double[testsampling.length / 2];
 		for (int n = 0; n + 1 < testsampling.length; n = n + 2) {
-
 			double d0 = testsampling[n];
 			double d1 = testsampling[n + 1];
 			double mean = (d0 + d1) / 2;
@@ -265,25 +242,19 @@ public class WaveletDenoizeACNV {
 
 	public static void _calcMovingAverage(List<SNVHolderPlusACnv> dlist, int denoiseLevel)
 	throws IOException {
-		
 		int size = (int) Math.pow(2, denoiseLevel);
 		for (int n = 0; n < dlist.size(); n++) {
-			
-			
-			double[] ave = getMA(n,size,dlist);	
+			double[] ave = getMA(n,size,dlist);
 			dlist.get(n).highera.wtval = (float) ave[0];
-			dlist.get(n).lowera.wtval = (float) ave[1];			
-			
-		}	
-		
+			dlist.get(n).lowera.wtval = (float) ave[1];
+		}
 	}
-	
+
 	private static double[] getMA(int idx,int size, List<SNVHolderPlusACnv> dlist) {
-		//
 		double sumall0 = 0;
 		double sumall1 = 0;
 		double weight = 0;
-		
+
 		int half = size/2;
 		int start = idx-half;
 		int addend = 0;
@@ -293,7 +264,6 @@ public class WaveletDenoizeACNV {
 		}
 		int end = idx + half+addend;
 		if(end>=dlist.size()){
-			
 			int minusstart = end-dlist.size();
 			start = start - minusstart;
 			if(start<0){
@@ -302,21 +272,19 @@ public class WaveletDenoizeACNV {
 			end = dlist.size();
 		}
 		for(int n=start;n<end;n++){
-			
 			SNVHolderPlusACnv  holder = dlist.get(n);
 			double localweight = 1;
 //			try{
 //				localweight = Math.sqrt(holder.snv.getNormal().getTotal());
 //			}catch(Exception ex){}	
-			
+
 			sumall0 = sumall0+(localweight*holder.highera.gcadjusted);
 			sumall1 = sumall1+(localweight*holder.lowera.gcadjusted);
-			weight = weight+localweight;		
-		}	
+			weight = weight+localweight;
+		}
 		if(weight<=0)weight=1;
 		double ave0 = sumall0/weight;
 		double ave1 = sumall1/weight;
 		return new double[]{ave0,ave1};
-		
-	}	
+	}
 }

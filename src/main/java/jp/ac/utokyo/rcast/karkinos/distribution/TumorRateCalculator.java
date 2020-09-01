@@ -16,36 +16,26 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.distribution;
 
 public class TumorRateCalculator {
-
 	private static final float LOH = 0.5f;
 	private static final float GAIN = 1.5f;
 	private static final float MINForGAIN = 0.33f;
 	private static final float MAXForGAIN = 0.66f;
 
-
 	public static float getTumorRatio(float degree, float observedR) {
-
 		float ret = 0f;
 		if (observedR == 0)
 			return 0;
 		observedR = (float) (observedR * 0.01);
 		if (degree == LOH) {
-
 //			if (midreangeLOH(observedR)) {
 //				return ret;
 //			}
 			if (observedR <= 0.5) {
-
 				ret = ((2 * observedR) - 1) / (observedR - 1);
-
 			} else {
-
 				ret = ((2 * observedR) - 1) / observedR;
-
 			}
-
 		} else if (degree == GAIN) {
-
 //			if (midreangeGAIN(observedR)) {
 //				return ret;
 //			}
@@ -56,23 +46,17 @@ public class TumorRateCalculator {
 				observedR = MAXForGAIN;
 
 			if (observedR <= 0.5) {
-
 				ret = (1 - (2 * observedR)) / (observedR);
 				//ret = (float) (((double)1/(double)observedR) -2);
-				
 			} else {
-
 				ret = ((2 * observedR) - 1) / (1 - observedR);
-
 			}
-
 		}
 		// System.out.println("tumorratio="+degree+"\t"+observedR+"\t"+ret);
 		if((ret > 1) || (ret < 0)){
 			ret = 1f;
 		}
 		return ret;
-
 	}
 
 	public static float getTumorRatioSomatic(float observedS) {
@@ -80,7 +64,5 @@ public class TumorRateCalculator {
 			return 0;
 		observedS = (float) (observedS * 0.01);
 		return observedS*2;
-		
 	}
-
 }

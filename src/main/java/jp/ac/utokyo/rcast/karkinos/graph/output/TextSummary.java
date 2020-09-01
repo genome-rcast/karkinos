@@ -39,13 +39,9 @@ import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsCounter;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 
 public class TextSummary {
-
 	public static void outTextData(String outpath, ReadsSummary readsSummary,
 			String readsStat, DataSet dataset, float ploidy) {
-
-		//
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -59,12 +55,10 @@ public class TextSummary {
 			bw.close();
 		} catch (IOException ex) {
 		}
-
 	}
 
 	private static void writeSNPCorrel(BufferedWriter bw, DataSet dataset)
 			throws IOException {
-
 		int snpRecurrent = 0;
 		int snpDiff = 0;
 
@@ -72,21 +66,16 @@ public class TextSummary {
 		List<Double> yl = new ArrayList<Double>();
 
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			if (snv.getDbSNPbean() != null) {
-
 				boolean ed1 = (snv.getNormal().getTotalcnt() >= 10);
 				boolean ed2 = (snv.getTumor().getTotalcnt() >= 10);
 				if (snv.getCi().getVaridateVal() == 1) {
-
 					if (ed1 && ed2) {
 						DbSNPBean dbb = snv.getDbSNPbean();
 						if (dbb.getMode() == DbSNPAnnotation.MODEdbSNP) {
-
 							double x = snv.getNormal().getRatio();
 							double y = snv.getTumor().getRatio();
 
-							//
 							xl.add(x);
 							yl.add(y);
 
@@ -97,7 +86,6 @@ public class TextSummary {
 									snpDiff++;
 								}
 							}
-
 						}
 					}
 				}
@@ -109,10 +97,9 @@ public class TextSummary {
 		double parcentDifferent = (double) snpDiff
 				/ (double) (snpRecurrent + snpDiff);
 		bw.write("diff SNP %=\t" + parcentDifferent + "\n");
-		//
+
 		double correl = correlation(xl, yl);
 		bw.write("correl=\t" + correl + "\n");
-
 	}
 
 	public static double correlation(List<Double> xs, List<Double> ys) {
@@ -146,14 +133,11 @@ public class TextSummary {
 
 		// correlation is just a normalized covariation
 		return cov / sigmax / sigmay;
-		
 	}
 
 	private static void writeReadSummary(BufferedWriter bw,
 			ReadsSummary readsSummary, String readsStat) {
-
 		try {
-
 			ReadsCounter normal = readsSummary.getNormalCounter();
 			ReadsCounter tumor = readsSummary.getTumorCounter();
 
@@ -165,7 +149,6 @@ public class TextSummary {
 
 			// // row
 			if (readsStat != null) {
-
 				String[] sa = readsStat.split(",");
 				String normalfile = sa[0];
 				Properties np = getProp(normalfile);
@@ -177,7 +160,6 @@ public class TextSummary {
 						"properOrunique", "afterrealgin", "identityLow" };
 				for (String key : keys) {
 					if (np.containsKey(key)) {
-
 						// row2
 						String kyeDisp = key.replaceAll("Or", " or ");
 						bw.write(kyeDisp + " tags" + "\t");
@@ -186,7 +168,6 @@ public class TextSummary {
 						bw.write("\n");
 
 						if (key.equals("duplicate")) {
-
 							try {
 								// row 13
 								bw.write("duplicate (%) \t");
@@ -202,10 +183,8 @@ public class TextSummary {
 							} catch (Exception ex) {
 							}
 						}
-
 					}
 				}
-
 			}
 
 			// row
@@ -226,7 +205,6 @@ public class TextSummary {
 			bw.write("\n");
 
 			if (readsSummary.isPairStats()) {
-
 				// row6
 				bw.write("First reads" + "\t");
 				bw.write(format(normal.getFirstReads()) + "\t");
@@ -302,7 +280,6 @@ public class TextSummary {
 					+ "\t");
 			bw.write("\n");
 
-			//
 			Map<String, ReadsCounter> datamapn = readsSummary
 					.getNormalPerChrom();
 			Map<String, ReadsCounter> datamapt = readsSummary
@@ -310,7 +287,6 @@ public class TextSummary {
 
 			bw.write("#reads counts by chr" + "\n");
 			for (Entry<String, ReadsCounter> entry : datamapt.entrySet()) {
-
 				String chrom = entry.getKey();
 				bw.write("ReadsCounts by " + chrom + "\t");
 				ReadsCounter rct = entry.getValue();
@@ -322,18 +298,14 @@ public class TextSummary {
 				bw.write(format(rct.getTotalmap()) + "\t");
 				bw.write(format(nmap) + "\t");
 				bw.write("\n");
-
 			}
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private static double getParcent(String dup, String nondup) {
-
 		double d = Double.parseDouble(dup);
 		double nond = Double.parseDouble(nondup);
 		d = (d / (d + nond)) * 100;
@@ -341,9 +313,7 @@ public class TextSummary {
 	}
 
 	private static void writeTR(BufferedWriter bw, DataSet dataset, float ploidy) {
-
 		try {
-
 			AnalyseDist dist = dataset.getAnalyseDist();
 			// row1
 			bw.write("#source" + "\t");
@@ -392,18 +362,14 @@ public class TextSummary {
 			bw.write(format(ploidy) + "\t");
 			bw.write(format(dist.getTcflg()) + "\t");
 			bw.write("\n");
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private static void writeCNV(BufferedWriter bw, DataSet dataset, int dispFlg) {
-
 		try {
-
 			// header
 			bw.write("#chr" + "\t");
 			bw.write("start" + "\t");
@@ -420,7 +386,6 @@ public class TextSummary {
 			bw.write("\n");
 
 			for (CopyNumberInterval cni : dataset.getCopyNumberIntervalList(9)) {
-
 				if (cni.getCopynumber() == dataset.getBaseploidy()) {
 					if (cni.getAaf() == dataset.getBaseploidy() / 2) {
 						continue;
@@ -462,9 +427,7 @@ public class TextSummary {
 					bw.write(cni.getAaf() + "\t");
 					bw.write(cni.getBaf() + "\t");
 					bw.write("fromDepth");
-
 				} else if (dispFlg == 2) {
-
 					bw.write("allelic");
 				} else {
 					if (cni.getCopynumber() < 1) {
@@ -476,12 +439,10 @@ public class TextSummary {
 
 				bw.write("\n");
 			}
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private static Properties getProp(String file) throws IOException {
@@ -502,13 +463,11 @@ public class TextSummary {
 			long l = Long.parseLong(num);
 			return format(l);
 		} catch (Exception ex) {
-
 		}
 		try {
 			double d = Double.parseDouble(num);
 			return format(d);
 		} catch (Exception ex) {
-
 		}
 		return "";
 	}
@@ -524,7 +483,6 @@ public class TextSummary {
 	}
 
 	private static float getX20percent(DepthCounter dc) {
-
 		try {
 			long total = dc.getTotal();
 			Map<Integer, CounterA> mt = dc.getMap();
@@ -535,11 +493,9 @@ public class TextSummary {
 				if (ca != null) {
 					less20x = ca.getCnt();
 				}
-
 			}
 			return (float) (((double) (total - less20x) / (double) total) * 100);
 		} catch (Exception ex) {
-
 		}
 		return 0f;
 	}

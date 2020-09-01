@@ -24,7 +24,6 @@ import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 
 public class FilterResult implements java.io.Serializable {
-
 	// public static int SUPPORTED_BY_ONEDirection = 1;
 	// public static int CONTAIN_INDEL_MISMATCH = 2;
 	// public static int CONTAIN_MISMATCH = 3;
@@ -53,7 +52,7 @@ public class FilterResult implements java.io.Serializable {
 	public static final int NEARINDEL = 16;
 	public static final int HighNormalRatio = 17;
 	public static final int noStrandSpecific = 18;
-	//
+
 	public static final int LOW_PROPER = 20;
 	public static final int NOISE_IN_NORMAL = 25;
 
@@ -120,10 +119,8 @@ public class FilterResult implements java.io.Serializable {
 	}
 
 	public String getFilterStr(Set<Integer> filter) {
-
 		StringBuffer sb = new StringBuffer();
 		for (int n : filter) {
-
 			if (n > 100)
 				continue;
 			if (sb.length() > 0) {
@@ -132,7 +129,6 @@ public class FilterResult implements java.io.Serializable {
 			sb.append(_getFilterStr(n));
 		}
 		return sb.toString();
-
 	}
 
 	// public static final int SNP = 1;
@@ -146,9 +142,8 @@ public class FilterResult implements java.io.Serializable {
 	// public static final int READSENDSONLY = 13;
 	// public static final int TooManyMismatchReads = 14;
 	// public static final int MutationAtSameCycle = 15;
-	public String _getFilterStr(int flg) {
 
-		//
+	public String _getFilterStr(int flg) {
 		switch (flg) {
 		case SNP:
 			return "snp";
@@ -244,7 +239,6 @@ public class FilterResult implements java.io.Serializable {
 	}
 
 	public Set<Integer> _getPassFilterFlg() {
-
 		Set<Integer> filter = new LinkedHashSet<Integer>();
 		if (supportReadsFlgs == null) {
 			supportReadsFlgs = new HashSet<Integer>();
@@ -258,12 +252,10 @@ public class FilterResult implements java.io.Serializable {
 			if (ratio > KarkinosProp.minTumorNormalRatio) {
 				filter.add(HighNormalRatio);
 			}
-
 		}
 		boolean lowsupport = (numSupportRead <= 6);
 
 		if (dbSNPbean != null) {
-
 			boolean dbSNP = dbSNPbean.getMode() == DbSNPAnnotation.MODEdbSNP;
 			boolean onekg = (dbSNPbean.getMode() == DbSNPAnnotation.MODE1000g);
 			boolean exonSNP = (dbSNPbean.getMode() == DbSNPAnnotation.MODEexonSNP);
@@ -309,7 +301,6 @@ public class FilterResult implements java.io.Serializable {
 			// policy change 20130308
 
 			if (dbSNPbean.isCosmic()) {
-
 				// filter.add(INFO_COSMIC);
 				supportReadsFlgs.add(INFO_COSMIC);
 				if (dbSNPbean.isCosmicvalid()) {
@@ -317,9 +308,7 @@ public class FilterResult implements java.io.Serializable {
 					// cosmicvalid = dbSNPbean.isCosmicHigh();
 					cosmicvalid = true;
 				}
-
 			} else if (dbSNP || onekg || exonSNP) {
-
 				if (indel) {
 					filter.add(SNP);
 				}
@@ -336,22 +325,16 @@ public class FilterResult implements java.io.Serializable {
 						|| (lowsupport && (tumorAF <= 0.2))) {
 					filter.add(SNP);
 				}
-
 			}
 
 			if (!dbSNPbean.isCosmic()) {
 				if (dbSNPbean.isValid()) {
-
 					supportReadsFlgs.add(INFO_SNP_flg);
-
 				}
 			}
-
 		}
-		//
 
 		if (numSupportRead <= KarkinosProp.minsupportreads) {
-
 			supportReadsFlgs.add(INFO_minimumSupportReads);
 			if (adjustedTumorAllereFreq < 0.3 || normalVrcnt > 0) {
 				filter.add(Low_tumor_adjustedRatio);
@@ -363,9 +346,7 @@ public class FilterResult implements java.io.Serializable {
 		}
 
 		if (initFilterFalse) {
-
 			supportReadsFlgs.add(INFO_INIT_Filter_FAIL);
-
 		}
 
 		// take out side of !cosmicvalid block 20130308
@@ -374,7 +355,6 @@ public class FilterResult implements java.io.Serializable {
 		}
 
 		if (!cosmicvalid) {
-
 			// except indel case
 			// if (!indel) {
 			// if (adjustedTumorAllereFreq <
@@ -396,20 +376,14 @@ public class FilterResult implements java.io.Serializable {
 			}
 
 			if (lowtumorAfterTCadjust) {
-
 				filter.add(Low_tumor_adjustedReads);
-
 			}
 
 			if (lowdepthafterTCadjust) {
-
 				filter.add(LOW_adjusted_reads);
-
 			}
 			if (lowdepthafterTCadjustInfo) {
-
 				supportReadsFlgs.add(INFO_adjustLowdepth);
-
 			}
 		}
 
@@ -438,13 +412,11 @@ public class FilterResult implements java.io.Serializable {
 		}
 
 		if (lowsupport) {
-
 			if (typicalSysErr) {
 				if (phredbq < 120) {
 					filter.add(illuminaSpecific);
 				}
 			}
-
 		}
 
 		// filter 2013.10.02
@@ -453,7 +425,6 @@ public class FilterResult implements java.io.Serializable {
 		}
 
 		if (!indel) {
-
 			if (phredbq < KarkinosProp.minPhredQual) {
 				filter.add(Low_SNPQual);
 			}
@@ -468,7 +439,6 @@ public class FilterResult implements java.io.Serializable {
 			boolean lowdepthn = normaldepth < KarkinosProp.baysianFilterdepth;
 			if (lowthresn) {
 				if (lowdepthn || highisoform) {
-
 					supportReadsFlgs.add(INFO_LOW_refOddsRatio);
 				}
 			}
@@ -489,17 +459,15 @@ public class FilterResult implements java.io.Serializable {
 			if (sAFratio > KarkinosProp.minSecondMutationRelativeRatio) {
 				filter.add(highSecondMutatedAllele);
 			}
-
 		}
 
 		for (int flg : supportReadsFlgs) {
 			if (flg < 100) {
-				
 				if(flg==CONTAIN_Reccurent_MISMATCH){
 					if(cosmicvalid){
 						continue;
 					}
-				}				
+				}
 				filter.add(flg);
 			}
 		}
@@ -557,7 +525,6 @@ public class FilterResult implements java.io.Serializable {
 
 	public void setSecondAF(double d) {
 		this.secondAF = (float) d;
-
 	}
 
 	public float getSupportreadsBAlleleFeqquency() {
@@ -646,9 +613,7 @@ public class FilterResult implements java.io.Serializable {
 	}
 
 	public void setLogtAjusted(double adjustedLogt) {
-
 		this.logtAjusted = adjustedLogt;
-
 	}
 
 	public double getLogt() {
@@ -744,7 +709,6 @@ public class FilterResult implements java.io.Serializable {
 	}
 
 	public boolean isPassFilter() {
-
 		Set<Integer> filter = getPassFilterFlg();
 		if (filter == null || filter.isEmpty()) {
 			return true;
@@ -757,7 +721,6 @@ public class FilterResult implements java.io.Serializable {
 		// }
 		// }
 		return filter.contains(PASS_FILTER);
-
 	}
 
 	public Set<Integer> getInfoFlg() {
@@ -773,9 +736,6 @@ public class FilterResult implements java.io.Serializable {
 	boolean initFilterFalse = false;
 
 	public void setInitFilterFalse(boolean initFilterFalse) {
-
 		this.initFilterFalse = initFilterFalse;
-
 	}
-
 }

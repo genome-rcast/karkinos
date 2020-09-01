@@ -18,15 +18,11 @@ package jp.ac.utokyo.rcast.karkinos.wavelet;
 import java.util.Comparator;
 
 public class MyCompPeak implements Comparator<double[]> {
-
 	public int compare(double[] arg0, double[] arg1) {
-		
 		double sd0 = arg0[1];
 		double sd1 = arg1[1];
-		
+
 		if(sd0==sd1)return 0;
 		return sd0>sd1?1:-1;
-		
 	}
-
 }

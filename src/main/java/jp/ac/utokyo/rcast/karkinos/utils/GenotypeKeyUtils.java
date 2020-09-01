@@ -16,12 +16,11 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.utils;
 
 public class GenotypeKeyUtils {
-	
 	public static final String keys1[] = new String[] { "CtoT", "CtoG", "CtoA",
 		"TtoG", "TtoC", "TtoA" };
 	public static final String keys2[] = new String[] { "GtoA", "GtoC", "GtoT",
 		"AtoC", "AtoG", "AtoT" };
-	
+
 	public static String aggrigateKeys(String key) {
 		if (index(keys1, key) >= 0) {
 			return key;
@@ -32,18 +31,16 @@ public class GenotypeKeyUtils {
 			}
 			return keys1[idx];
 		}
+	}
 
-	}	
-	
 	public static String toDispKey(String key){
 		int idx1  = index(keys1, key);
 		String key2 = keys2[idx1];
 		return key.charAt(0)+":"+key2.charAt(0)+">"
 				+key.charAt(3)+":"+key2.charAt(3);
 	}
-	
-	public static int index(String[] keys, String key) {
 
+	public static int index(String[] keys, String key) {
 		int n = 0;
 		for (String s : keys) {
 			if (s.equals(key)) {
@@ -53,6 +50,4 @@ public class GenotypeKeyUtils {
 		}
 		return -1;
 	}
-
-	
 }

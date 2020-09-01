@@ -25,7 +25,6 @@ import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 
 public class CNVVcf {
-
 	// ##fileformat=VCFv4.1
 	// ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record">
 	// ##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">
@@ -34,10 +33,7 @@ public class CNVVcf {
 	// ##FORMAT=<ID=CN,Number=1,Type=Integer,Description="Copy number genotype for imprecise events">
 
 	public static void outData(String outpath, DataSet dataset) {
-
-		//
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -51,9 +47,7 @@ public class CNVVcf {
 			bw.write("AAF");
 			bw.write("BAF");
 			bw.write("type");
-			
 			bw.write("\n");
-
 
 			writeCNV(bw, dataset, 1);
 			//writeCNV(bw, dataset, 2);
@@ -61,19 +55,13 @@ public class CNVVcf {
 
 			bw.close();
 		} catch (IOException ex) {
-
 		}
-
 	}
 
 	private static void writeCNV(BufferedWriter bw, DataSet dataset, int dispFlg) {
-
 		try {
-
-			
 			for (CopyNumberInterval cni : dataset
 					.getCopyNumberIntervalList(9)) {
-
 //				if (cni.getCopynumber() == 2)
 //					continue;
 //				if (dispFlg == 1) {
@@ -95,13 +83,13 @@ public class CNVVcf {
 //						continue;
 //					}
 //				}
-				
+
 				if (cni.getCopynumber() == dataset.getBaseploidy()){
 					if(cni.getAaf()==dataset.getBaseploidy()/2){
 						continue;
 					}
 				}
-					
+
 				if (dispFlg == 1) {
 					if (cni.isAllelic())
 						continue;
@@ -136,13 +124,10 @@ public class CNVVcf {
 				
 				bw.write(format(cni.getAaf()) + "\t");
 				bw.write(format(cni.getBaf()) + "\t");
-				
+
 				if (dispFlg == 1) {
-					
 					bw.write("fromDepth");
-
 				} else if (dispFlg == 2) {
-
 					bw.write("allelic");
 				} else {
 					if (cni.getCopynumber() < 1) {
@@ -158,7 +143,6 @@ public class CNVVcf {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private static String format(double num) {
@@ -170,5 +154,4 @@ public class CNVVcf {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);
 	}
-
 }

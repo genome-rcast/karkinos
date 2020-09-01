@@ -20,18 +20,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Fisher {
-	
-	
 	public static void main(String[] arg){
-		
 		System.out.println(calcPValue(8,2,8,0));
-		
-		
 	}
-	
-	
+
 	public static double calcPValue(int a,int b,int c,int d) {
-		
 		int[][] data = new int[2][2];
 		data[0][0] = a;
 		data[0][1] = b;
@@ -39,7 +32,7 @@ public class Fisher {
 		data[1][1] = d;
 		return calcPValue(data);
 	}
-	
+
 	/**
 	 * Pvalue fisher
 	 *
@@ -70,8 +63,6 @@ public class Fisher {
 		}
 	}
 
-	
-	
 	/**
 	 * feasible list
 	 */
@@ -101,6 +92,7 @@ public class Fisher {
 		}
 		return feasibleTableList;
 	}
+
 	/**
 	 * result = ((a+b)!/a! (b+d)!/b! (a+c)!/c! (c+d)!/d!) / (a+b+c+d)!
 	 */
@@ -137,6 +129,7 @@ public class Fisher {
 		}
 		return result;
 	}
+
 	/**
 	 * 
 	 */

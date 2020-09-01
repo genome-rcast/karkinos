@@ -19,18 +19,11 @@ import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 
 public class CalcUtils {
-	
 	public static float getTumorrateAdjustedRatio(SNVHolder snv,float tratio) {
-
-		
-		
 		double nontumorr = 1 - tratio;
 		double nAF = snv.getNormal().getRatio();
 		double tAF = snv.getTumor().getRatio();
-		
-		
-		
-		
+
 //		if (nontumorr > 1 || nontumorr < 0) {
 //			// something wrong
 //			return (float) tAF;
@@ -46,27 +39,22 @@ public class CalcUtils {
 		//float aaf = (float) (snv.getCi().getAafreq());
 		//float baf = (float) (snv.getCi().getBafreq());
 		float taf = (float) (snv.getCi().getCnvtotal());
-		//
+
 		if (nontumorr > 1 || nontumorr < 0) {
 			// something wrong
 			return (float) tAF;
 		} else {
-
 			float f = (float) ((tAF - nAF)*((tratio*taf)+(2*nontumorr)))/(tratio*taf);
 			if (f > 1 || f<= tAF) {
 				// something wrong
 				return (float) tAF;
 			}
-			
+
 			return f;
-
 		}
-		
-		
 	}
-	
-	public static String revcon(String read) {
 
+	public static String revcon(String read) {
 		StringBuffer sb = new StringBuffer();
 		for (char c : read.toCharArray()) {
 			sb.append(comp(c));
@@ -76,7 +64,6 @@ public class CalcUtils {
 	}
 
 	private static char comp(char c) {
-
 		if (c == 'A') {
 			return 'T';
 		} else if (c == 'T') {
@@ -89,9 +76,7 @@ public class CalcUtils {
 		return 'N';
 	}
 
-	
 	public static boolean pass2(FilterResult filterResult) {
-		
 		if(!filterResult.isPassFilter()){
 			return false;
 		}else{
@@ -99,17 +84,15 @@ public class CalcUtils {
 			for(int flg:filterResult.getInfoFlg()){
 			  if(flg==FilterResult.INFO_COSMIC_Validate){
 				return true;
-			  }	
-			}			
+			  }
+			}
 			// if Indel
-			
 		}
 		for(int flg:filterResult.getInfoFlg()){
 			if(flg>200){
 				return false;
 			}
-		}		
+		}
 		return true;
-	
 	}
 }

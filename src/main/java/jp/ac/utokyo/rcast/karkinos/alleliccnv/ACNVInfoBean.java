@@ -16,29 +16,32 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.alleliccnv;
 
 public class ACNVInfoBean {
-	
 	float row;
 	float gcadjusted;
 	float wtval;
 	float hmmval;
-	
+
 	public float getRow() {
 		return row;
 	}
+
 	public float getGcadjusted() {
 		return gcadjusted;
 	}
+
 	public float getWtval() {
 		return wtval;
 	}
+
 	public void setWtval(float wtval) {
 		this.wtval = wtval;
 	}
+
 	public float getHmmval() {
 		return hmmval;
 	}
+
 	public void setHmmval(float hmmval) {
 		this.hmmval = hmmval;
 	}
-	
 }

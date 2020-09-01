@@ -22,20 +22,14 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class XYSeriesExtract {
-
 	Map<Float, DataHolderByCN> map;
 
-
-	
-	
 	public XYSeriesExtract(Map<Float, DataHolderByCN> map) {
 		this.map = map;
 	}
 
-
 	public IntervalXYDataset getXYSeriesAfterFinalFilter(float degree,
 			boolean normal) {
-
 		String s1 = "_mutation";
 		String s2 = normal ? "_normal" : "_tumor";
 		XYSeries series1 = new XYSeries((degree*2) + s1 + s2);
@@ -46,12 +40,11 @@ public class XYSeriesExtract {
 			dist = data.mutationDistNFinalFilter;
 		} else {
 			dist = data.mutationDistTFinalFilter;
-
 		}
 		int cnt = 0;
 		if (dist != null) {
 			int n = 0;
-			
+
 			for (float f : dist) {
 				series1.add(n, f);
 				n++;
@@ -69,7 +62,6 @@ public class XYSeriesExtract {
 
 	public IntervalXYDataset getXYSeries(float degree, boolean SNP,
 			boolean normal, boolean filter) {
-
 		String s1 = SNP ? "_SNP" : "_mutation";
 		String s2 = normal ? "_normal" : "_tumor";
 
@@ -78,34 +70,27 @@ public class XYSeriesExtract {
 		if(data==null)return null;
 		float[] dist = null;
 		if (data != null) {
-
 			if (SNP) {
-
 				if (normal) {
 					dist = data.snpDistN;
 				} else {
 					dist = data.snpDistT;
 				}
 			} else {
-
 				if (filter) {
 					if (normal) {
 						dist = data.mutationDistNFilter;
 					} else {
 						dist = data.mutationDistTFilter;
-
 					}
 				} else {
 					if (normal) {
 						dist = data.mutationDistN;
 					} else {
 						dist = data.mutationDistT;
-
 					}
 				}
-
 			}
-
 		}
 		int n = 0;
 		int cnt = 0;

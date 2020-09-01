@@ -39,7 +39,6 @@ public class PileUPResult implements java.io.Serializable {
 	float lowqualratio = 0f;
 
 	public void clear() {
-
 		indelinfo = null;
 		diff = false;
 		ratiocalclated = false;
@@ -67,7 +66,6 @@ public class PileUPResult implements java.io.Serializable {
 				likehoodp2x[n][m] = 0;
 			}
 		}
-
 	}
 
 	public float getLowqualratio() {
@@ -81,7 +79,6 @@ public class PileUPResult implements java.io.Serializable {
 	boolean insersion = false;
 
 	public String getIndelStr() {
-
 		if (indel) {
 			if (isInsersion()) {
 				StringBuffer sb = new StringBuffer();
@@ -111,14 +108,12 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	private int getMaxidx() {
-
 		double maxdd = 0;
 		int idx = 0;
 		int maxidx = 0;
 		int gidx = seqALL.indexOf(genomeR);
 
 		for (double d : expected) {
-
 			if (gidx == idx) {
 				idx++;
 				continue;
@@ -133,7 +128,6 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	private int getSecondMutationidx() {
-
 		int gidx = seqALL.indexOf(genomeR);
 		int maxidx = getMaxidx();
 		if (indel) {
@@ -145,7 +139,6 @@ public class PileUPResult implements java.io.Serializable {
 		int idx = 0;
 
 		for (double d : expected) {
-
 			if ((gidx == idx) || (maxidx == idx)) {
 				idx++;
 				continue;
@@ -157,18 +150,15 @@ public class PileUPResult implements java.io.Serializable {
 			idx++;
 		}
 		return sndidx;
-
 	}
 
 	public int getRefCnt() {
-
 		int gidx = seqALL.indexOf(genomeR);
 
 		if (gidx < 0)
 			return 0;
 
 		return seqCounter[gidx];
-
 	}
 
 	public int getAltCnt() {
@@ -193,21 +183,15 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public char getALT() {
-
 		return seqALL.charAt(getMaxidx());
-
 	}
 
 	public char getSecondALT() {
-
 		return seqALL.charAt(getSecondMutationidx());
-
 	}
 
 	public float getPhred() {
-
 		return (float) phredQual[getMaxidx()] * 10;
-
 	}
 
 	public float getBQrms() {
@@ -219,11 +203,9 @@ public class PileUPResult implements java.io.Serializable {
 		double pq = phredQualRMS[mi];
 		double d = pq / (double) count;
 		return (float) Math.sqrt(d);
-
 	}
 
 	public float getMQrms() {
-
 		if (indel) {
 			double d = mapqualRMS4Indel / (double) indelcnt;
 			return (float) Math.sqrt(d);
@@ -248,7 +230,6 @@ public class PileUPResult implements java.io.Serializable {
 	private int noindelcnt = 0;
 
 	public void setBaseAndQual(char ch, byte qual, int mapq, IndelInfo indelinfo) {
-
 		totalcnt++;
 		if (indelinfo.indel) {
 			indelcnt++;
@@ -286,7 +267,6 @@ public class PileUPResult implements java.io.Serializable {
 		}
 
 		if (ch > 0) {
-			//
 			int idx = seqALL.indexOf(ch);
 			if (idx < 0) {
 				// something wrong
@@ -303,27 +283,20 @@ public class PileUPResult implements java.io.Serializable {
 				double pmathch = 1 - pNomatch;
 
 				for (int n = 0; n < 4; n++) {
-
 					if (n == idx) {
 						expected[n] = expected[n] + pmathch;
 						likehoodp2x[idx][n] = likehoodp2x[idx][n] + pmathch;
 						// double logpmatch = Math.log10(pmathch);
 						// likehood[n] = likehood[n] + logpmatch;
-
 					} else {
 						expected[n] = expected[n] + (pNomatch / (double) 3);
 						likehoodp2x[idx][n] = likehoodp2x[idx][n] + (pNomatch / (double) 3);
 						// double logpunmatch =Math.log10(pNomatch/(double)3);
 						// likehood[n] = likehood[n] +logpunmatch;
-
 					}
-
 				}
-
 			}
-
 		}
-
 	}
 
 	public int getTotalcnt() {
@@ -331,9 +304,7 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public boolean isInsersion() {
-
 		return getMax(insersionmap) > getMax(delmap);
-
 	}
 
 	public boolean isIndel() {
@@ -370,9 +341,7 @@ public class PileUPResult implements java.io.Serializable {
 	double total = 0;
 
 	private void calcRatio() {
-
 		if (indel) {
-
 			double indelr = calcRatio_Indel();
 			ratio = (float) indelr;
 		} else {
@@ -381,9 +350,7 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public void checkIndel() {
-
 		if (indel) {
-
 			double indelr = calcRatio_Indel();
 			if (indelr < 0.05) {
 				double snvr = calcRatio_SNV();
@@ -391,20 +358,16 @@ public class PileUPResult implements java.io.Serializable {
 					indel = false;
 				}
 			}
-
 		}
-
 	}
 
 	private double calcRatio_Indel() {
-
 		int indelcnt = indelcnt();
 		ratio = (float) ((double) indelcnt / (double) (indelcnt + noindelcnt));
 		return ratio;
 	}
 
 	public float getRefLogLikeHood() {
-
 		int mi = getMaxidx();
 		int refidx = seqALL.indexOf(genomeR);
 		if ((refidx < 0) || (mi < 0)) {
@@ -414,11 +377,9 @@ public class PileUPResult implements java.io.Serializable {
 		double mid = expected[mi];
 		double d = refd / mid;
 		return (float) (Math.log10(d));
-
 	}
 
 	public float getMutationLogLikeHood() {
-
 		int mi = getMaxidx();
 		int refidx = seqALL.indexOf(genomeR);
 		if ((refidx < 0) || (mi < 0)) {
@@ -428,11 +389,9 @@ public class PileUPResult implements java.io.Serializable {
 		double mid = expected[mi];
 		double d = mid / refd;
 		return (float) (Math.log10(d));
-
 	}
 
 	public float getMutateLogLikeHoodAmongMutation() {
-
 		int mi = getMaxidx();
 		int refidx = seqALL.indexOf(genomeR);
 		if ((refidx < 0) || (mi < 0)) {
@@ -442,11 +401,9 @@ public class PileUPResult implements java.io.Serializable {
 		double mid = likehoodp2x[mi][mi];
 		double d = mid / refd;
 		return (float) (Math.log10(d));
-
 	}
 
 	public int[] getRefAltCnt() {
-
 		int[] ret = new int[2];
 		if (indel) {
 			if (noindelcnt == 0 && indelcnt == 0) {
@@ -471,18 +428,15 @@ public class PileUPResult implements java.io.Serializable {
 			ret[1] = count;
 		}
 		return ret;
-
 	}
 
 	private double calcRatio_SNV() {
-
 		int idx = 0;
 		int idxref = seqALL.indexOf(genomeR);
 		double max = 0;
 		ratio=0;
 		total=0;
 		for (double d : expected) {
-
 			if (idx != idxref) {
 				if (max == 0)
 					max = d;
@@ -511,7 +465,6 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public double getSecondRatio() {
-
 		int idx = 0;
 		int idxsecond = getSecondMutationidx();
 		double second = 0;
@@ -519,7 +472,6 @@ public class PileUPResult implements java.io.Serializable {
 		double l_ratio = 0;
 
 		for (double d : expected) {
-
 			if (idx == idxsecond) {
 				second = d;
 			}
@@ -551,7 +503,6 @@ public class PileUPResult implements java.io.Serializable {
 	}
 
 	public PileUPResult getIndelCopy() {
-
 		PileUPResult ret = new PileUPResult();
 		ret.totalcnt = totalcnt;
 		ret.indel = indel;
@@ -577,7 +528,6 @@ public class PileUPResult implements java.io.Serializable {
 		for (Entry e : es) {
 			dist.put(e.getKey(), e.getValue());
 		}
-
 	}
 
 	private int getMax(Map m) {
@@ -593,5 +543,4 @@ public class PileUPResult implements java.io.Serializable {
 		}
 		return max;
 	}
-
 }

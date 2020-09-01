@@ -23,7 +23,6 @@ import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.SNVHolderPlusACnv;
 
 public class ChrAllelicPeak {
-
 	List<SNVHolderPlusACnv> list = new ArrayList<SNVHolderPlusACnv>();
 	SummaryStatistics higha = new SummaryStatistics();
 	SummaryStatistics lowa = new SummaryStatistics();
@@ -35,20 +34,14 @@ public class ChrAllelicPeak {
 	}
 
 	public void add(SNVHolderPlusACnv snva){
-		
-		//
 		list.add(snva);
 		higha.addValue(snva.getHighera().getWtval());
 		lowa.addValue(snva.getLowera().getWtval());
-		//
+
 		tumorSNP.setValue(snva.getSnv().getTumor().getRatio());
-		
 	}
 
 	public AFCounter getTumorSNP() {
 		return tumorSNP;
 	}
-	
-	
-	
 }

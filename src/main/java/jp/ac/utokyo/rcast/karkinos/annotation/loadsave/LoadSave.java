@@ -32,31 +32,26 @@ import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 //to separate bam pileup and reads counting process to
 //later analysis process;
 public class LoadSave {
-
 	public static void save(SaveBean sbean, String outputsave)
 			throws IOException {
-
 		// Write to disk with FileOutputStream
 		FileOutputStream f_out = new FileOutputStream(outputsave);
 
 		// Write object with ObjectOutputStream
 		ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
 
-		// Write object out to disk			
+		// Write object out to disk
 		obj_out.writeObject(sbean);
-
 	}
 
 	public static SaveBean load(String s, List<SAMSequenceRecord> ssrList,
 			TwoBitGenomeReader tgr) throws IOException, ClassNotFoundException {
-
 		File f = new File(s);
 		if (f.isFile()) {
 			return _load(s);
 		}
-		//
+
 		if (f.isDirectory()) {
-			//
 			List<File> flist = new ArrayList<File>();
 			for (File fa : f.listFiles()) {
 				if (fa.getName().endsWith(".obj")) {
@@ -68,27 +63,24 @@ public class LoadSave {
 			sort(flist, ssrList);
 			int cnt = 0;
 			for (File ff : flist) {
-
 //				if(!ff.getName().contains("chr1_")){
 //					//debug
 //					continue;
 //				}
-				
-				cnt++;				
+
+				cnt++;
 				System.out.println("reading " + ff.getName());
-				
+
 				SaveBean sbeach = null;
 				try{
 					sbeach = _load(ff);
 				}catch(Exception ex){
-					
 				}
 				if(sbeach != null){
-					
 					System.out.println("normal="+sbeach.getReadsSummary().getNormalCounter().getTotalmap());
 					System.out.println("tumor="+sbeach.getReadsSummary().getTumorCounter().getTotalmap());
 				}
-				
+
 				// debug
 				// for(SNVHolder snv:sbeach.dataset.getSnvlist()){
 				// if(snv.getPos()==1418474){
@@ -100,31 +92,25 @@ public class LoadSave {
 					//String chr = list.get(0).getChr();
 					//if (tgr.isRefExsist(chr)||tgr.isRefExsist(chr.replaceAll("chr",""))) {
 					//	System.out.println(chr);
-					
+
 				if(sbeach!=null){
 					LoadUtils.merge(sb, sbeach);
 				}
 					//}
 				//}
 				//
-
 			}
 			return sb;
-
 		}
 		return null;
-
 	}
 
 	private static void sort(List<File> flist, List<SAMSequenceRecord> ssrList) {
-
 		Collections.sort(flist, new FileComparator(ssrList));
-
 	}
 
 	public static SaveBean _load(File f) throws IOException,
 			ClassNotFoundException {
-
 		// Read from disk using FileInputStream
 		FileInputStream f_in = new FileInputStream(f);
 
@@ -138,12 +124,10 @@ public class LoadSave {
 			saveBean = (SaveBean) obj;
 		}
 		return saveBean;
-
 	}
 
 	public static SaveBean _load(String f) throws IOException,
 			ClassNotFoundException {
-
 		// Read from disk using FileInputStream
 		FileInputStream f_in = new FileInputStream(f);
 
@@ -157,7 +141,5 @@ public class LoadSave {
 			saveBean = (SaveBean) obj;
 		}
 		return saveBean;
-
 	}
-
 }

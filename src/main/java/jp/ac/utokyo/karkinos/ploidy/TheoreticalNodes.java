@@ -16,97 +16,92 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.ploidy;
 
 public class TheoreticalNodes {
-
-	
 	float totalploidy;
 	float aAllelePloidy;
 	float bAllelePloidy;
 	double peakpos;
 	float[] imbalance4N = new float[100];
 	float[] distTo4N = new float[100];
-	
+
 	float[] imbalance2N = new float[100];
 	float[] distTo2N = new float[100];
-	
+
 	public final static int diploid = 2;
 	public final static int tetraploid = 4;
-	
+
 	public TheoreticalNodes(int[] ploidy,double peakpos) {
-		
 		aAllelePloidy = ploidy[0];
 		bAllelePloidy = ploidy[1];
 		totalploidy = ploidy[0]+ploidy[1];
 		this.peakpos = peakpos;
 		setUp(diploid,ploidy);
 		setUp(tetraploid,ploidy);
-		
-		
 	}
-	
+
 	public TheoreticalNodes() {
 		// TODO Auto-generated constructor stub
 	}
 
 	double diffu;
 	double diffpd;
+
 	public void setDiffu(double diffu) {
 		this.diffu = diffu;
 	}
-
-
 
 	public void setDiffpd(double diffpd) {
 		this.diffpd = diffpd;
 	}
 
-
-
 	private void setUp(int i, int[] ploidy) {
-		
-		
 		if(i==diploid){
-	    	VirtualPeakCalculator.calc(ploidy,i,imbalance2N,distTo2N,peakpos);	
+	    	VirtualPeakCalculator.calc(ploidy,i,imbalance2N,distTo2N,peakpos);
 		}else{
-			VirtualPeakCalculator.calc(ploidy,i,imbalance4N,distTo4N,peakpos);				
+			VirtualPeakCalculator.calc(ploidy,i,imbalance4N,distTo4N,peakpos);
 		}
-		
 	}
-
 
 	public float getTotalploidy() {
 		return totalploidy;
 	}
+
 	public void setTotalploidy(float totalploidy) {
 		this.totalploidy = totalploidy;
 	}
+
 	public float getaAllelePloidy() {
 		return aAllelePloidy;
 	}
+
 	public void setaAllelePloidy(float aAllelePloidy) {
 		this.aAllelePloidy = aAllelePloidy;
 	}
+
 	public float getbAllelePloidy() {
 		return bAllelePloidy;
 	}
+
 	public void setbAllelePloidy(float bAllelePloidy) {
 		this.bAllelePloidy = bAllelePloidy;
 	}
+
 	public float[] getImbalance4N() {
 		return imbalance4N;
 	}
+
 	public float[] getDistTo4N() {
 		return distTo4N;
 	}
+
 	public float[] getImbalance2N() {
 		return imbalance2N;
 	}
+
 	public float[] getDistTo2N() {
 		return distTo2N;
 	}
 
 	public String getID() {
-
 		return aAllelePloidy + "-" +bAllelePloidy;
 	}
-	
 }

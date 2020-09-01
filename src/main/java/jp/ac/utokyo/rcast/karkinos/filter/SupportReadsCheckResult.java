@@ -18,49 +18,56 @@ package jp.ac.utokyo.rcast.karkinos.filter;
 import java.util.Set;
 
 public class SupportReadsCheckResult {
-
 	Set<Integer> filter;
 	float pval4directionCheck = 0;
 	float logtAdjusted=0;
-	
+
 	float ntQualityDiff=0;
-	
+
 	public void setNtQualityDiff(float ntQualityDiff) {
 		this.ntQualityDiff = ntQualityDiff;
 	}
+
 	public float getSupportreadsBAlleleFeqquency() {
 		return supportreadsBAlleleFeqquency;
 	}
+
 	public float getRefreadsBAlleleFeqquency() {
 		return refreadsBAlleleFeqquency;
 	}
+
 	float supportreadsBAlleleFeqquency = 0;
 	float refreadsBAlleleFeqquency = 0;
-	//			
-		
+
 	public float getLogtAdjusted() {
 		return logtAdjusted;
 	}
+
 	public void setSupportreadsBAlleleFeqquency(float supportreadsBAlleleFeqquency) {
 		this.supportreadsBAlleleFeqquency = supportreadsBAlleleFeqquency;
 	}
+
 	public void setRefreadsBAlleleFeqquency(float refreadsBAlleleFeqquency) {
 		this.refreadsBAlleleFeqquency = refreadsBAlleleFeqquency;
 	}
+
 	public void setLogtAdjusted(float logt) {
 		this.logtAdjusted = logt;
 	}
+
 	public Set<Integer> getFilter() {
 		return filter;
 	}
+
 	public void setFilter(Set<Integer> filter) {
 		this.filter = filter;
 	}
+
 	public float getPval4directionCheck() {
 		return pval4directionCheck;
 	}
+
 	public void setPval4directionCheck(float pval4directionCheck) {
 		this.pval4directionCheck = pval4directionCheck;
 	}
-	
 }

@@ -18,20 +18,22 @@ package jp.ac.utokyo.rcast.karkinos.exec;
 import htsjdk.samtools.SAMRecord;
 
 public class SamHolder implements java.io.Serializable {
-
 	SAMRecord sam;
 	OntagetInfo oi;
+
 	public SAMRecord getSam() {
 		return sam;
 	}
+
 	public void setSam(SAMRecord sam) {
 		this.sam = sam;
 	}
+
 	public OntagetInfo getOi() {
 		return oi;
 	}
+
 	public void setOi(OntagetInfo oi) {
 		this.oi = oi;
 	}	
-	
 }

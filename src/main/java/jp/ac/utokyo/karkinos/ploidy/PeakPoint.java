@@ -16,32 +16,36 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.ploidy;
 
 public class PeakPoint implements Comparable{
-	
 	float peakpos;
 	float imbalanceratio;
 	float peakmagnitude;
+
 	public float getPeakpos() {
 		return peakpos;
 	}
+
 	public void setPeakpos(float peakpos) {
 		this.peakpos = peakpos;
 	}
+
 	public float getImbalanceratio() {
 		return imbalanceratio;
 	}
+
 	public void setImbalanceratio(float imbalanceratio) {
 		this.imbalanceratio = imbalanceratio;
 	}
+
 	public float getPeakmagnitude() {
 		return peakmagnitude;
 	}
+
 	public void setPeakmagnitude(float peakmagnitude) {
 		this.peakmagnitude = peakmagnitude;
 	}
-	
+
 	public int compareTo(Object o) {
 		PeakPoint p2 = (PeakPoint)o;
 		return p2.peakmagnitude>peakmagnitude?1:-1;
 	}
-
 }

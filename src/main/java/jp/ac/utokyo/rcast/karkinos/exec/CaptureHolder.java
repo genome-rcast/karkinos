@@ -41,14 +41,11 @@ import jp.ac.utokyo.rcast.karkinos.utils.Interval;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 public class CaptureHolder implements java.io.Serializable {
-
 	protected Map<String, TreeMap<Integer, CapInterval>> map = new LinkedHashMap<String, TreeMap<Integer, CapInterval>>();
 	long totalcnt = 0;
 	long totallen = 0;
 
 	public SortedMap<Integer, CapInterval> getIntersectCapinterval(Interval iv) {
-
-		//
 		TreeMap<Integer, CapInterval> tm = map.get(iv.getChrom());
 		int start = iv.getStart();
 		int end = iv.getEnd();
@@ -64,9 +61,7 @@ public class CaptureHolder implements java.io.Serializable {
 
 	public void loadTargetBed(String bed, TwoBitGenomeReader tgr)
 			throws IOException {
-
 		if (bed == null) {
-
 			System.out.println("no Target File was specified WGS assumed");
 
 			loadUnitTarget(tgr);
@@ -77,7 +72,6 @@ public class CaptureHolder implements java.io.Serializable {
 		File f = new File(bed + ".capregion");
 		File f0 = new File(bed + ".capwithdepth");
 
-		//
 		if (f0.exists()) {
 			loadTargetFromCapregionFile(f0, true);
 		} else if (f.exists()) {
@@ -88,44 +82,36 @@ public class CaptureHolder implements java.io.Serializable {
 	}
 
 	private void loadUnitTarget(TwoBitGenomeReader tgr) throws IOException {
-
 		// assign 1K artifitial interval
 		Map<String, Integer> chrmap = tgr.getReadSizes();
 		Iterator<String> ite = chrmap.keySet().iterator();
 		int unit  = 10000;
 		while (ite.hasNext()) {
-			
 			String chr = ite.next();
 			TreeMap<Integer, CapInterval> tm = map.get(chr);
 			if (tm == null) {
 				tm = new TreeMap<Integer, CapInterval>();
 				map.put(chr, tm);
 			}
-			//
+
 			int chrend = chrmap.get(chr);
 			int start = 1;
 			int end = start+unit;
 			while(start+unit<chrend){
-				
 				float cgParcent = tgr.getCGParcent(chr, start, end);
 				//debug
 				//float cgParcent = 0.5f;
 				CapInterval iv = new CapInterval(chr, start, end, false, cgParcent,
-						1);			
+						1);
 				tm.put(start, iv);
 				start = start + unit;
 				end = end + unit;
-				
-			}		
-			
-
+			}
 		}
-
 	}
 
 	private void loadTargetFromCapregionFile(File f, boolean withdepth)
 			throws IOException {
-
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(f)));
 
@@ -133,7 +119,6 @@ public class CaptureHolder implements java.io.Serializable {
 		long totallenrna = 0;
 
 		try {
-
 			for (;;) {
 				String line = br.readLine();
 				if (line == null)
@@ -170,7 +155,6 @@ public class CaptureHolder implements java.io.Serializable {
 
 				tm.put(start, iv);
 			}
-
 		} finally {
 			br.close();
 		}
@@ -182,7 +166,6 @@ public class CaptureHolder implements java.io.Serializable {
 
 	public void loadTargetBedFirstTime(File bed, TwoBitGenomeReader tgr)
 			throws IOException {
-
 		// load bed
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(bed)));
@@ -190,7 +173,6 @@ public class CaptureHolder implements java.io.Serializable {
 		int totalcnt = 0;
 		long totallen = 0;
 		try {
-
 			for (;;) {
 				String line = br.readLine();
 				if (line == null)
@@ -215,7 +197,6 @@ public class CaptureHolder implements java.io.Serializable {
 				list.add(iv);
 				totallen = totallen + Math.abs(end - start);
 			}
-
 		} finally {
 			br.close();
 		}
@@ -223,7 +204,6 @@ public class CaptureHolder implements java.io.Serializable {
 				+ +totallen + " bp has loaded");
 		Collections.sort(list, new MYComparator());
 		for (CapInterval iv : list) {
-
 			TreeMap<Integer, CapInterval> tm = map.get(iv.getChr());
 			if (tm == null) {
 				tm = new TreeMap<Integer, CapInterval>();
@@ -241,7 +221,6 @@ public class CaptureHolder implements java.io.Serializable {
 			if (merge == false) {
 				tm.put(iv.getStart(), iv);
 			}
-
 		}
 
 		File f = new File(bed + ".capregion");
@@ -251,11 +230,9 @@ public class CaptureHolder implements java.io.Serializable {
 					new FileOutputStream(f)));
 
 			while (ite.hasNext()) {
-
 				TreeMap<Integer, CapInterval> tm = map.get(ite.next());
 				Set<Entry<Integer, CapInterval>> es = tm.entrySet();
 				for (Entry<Integer, CapInterval> entry : es) {
-
 					// Convert CapInterval range (1-based closed range) into BED range
 					// (0-based half-opened range).
 					CapInterval cp = entry.getValue();
@@ -275,23 +252,18 @@ public class CaptureHolder implements java.io.Serializable {
 					bw.write(chr + "\t" + (start - 1) + "\t" + end + "\t" + length
 							+ "\t" + cgParcent + "\t" + duality + "\t"
 							+ genestr + "\n");
-
 				}
-
 			}
 			bw.close();
 		} catch (Exception ex) {
 		}
-
 	}
 
 	class MYComparator implements Comparator<CapInterval> {
-
 		public int compare(CapInterval o1, CapInterval o2) {
 			if (o1.getChr().equals(o2.getChr())) {
 				return o1.getStart() - o2.getStart();
 			} else {
-
 				String chr1 = o1.getChr();
 				if (chr1.contains("chr")) {
 					chr1 = chr1.replace("chr", "");
@@ -310,7 +282,6 @@ public class CaptureHolder implements java.io.Serializable {
 				} else {
 					return chr1.compareTo(chr2);
 				}
-
 			}
 		}
 
@@ -330,11 +301,9 @@ public class CaptureHolder implements java.io.Serializable {
 			}
 			return true;
 		}
-
 	}
 
 	public CapInterval getCapInterval(String chr, int pos) {
-
 		TreeMap<Integer, CapInterval> refmap = map.get(chr);
 		if (refmap == null)
 			return null;
@@ -342,29 +311,23 @@ public class CaptureHolder implements java.io.Serializable {
 		if (et == null) {
 			return null;
 		} else {
-
 			if (et.getValue().include(pos)) {
 				return et.getValue();
 			}
-
 		}
 		return null;
-
 	}
 
 	public CapInterval getOverlapping(SAMRecord sam) {
-
 		int s = sam.getAlignmentStart();
 		int e = sam.getAlignmentEnd();
 		if (e == 0 || e == s) {
 			e = s + sam.getReadLength() - 1;
 		}
 		return getOverlapping(sam.getReferenceName(), s, e);
-
 	}
 
 	public CapInterval getOverlappingOfPair(SAMRecord sam) {
-
 		if (!sam.getReadPairedFlag()) {
 			return null;
 		}
@@ -381,7 +344,6 @@ public class CaptureHolder implements java.io.Serializable {
 	 * The arguments take 1-based closed range: [start,end]
 	 */
 	public CapInterval getOverlapping(String chrom, int start, int end) {
-
 		TreeMap<Integer, CapInterval> refmap = map.get(chrom);
 		if (refmap == null)
 			return null;
@@ -389,14 +351,12 @@ public class CaptureHolder implements java.io.Serializable {
 		if (et == null) {
 			return null;
 		} else {
-
 			if (et.getValue().intersect(start, end)) {
 				return et.getValue();
 			}
 		}
 
 		return null;
-
 	}
 
 	public CapInterval getOverlapping(SAMRecord sam, int baitmergin) {
@@ -412,5 +372,4 @@ public class CaptureHolder implements java.io.Serializable {
 		}
 		return null;
 	}
-
 }

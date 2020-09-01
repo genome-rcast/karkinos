@@ -16,25 +16,27 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph;
 
 public class DisplayObject {
-	
 	public DisplayObject(Object _obj,int _size,String _title){
 		object = _obj;
 		size = _size;
 		title = _title;
 	}
-	
+
 	Object object;
 	int size;
+
 	public Object getObject() {
 		return object;
 	}
+
 	public int getSize() {
 		return size;
 	}
+
 	String title ="";
+
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return title;
 	}
-	
 }

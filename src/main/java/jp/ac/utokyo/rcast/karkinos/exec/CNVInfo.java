@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.exec;
 
 public class CNVInfo implements java.io.Serializable{
-	
 	long normalcnt;
 	double normaldepth;
 	double normaldepthAdj;
@@ -31,7 +30,6 @@ public class CNVInfo implements java.io.Serializable{
 	public CNVInfo(long _normalcnt, double _normaldepth,
 			double _normaldepthAdj, long _tumorcnt, double _tumordepth,
 			double _tumordepthAdj, double _tnratio) {
-		
 		normalcnt = _normalcnt;
 		normaldepth = _normaldepth;
 		normaldepthAdj = _normaldepthAdj;
@@ -41,6 +39,7 @@ public class CNVInfo implements java.io.Serializable{
 		tnratio =_tnratio;
 		tnratioorg = _tnratio;
 	}
+
 	public long getNormalcnt() {
 		return normalcnt;
 	}
@@ -60,21 +59,24 @@ public class CNVInfo implements java.io.Serializable{
 	public double getTnratio() {
 		return tnratio;
 	}
+
 	public void setDenioseValue(double _denoise) {
 		denoise = _denoise;
 	}
+
 	public void setCN(double _copynumber) {
 		copynumber = _copynumber;
 	}
+
 	public double getDenoise() {
 		return denoise;
 	}
+
 	public double getCopynumber() {
 		return copynumber;
 	}
+
 	public double getOriginalTnratio() {
 		return tnratioorg;
 	}
-	
-
 }

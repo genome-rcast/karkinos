@@ -56,13 +56,10 @@ import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 import jp.ac.utokyo.rcast.karkinos.readssummary.XYSeriesForReadsDepth;
 
 public class GetReadsStatsChart {
-
 	private final static int SIZE = 2;
 
 	public static List<DisplayObject> getChartLists(ReadsSummary readsSummary,
 			String readsStat) {
-
-		//
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		// Table all
 		List olist1 = new ArrayList();
@@ -104,11 +101,9 @@ public class GetReadsStatsChart {
 				"Tumor reads stats");
 		list.add(dobj2);
 		return list;
-
 	}
 
 	private static JFreeChart getInsertSizeGraph(ReadsSummary readsSummary) {
-
 		// make a common vertical axis for all the sub-plots
 		NumberAxis xAxis = new NumberAxis("Library size");
 		int[] interval = readsSummary.getInsertSizeInterval();
@@ -135,16 +130,13 @@ public class GetReadsStatsChart {
 			JFreeChart chart = new JFreeChart("Library size",
 					JFreeChart.DEFAULT_TITLE_FONT, subplot1, true);
 			return chart;
-
 		}
 
 		return null;
-
 	}
 
 	private static XYSeries getXYSeries(ReadsCounter readsCounter,
 			int[] interval, String label) {
-
 		XYSeries series = new XYSeries(label);
 		TreeMap<Integer, CounterA> inserSizeMap = readsCounter
 				.getInserSizeMap();
@@ -160,7 +152,6 @@ public class GetReadsStatsChart {
 	}
 
 	private static Object getCaptureCoveageGraph(ReadsSummary readsSummary) {
-
 		// CategoryAxis domainAxis = new CategoryAxis("depth");
 		// NumberAxis yAxis = new NumberAxis("counts");
 		// yAxis.setAutoRangeIncludesZero(true);
@@ -209,11 +200,9 @@ public class GetReadsStatsChart {
 		// JFreeChart.DEFAULT_TITLE_FONT, parent, true);
 
 		return chart;
-
 	}
 
 	private static float getX20percent(DepthCounter dc) {
-
 		try {
 			long total = dc.getTotal();
 			Map<Integer, CounterA> mt = dc.getMap();
@@ -224,11 +213,9 @@ public class GetReadsStatsChart {
 				if (ca != null) {
 					less20x = ca.getCnt();
 				}
-
 			}
 			return (float) (((double) (total-less20x) / (double) total) * 100);
 		} catch (Exception ex) {
-
 		}
 		return 0f;
 	}
@@ -257,7 +244,6 @@ public class GetReadsStatsChart {
 			keySet.addAll(mt.keySet());
 
 			for (Integer key : keySet) {
-
 				int countNormal = 0;
 				float normalP = 0;
 				int countTumor = 0;
@@ -294,11 +280,9 @@ public class GetReadsStatsChart {
 
 				table.addCell(format(countTumor));
 				table.addCell(format(tumorP) + "%");
-
 			}
 
 			return table;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -307,7 +291,6 @@ public class GetReadsStatsChart {
 	}
 
 	private static void addFileInfoStr(List olist1, ReadsSummary readsSummary) {
-
 		olist1.add("");
 		olist1.add(KarkinosCmd.getVersion().orElse(""));
 		Date date = new Date();
@@ -326,15 +309,12 @@ public class GetReadsStatsChart {
 		olist1.add("used properties");
 		olist1.add("");
 		olist1.add(KarkinosProp.getInfoString());
-
 	}
 
 	private static Object getSummaryGraph(Map<String, ReadsCounter> datamap,
 			String title) {
-
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for (Entry<String, ReadsCounter> entry : datamap.entrySet()) {
-
 			String chrom = entry.getKey();
 			ReadsCounter rc = entry.getValue();
 			int target = rc.getTotalOnTarget();
@@ -342,7 +322,6 @@ public class GetReadsStatsChart {
 			int outoftarget = total - target;
 			dataset.addValue(target, "on target", chrom);
 			dataset.addValue(outoftarget, "out of target", chrom);
-
 		}
 
 		JFreeChart jfc = ChartFactory.createStackedBarChart(title, "chrom",
@@ -356,7 +335,6 @@ public class GetReadsStatsChart {
 
 	private static Object getChrSummaryTable(ReadsCounter totalc,
 			Map<String, ReadsCounter> datamap) {
-
 		Table table;
 		try {
 			table = new Table(6);
@@ -370,10 +348,8 @@ public class GetReadsStatsChart {
 			table.addCell("ontag %");
 
 			for (Entry<String, ReadsCounter> entry : datamap.entrySet()) {
-
 				String chrom = entry.getKey();
-				//
-				
+
 				ReadsCounter rc = entry.getValue();
 				int target = rc.getTotalOnTarget();
 				int total = rc.getTotalmap();
@@ -387,7 +363,6 @@ public class GetReadsStatsChart {
 				table.addCell(format(rc.getTotalUniqueOntarget()));
 				table.addCell(format(uniqueoutoftarget));
 				table.addCell(format(rc.onTargetParcent()) + "%");
-
 			}
 
 			// write total
@@ -405,20 +380,16 @@ public class GetReadsStatsChart {
 			table.addCell(format(rc.onTargetParcent()) + "%");
 
 			return table;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 
 	private static Object getSummaryTable(ReadsSummary readsSummary,
 			String readsStat) {
-
 		try {
-
 			ReadsCounter normal = readsSummary.getNormalCounter();
 			ReadsCounter tumor = readsSummary.getTumorCounter();
 
@@ -433,7 +404,6 @@ public class GetReadsStatsChart {
 
 			// // row
 			if (readsStat != null) {
-
 				String[] sa = readsStat.split(",");
 				String normalfile = sa[0];
 				Properties np = getProp(normalfile);
@@ -456,7 +426,6 @@ public class GetReadsStatsChart {
 						"properOrunique", "afterrealgin", "identityLow" };
 				for (String key : keys) {
 					if (np.containsKey(key)) {
-
 						// row2
 						String kyeDisp = key.replaceAll("Or", " or ");
 						table.addCell(kyeDisp + " tags");
@@ -464,7 +433,6 @@ public class GetReadsStatsChart {
 						table.addCell(format(tp.getProperty(key)));
 
 						if (key.equals("duplicate")) {
-
 							try {
 								// row 13
 								table.addCell("duplicate (%)");
@@ -481,7 +449,6 @@ public class GetReadsStatsChart {
 						}
 					}
 				}
-
 			}
 
 			// row
@@ -499,7 +466,6 @@ public class GetReadsStatsChart {
 			table.addCell(format(tumor.getTotalUniqueOntarget()));
 
 			if (readsSummary.isPairStats()) {
-
 				// row6
 				table.addCell("First reads");
 				table.addCell(format(normal.getFirstReads()));
@@ -520,7 +486,6 @@ public class GetReadsStatsChart {
 				table.addCell("mean library size");
 				table.addCell(format(normal.getMeanInsertSize()));
 				table.addCell(format(tumor.getMeanInsertSize()));
-
 			}
 
 			// // row11
@@ -528,11 +493,11 @@ public class GetReadsStatsChart {
 			table.addCell("mean depth");
 			table.addCell(format(readsSummary.getNormalDepth().getMeanDepth()));
 			table.addCell(format(readsSummary.getTumorDepth().getMeanDepth()));
-			
+
 			table.addCell("total covered region");
 			table.addCell(format(readsSummary.getNormalDepth().getTotal()));
 			table.addCell(format(readsSummary.getTumorDepth().getTotal()));
-			
+
 			// row 13
 			table.addCell("On target(%)");
 			table.addCell(format(normal.onTargetParcent()) + "%");
@@ -543,34 +508,28 @@ public class GetReadsStatsChart {
 					+ "%");
 			table.addCell(format(getX20percent(readsSummary.getTumorDepth()))
 					+ "%");
-			
-			
+
 			table.addCell("mean depth CDS");
 			table.addCell(format(readsSummary.getNormalDepth().getMeanCDSDepth()));
 			table.addCell(format(readsSummary.getTumorDepth().getMeanCDSDepth()));
-			
+
 			table.addCell("more than X10(%) CDS");
 			table.addCell(format(readsSummary.getNormalDepth().getOver10X())+ "%");
 			table.addCell(format(readsSummary.getTumorDepth().getOver10X())+ "%");
-			
+
 			table.addCell("more than X20(%) CDS");
 			table.addCell(format(readsSummary.getNormalDepth().getOver20X())+ "%");
 			table.addCell(format(readsSummary.getTumorDepth().getOver20X())+ "%");
-			
 
-			
 			return table;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 
 	private static double getParcent(String dup, String nondup) {
-
 		double d = Double.parseDouble(dup);
 		double nond = Double.parseDouble(nondup);
 		d = (d / (d + nond)) * 100;
@@ -595,13 +554,11 @@ public class GetReadsStatsChart {
 			long l = Long.parseLong(num);
 			return format(l);
 		} catch (Exception ex) {
-
 		}
 		try {
 			double d = Double.parseDouble(num);
 			return format(d);
 		} catch (Exception ex) {
-
 		}
 		return "";
 	}
@@ -617,23 +574,18 @@ public class GetReadsStatsChart {
 	}
 
 	private static void setNo3D(JFreeChart chart) {
-
 		try {
 			CategoryPlot cp = chart.getCategoryPlot();
 			BarRenderer br = (BarRenderer) cp.getRenderer();
 			br.setShadowVisible(false);
 			br.setBarPainter(new StandardBarPainter());
-
 		} catch (Exception ex) {
 		}
 		try {
 			CategoryPlot cp = chart.getCategoryPlot();
 			CategoryAxisSkipLabels ca = new CategoryAxisSkipLabels();
 			cp.setDomainAxis(ca);
-
 		} catch (Exception ex) {
 		}
-		//
-
 	}
 }

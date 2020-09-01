@@ -16,27 +16,30 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.utils;
 
 public class Interval implements java.io.Serializable{
-		
 	String chrom;
+
 	public Interval(String _chrom, int _start, int _end) {
 		chrom = _chrom;
 		start = _start;
 		end = _end;
 	}
+
 	public String getChrom() {
 		return chrom;
 	}
+
 	public int getStart() {
 		return start;
 	}
+
 	public int getEnd() {
 		return end;
 	}
+
 	int start;
 	int end;
+
 	public String getStr() {
-		
 		return chrom+":"+start+"-"+end;
 	}
-	
 }

@@ -39,19 +39,15 @@ import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 
 public class GetThresholdsCharts {
-
 	public static Collection<? extends DisplayObject> getChartLists(
 			DataSet dataset) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		list.add(new DisplayObject(getThresHoldsChart(dataset), 1, "Thresholds"));
 
 		return list;
-
 	}
 
 	private static List<JFreeChart> getThresHoldsChart(DataSet dataset) {
-
 		List<JFreeChart> olist = new ArrayList<JFreeChart>();
 		olist.add(createHistogram("adjusted ratio >"
 				+KarkinosProp.mintumorratio,
@@ -104,12 +100,10 @@ public class GetThresholdsCharts {
 				KarkinosProp.LogtThres));
 
 		return olist;
-
 	}
 
 	private static JFreeChart createHistogram(String title, String xlabel,
 			String ylabel, DataSet dataset, int flg) {
-
 		HistogramDataset hdataset = getDataSet(dataset, flg);
 		JFreeChart chart = ChartFactory.createHistogram(title, xlabel, ylabel,
 				hdataset, PlotOrientation.VERTICAL, true, false, false);
@@ -117,7 +111,6 @@ public class GetThresholdsCharts {
 		plot.setBackgroundPaint(Color.WHITE);
 		setSeriesPaint(chart);
 		return chart;
-
 	}
 
 	private static void setSeriesPaint(JFreeChart chart) {
@@ -138,12 +131,10 @@ public class GetThresholdsCharts {
 			
 		} catch (Exception ex) {
 		}
-		
 	}
 
 	private static JFreeChart createHistogram(String title, String xlabel,
 			String ylabel, DataSet dataset, int flg, double line) {
-
 		HistogramDataset hdataset = getDataSet(dataset, flg);
 		JFreeChart chart = ChartFactory.createHistogram(title, xlabel, ylabel,
 				hdataset, PlotOrientation.VERTICAL, true, false, false);
@@ -151,7 +142,7 @@ public class GetThresholdsCharts {
 		addMaker(plot, line);
 		plot.setBackgroundPaint(Color.WHITE);
 		setSeriesPaint(chart);
-		
+
 		try {
 			plot.setRangeGridlinesVisible(true);
 			plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
@@ -160,37 +151,30 @@ public class GetThresholdsCharts {
 			BarRenderer br = (BarRenderer) plot.getRenderer();
 			br.setShadowVisible(false);
 			br.setBarPainter(new StandardBarPainter());
-
 		} catch (Exception ex) {
 		}
 		return chart;
-
 	}
 
 	private static void addMaker(XYPlot xyplot, double d) {
 		Marker marker0 = new ValueMarker(d);
 		marker0.setPaint(Color.RED);
 		xyplot.addDomainMarker(marker0);
-
 	}
 
 	private static double getData(SNVHolder snv, float tumorRratio, int flg) {
-		//
 		PileUPResult pir = snv.getTumor();
 		boolean isindel = pir.isIndel();
 		if (flg == 1) {
-
 			float adjustedratio = CalcUtils.getTumorrateAdjustedRatio(
 					snv, tumorRratio);
 			return adjustedratio;
-
 		} else if (flg == 2) {
 			return pir.getRatio();
 		} else if (flg == 3) {
 			if (!isindel) {
 				return pir.getBQrms();
 			}
-
 		} else if (flg == 4) {
 			return pir.getMQrms();
 		} else if (flg == 5) {
@@ -228,7 +212,6 @@ public class GetThresholdsCharts {
 	}
 
 	private static HistogramDataset getDataSet(DataSet dataset, int flg) {
-
 		HistogramDataset histdata = new HistogramDataset();
 		float tumorRratio = dataset.getTumorRatio();
 
@@ -240,7 +223,6 @@ public class GetThresholdsCharts {
 		double min = 0;
 		double max = 0;
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			if (snv.getFilterResult() != null) {
 				double d = getData(snv, tumorRratio, flg);
 				if (d == -1000) {
@@ -267,29 +249,24 @@ public class GetThresholdsCharts {
 					filter2OK.add(d);
 				}
 			}
-
 		}
 		if (min > 0)
 			min = 0;
-		//
+
 		histdata.addSeries("final cand", toAry(filter2OK), 100, min, max);
 		histdata.addSeries("candidate", toAry(filterOK), 100, min, max);
 		histdata.addSeries("dbSNP", toAry(dbSNP), 100, min, max);
 		histdata.addSeries("all", toAry(all), 100, min, max);
 		return histdata;
-
 	}
 
 	private static double[] toAry(List<Double> list) {
-
 		double[] ary = new double[list.size()];
 		int idx = 0;
 		for (double d : list) {
-
 			ary[idx] = d;
 			idx++;
 		}
 		return ary;
 	}
-
 }

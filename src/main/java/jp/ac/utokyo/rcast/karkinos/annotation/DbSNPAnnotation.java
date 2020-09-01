@@ -32,7 +32,6 @@ import java.util.Map.Entry;
 
 
 public class DbSNPAnnotation implements java.io.Serializable {
-
 	public static final int MODEdbSNP = 0;
 	public static final int MODE1000g = 1;
 	public static final int MODEcosmic = 2;
@@ -54,9 +53,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 
 	public DbSNPAnnotation(String _file, String g1000, float g1000thres,
 			String cosmic, String exonSNP) {
-
-		//
-
 		if (IsNotEmpty(exonSNP)) {
 			try {
 				readsIndex(exonSNP, MODEexonSNP);
@@ -79,7 +75,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 		}
 
 		if (IsNotEmpty(_file)) {
-			
 			int mode = MODEdbSNP;
 			if(_file.endsWith("vcf")){
 				mode = MODEdbSNPVCF;
@@ -102,13 +97,10 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			}
 			this.cosmic = cosmic;
 		}
-
 	}
 
 	private boolean IsNotEmpty(String s) {
-		
 		return (s!=null) && (s.trim().length() > 2);
-
 	}
 
 	public void readsIndex(String file, int mode) throws IOException {
@@ -151,7 +143,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			}
 			br.close();
 		} else {
-
 			// FileInputStream fis = new FileInputStream(file);
 			// FileChannel fc = fis.getChannel();
 			// BufferedReader br = new BufferedReader(new
@@ -164,7 +155,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			String key = "";
 			// long filepos =0;
 			for (;;) {
-
 				long filepos = raf.getFilePointer();
 				String line = raf.readLine();
 				if (line == null)
@@ -195,7 +185,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 //					if(sa[10].equals("cDNA")){
 //						continue;
 //					}
-					
 				} else {
 					chr = sa[0];
 					pos = Integer.parseInt(sa[1]);
@@ -204,7 +193,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					chr = chr.replace("chr", "");
 				String _key = chr + "-" + getBinidx(pos);
 				if (!key.equals(_key)) {
-
 					// System.out.println(line+"\t"+filepos);
 					if (key.equals("")) {
 						_key = chr + "-" + 0;
@@ -220,7 +208,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					}
 				}
 				key = _key;
-
 			}
 			raf.close();
 
@@ -229,7 +216,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			// can write does not work in some environments try catch instead
 
 			try {
-
 				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 						new FileOutputStream(f)));
 				Map<String, Long> map = null;
@@ -249,9 +235,7 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			} catch (IOException ex) {
 			}
 			// }
-
 		}
-
 	}
 
 	private boolean newer(File f, File file2) {
@@ -272,7 +256,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 	Map<Integer, DbSNPBean> exonSNPdata = new HashMap<Integer, DbSNPBean>();
 
 	public DbSNPBean lookup(String chr, int pos) {
-
 		if (chr.contains("chr")) {
 			chr = chr.replace("chr", "");
 		}
@@ -285,7 +268,7 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					success = loadData(binid, 0);
 					if (success == false)
 						return null;
-				}				
+				}
 				if (g1000 != null) {
 					success = loadData(binid, 1);
 					if (success == false)
@@ -301,7 +284,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					if (success == false)
 						return null;
 				}
-
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -315,7 +297,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 		if (g1000 != null) {
 			DbSNPBean dbSNPg1000 = g1000data.get(pos);
 			if (dbSNPg1000 != null) {
-
 				if (dbSNPbean == null) {
 					dbSNPbean = dbSNPg1000;
 					dbSNPbean.setMode(MODE1000g);
@@ -324,15 +305,11 @@ public class DbSNPAnnotation implements java.io.Serializable {
 						dbSNPbean.setValid(true);
 					}
 				}
-
 			}
-
 		}
 		if (exonSNP != null) {
-
 			DbSNPBean dbSNPexon = exonSNPdata.get(pos);
 			if (dbSNPexon != null) {
-
 				if (dbSNPbean == null) {
 					dbSNPbean = dbSNPexon;
 					dbSNPbean.setMode(MODEexonSNP);
@@ -341,13 +318,10 @@ public class DbSNPAnnotation implements java.io.Serializable {
 						dbSNPbean.setValid(true);
 					}
 				}
-
 			}
-
 		}
 		DbSNPBean cbean = cosmicdata.get(pos);
 		if (cbean != null) {
-			//
 			if (dbSNPbean == null) {
 				cbean.setCosmic(true);
 				cbean.setCosmicvalid(cbean.valid);
@@ -360,33 +334,26 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			}
 		}
 		return dbSNPbean;
-
 	}
 
 	private boolean loadData(String binid, int mode) throws IOException {
-
 		Long fp = 0l;
 		if (mode == MODEdbSNP || mode == MODEdbSNPVCF) {
 			data = null;
 			data = new HashMap<Integer, DbSNPBean>();
 			fp = index.get(binid);
-
 		} else if (mode == MODEcosmic) {
 			cosmicdata = null;
 			cosmicdata = new HashMap<Integer, DbSNPBean>();
 			fp = indexcosmic.get(binid);
-
 		} else if (mode == MODE1000g) {
 			g1000data = null;
 			g1000data = new HashMap<Integer, DbSNPBean>();
 			fp = indexg1000.get(binid);
-
 		} else {
-
 			exonSNPdata = null;
 			exonSNPdata = new HashMap<Integer, DbSNPBean>();
 			fp = indexexonSNP.get(binid);
-
 		}
 
 		if (fp == null)
@@ -443,43 +410,31 @@ public class DbSNPAnnotation implements java.io.Serializable {
 							 validated = !(vs.contains("unknown") || vs
 									.contains("by-cluster"));
 							}
-							
+
 							byte[] ba = null;
 							if(mode == MODEdbSNPVCF){
-								
 								String info = sa[5];
 								String[] ary = info.split(";");
 								String vp ="";
 								for(String ss:ary){
 									if(ss.contains("VP")){
 										vp = ss.replace("VP=","");
-										//
 										BigInteger bi = new BigInteger(vp.substring(2),16);
 										ba = bi.toByteArray();
 									}
-								
-									
 								}
-								//
+
 								if(ba!=null){
-									
 									validated = ((ba[6] & 0x4) != 0);
 									boolean assemblyproblem  = ((ba[5] & 0x4) != 0) || ((ba[5] & 0x8) != 0);
 									if(assemblyproblem){
 										validated = false;
 									}
-									
-								}							
-															
-								
+								}
 							}
-							
-							
 						} catch (Exception ex) {
-
 						}
 					} else if (mode == MODEexonSNP) {
-
 						String id = sa[2];
 						if (id.length() > 2) {
 							// do not register dbSNP pos
@@ -499,50 +454,35 @@ public class DbSNPAnnotation implements java.io.Serializable {
 								validated = true;
 							}
 						} catch (Exception ex) {
-
 						}
 					} else if (mode == MODEcosmic) {
-
 						chr = sa[0];
 						pos = Integer.parseInt(sa[1]);
 						validated = false;
 						try {
-
 							if(sa.length>8){
 							 validated = sa[8].equalsIgnoreCase("true");
 							}
-							
 						} catch (Exception ex) {
-
 						}
-
 					} else {
-						
 						chr = sa[0];
 						pos = Integer.parseInt(sa[1]);
 						try {
 							freq = Float.parseFloat(sa[4]);
 						} catch (Exception ex) {
-							
 							String info = sa[5];
 							String[] ary = info.split(";");
 							for(String ss:ary){
 								if(ss.contains("AF")){
 									String af = ss.replace("AF=","");
-									//
 									try {
 										freq = Float.parseFloat(af);
 									} catch (Exception e) {
-										
 									}
-									
 								}
-							
-								
 							}
-							
 						}
-
 					}
 					// if((mode ==
 					// MODEcosmic)&&(binid.equals("1-4")||binid.equals("1-3"))){
@@ -554,9 +494,7 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					}
 
 					if (chr.equals("X") || chr.equals("Y") || chr.equals("M")) {
-
 					} else {
-
 						try {
 							int n = Integer.parseInt(chr);
 							if (n > 30) {
@@ -565,9 +503,7 @@ public class DbSNPAnnotation implements java.io.Serializable {
 						} catch (Exception ex) {
 							continue;
 						}
-
 					}
-
 				} catch (Exception ex) {
 					continue;
 				}
@@ -590,7 +526,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					dbSNP.setValid(validated);
 					data.put(pos, dbSNP);
 				} else if (mode == MODEcosmic) {
-
 					if (cosmicdata.containsKey(pos)) {
 						DbSNPBean dbSNP2 = cosmicdata.get(pos);
 						dbSNP2.inc();
@@ -601,7 +536,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 						dbSNP.setValid(validated);
 						cosmicdata.put(pos, dbSNP);
 					}
-
 				} else if (mode == MODE1000g) {
 					if (freq != 0) {
 						boolean valid = freq >= g1000thres;
@@ -613,7 +547,6 @@ public class DbSNPAnnotation implements java.io.Serializable {
 					exonSNPdata.put(pos, dbSNP);
 				}
 				loadtotal++;
-
 			}
 			// System.out.println(MODEdbSNP+" "+binid+" load="+loadtotal+" "+cntignore);
 			presentindex = binid;
@@ -624,7 +557,5 @@ public class DbSNPAnnotation implements java.io.Serializable {
 			}
 		}
 		return true;
-
 	}
-
 }

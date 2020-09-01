@@ -22,7 +22,6 @@ import org.broad.igv.bbfile.BigWigIterator;
 import org.broad.igv.bbfile.WigItem;
 
 public class MappabilityAnnotation {
-	
 	String file = "";
 	BBFileReader bbReader = null;
 	boolean init = false;
@@ -33,13 +32,12 @@ public class MappabilityAnnotation {
 		 init = true;
 		}
 	}
-	
+
 	public boolean isInit() {
 		return init;
 	}
 
 	public float getMappability(String chrom,int pos){
-		
 		float ret = -1;
 		BigWigIterator bi = bbReader.getBigWigIterator(chrom, pos, chrom, pos, false);
 		if(bi!=null&&bi.hasNext()){
@@ -48,6 +46,4 @@ public class MappabilityAnnotation {
 		}
 		return ret;
 	}
-	
-
 }

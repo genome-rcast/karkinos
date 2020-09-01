@@ -17,49 +17,59 @@ package jp.ac.utokyo.rcast.karkinos.distribution;
 
 
 public class TumorRatioBean {
-
 	float tumorratio;
 	float observedratio;
 	float sd;
 	int number;
 	float correl = 0;
-	
+
 	public float getCorrel() {
 		return correl;
 	}
+
 	public void setCorrel(float correl) {
 		this.correl = correl;
 	}
+
 	public float getTumorratio() {
 		return tumorratio;
 	}
+
 	public void setTumorratio(float tumorratio) {
 		this.tumorratio = tumorratio;
 	}
+
 	public float getObservedratio() {
 		return observedratio;
 	}
+
 	public void setObservedratio(float observedratio) {
 		this.observedratio = observedratio;
 	}
+
 	public float getSd() {
 		return sd;
 	}
+
 	public void setSd(float sd) {
 		this.sd = sd;
 	}
+
 	public int getNumber() {
 		return number;
 	}
+
 	public void setNumber(int number) {
 		this.number = number;
 	}
+
 	int mode;
+
 	public void setMode(int i) {
 		mode = i;		
 	}
+
 	public String getModeStr() {
-		
 		if(mode==0){
 			return "from HetroSNP distribution";
 		}else if(mode==1){
@@ -67,5 +77,4 @@ public class TumorRatioBean {
 		}
 		return "minimal tumor ratio";
 	}
-	
 }

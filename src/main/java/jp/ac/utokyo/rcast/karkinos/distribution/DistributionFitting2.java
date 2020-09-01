@@ -19,28 +19,22 @@ import org.apache.commons.math.distribution.NormalDistribution;
 import org.apache.commons.math.distribution.NormalDistributionImpl;
 
 public class DistributionFitting2 {
-
-
-	
 	public static float[] getObserveRatio(DataHolderByCN dataHolderByCN,
 			double tumorvariance,int start,int end) {
-		
-		//
 		if (dataHolderByCN == null) {
 			return new float[]{0,0};
 		}
 		if(tumorvariance>5){
 			tumorvariance=5;
 		}
-		//
+
 		int maxratio = 0;
 		double maxcp = 0;
 		double cpb4 = 0;
 		for (int n = start; n <= end; n++) {
-			//
 			float[] theoreticalDist = getThereticalDist(n, 
 					tumorvariance);
-				
+
 			double cp = crossProduct(theoreticalDist, dataHolderByCN.mutationDistTFinalFilter100xdepth);
 			System.out.println("n="+n+"cp="+cp);
 			if (cp > cpb4) {
@@ -48,19 +42,15 @@ public class DistributionFitting2 {
 				maxcp = cp;
 			}
 			cpb4 = cp;
-
 		}
 		return new float[]{maxratio,(float) maxcp};
 	}
-	
 
 	private static double crossProduct(float[] theoreticalDist, float[] snpDistT) {
-
 		// exclude < 2 and > 98
 		float[] normalizesnpDistT = norm(snpDistT);
 		double d = 0;
 		for (int n = 2; n < 98; n++) {
-			//
 			d = d + (theoreticalDist[n] * normalizesnpDistT[n]);
 		}
 		return d;
@@ -86,8 +76,7 @@ public class DistributionFitting2 {
 			idx++;
 		}
 		float[] ndist = new float[dist.length];
-		
-		//
+
 		int n= 0;
 		for(float f:dist){
 			if(n==0){
@@ -104,17 +93,15 @@ public class DistributionFitting2 {
 			}
 			ndist[n] = (float)((double)f/(double)sum);
 			n++;
-		}				
+		}
 		return ndist;
 	}
 
 	private static float[] getThereticalDist(int ratio,double variance) {
-
 		float x = 0;
 		double sum = 0;
 		float[] dist = new float[100];
 		for (int n = 0; n < 100; n++) {
-
 			x = n + 0.5f;
 			float y = dist(x, variance, ratio);
 			sum = sum+y;
@@ -122,7 +109,6 @@ public class DistributionFitting2 {
 		}
 		int idx =0;
 		for(double d:dist){ 
-			
 			dist[idx] = (float) (dist[idx]/sum);
 			idx++;
 		}
@@ -130,7 +116,6 @@ public class DistributionFitting2 {
 	}
 
 	private static float dist(float x, double sd, int ratio) {
-		
 		if(sd==0){
 			sd = 10;// to avoid error
 		}
@@ -138,8 +123,5 @@ public class DistributionFitting2 {
 		float mean = ratio;
 		NormalDistribution normald = new NormalDistributionImpl(mean, sd);
 		return (float) normald.density((double) x);
-		
-
 	}
-
 }

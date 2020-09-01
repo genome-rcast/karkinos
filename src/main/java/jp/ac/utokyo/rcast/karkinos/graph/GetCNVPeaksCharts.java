@@ -38,31 +38,23 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.data.xy.XYZDataset;
 
 public class GetCNVPeaksCharts {
-
 	public static List<DisplayObject> getChartLists(PeaksInfo pi) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
-		//
 
 		JFreeChart jfc = getPeakPick(pi);
 		list.add(new DisplayObject(jfc, 2, "CNV peaks estimates"));
 
 		try {
-
 			JFreeChart mattixmatch2 = getMattixMatch(pi, 2);
 			list.add(new DisplayObject(mattixmatch2, 2, "matrix match"));
 			JFreeChart mattixmatch4 = getMattixMatch(pi, 4);
 			list.add(new DisplayObject(mattixmatch4, 2, "matrix match"));
-
 		} catch (Exception ex) {
 		}
 		return list;
-
 	}
 
 	private static JFreeChart getMattixMatch(PeaksInfo pi, int baseploidy) {
-
-		//
 		MatchMatrixBean mmb = pi.getMatchmatrix();
 		XYZDataset xyz = getMSC(mmb, baseploidy);
 		int purity = mmb.getBestmme().getPurity();
@@ -74,31 +66,24 @@ public class GetCNVPeaksCharts {
 		JFreeChart jfc = ChartFactory.createBubbleChart(infostr,
 				"AF", "peakdist", xyz, PlotOrientation.VERTICAL, true, false,
 				false);
-		
-				
+
 		XYPlot xyp = jfc.getXYPlot();
 		xyp.setBackgroundPaint(Color.WHITE);
-		
+
 		XYItemRenderer renderer0 = xyp.getRenderer();
 		renderer0.setSeriesPaint(0, ChartColor.DARK_GRAY);
-		
-		
-		
+
 		NumberAxis xAxis = new NumberAxis("AF");
 		xAxis.setRange(0, 1);
 		xAxis.setAutoRangeIncludesZero(false);
 		NumberAxis yAxis = new NumberAxis("pos");
 		yAxis.setRange(-2, 2);
 		yAxis.setAutoRangeIncludesZero(false);
-		
-		return jfc;
 
+		return jfc;
 	}
 
 	private static XYZDataset getMSC(MatchMatrixBean mmb, int baseploidy) {
-
-		//
-
 		List<TheoreticalNodes> tnode = null;
 		if (baseploidy == 2) {
 			tnode = mmb.getDiplist();
@@ -107,7 +92,6 @@ public class GetCNVPeaksCharts {
 		}
 		XYZDataset xyz = new MyXYZDataset(tnode, mmb.getList(), baseploidy);
 		return xyz;
-
 	}
 
 	private static JFreeChart getPeakPick(PeaksInfo pi) {
@@ -123,21 +107,17 @@ public class GetCNVPeaksCharts {
 		XYSeries series04 = new XYSeries("additional peak");
 
 		for (int n = 0; n < pi.getSignalcount().length; n++) {
-
 			double x = n * 0.001;
 			int rowcount = pi.getSignalcount()[n];
 			double soothed = pi.getMa()[n];
 			series01.add(x, rowcount);
 			series02.add(x, soothed);
-
 		}
 
 		for (int n = 0; n < pi.getPeaksignals().length; n++) {
-
 			double x = n * 0.001;
 			double ps = pi.getPeaksignals()[n];
 			series05.add(x, ps);
-
 		}
 
 		data.addSeries(series02);
@@ -147,10 +127,8 @@ public class GetCNVPeaksCharts {
 		data2.addSeries(series05);
 
 		for (double x = 0; x < 4; x = x + 0.001) {
-
 			series03.add(x, pi.getAcutualVal(x));
 			series04.add(x, pi.getArtifitialVal(x));
-
 		}
 
 		JFreeChart jfc = getGraph(data, data1, data2, PlotOrientation.VERTICAL);
@@ -159,7 +137,6 @@ public class GetCNVPeaksCharts {
 
 	private static JFreeChart getGraph(XYDataset dataset0, XYDataset dataset1,
 			XYSeriesCollection data2, PlotOrientation orientation) {
-
 		NumberAxis xAxis = new NumberAxis("T/N depth ratio");
 		xAxis.setRange(0, 4);
 		CombinedDomainXYPlot parent = new CombinedDomainXYPlot(xAxis);
@@ -179,7 +156,6 @@ public class GetCNVPeaksCharts {
 		plot.setRenderer(renderer1);
 		parent.add(plot, 1);
 
-		//
 		JFreeChart chart3 = ChartFactory.createScatterPlot("peaksignals",
 				"T/N ratio", "peaksignal", data2, PlotOrientation.VERTICAL,
 				true, false, false);
@@ -198,7 +174,7 @@ public class GetCNVPeaksCharts {
 		renderer0.setSeriesPaint(1, ChartColor.RED);
 		plot3.setRenderer(0, renderer0);
 		parent.add(plot3, 1);
-		//
+
 		JFreeChart chart2 = ChartFactory.createScatterPlot("T/N distribution",
 				"T/N ratio", "approx func", dataset1, PlotOrientation.VERTICAL,
 				true, false, false);
@@ -222,7 +198,5 @@ public class GetCNVPeaksCharts {
 				JFreeChart.DEFAULT_TITLE_FONT, parent, false);
 
 		return chart0;
-
 	}
-
 }

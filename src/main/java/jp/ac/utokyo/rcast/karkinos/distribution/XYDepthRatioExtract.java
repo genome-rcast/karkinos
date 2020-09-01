@@ -29,7 +29,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class XYDepthRatioExtract {
-
 	DataSet dataset;
 
 	public XYDepthRatioExtract(DataSet dataset) {
@@ -37,35 +36,28 @@ public class XYDepthRatioExtract {
 	}
 
 	public XYSeriesCollection getTumorRatioDepth(int i) {
-
 		XYSeriesCollection data = new XYSeriesCollection();
 		Map<Float, XYSeries> map = new LinkedHashMap<Float, XYSeries>();
 		for (float degree = 0.5f; degree <= 2; degree = degree + 5f) {
-			//
 			String ns = format((degree * 2));
 			XYSeries n = new XYSeries("n=" + ns);
 			map.put(degree, n);
-
 		}
 		for (float degree = 0.5f; degree <= 2; degree = degree + 0.25f) {
-			//
 			String ns = format((degree * 2));
 			if (!map.containsKey(degree)) {
 				XYSeries n = new XYSeries("n=" + ns);
 				map.put(degree, n);
 			}
-
 		}
 
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			float f = (float) snv.getCi().getVaridateVal();
 			float ratio = snv.getTumor().getRatio();
 			int depth = snv.getTumor().getTotalcnt();
 			XYSeries xys = map.get(f);
 			if(xys==null)continue;
 
-			//
 			if (i == 0) {
 				if (snv.isHetroSNP()) {
 					xys.add(ratio, depth);
@@ -81,7 +73,6 @@ public class XYDepthRatioExtract {
 						xys.add(ratio, depth);
 					}
 				}
-
 			} else if (i == 3) {
 				if (snv.getFlg() == PileUP.SomaticMutation) {
 					if (snv.getFilterResult() != null
@@ -91,15 +82,11 @@ public class XYDepthRatioExtract {
 						}
 					}
 				}
-
 			}
-
 		}
 
 		Iterator<Float> ite = map.keySet().iterator();
 		while (ite.hasNext()) {
-
-			//
 			XYSeries xys = map.get(ite.next());
 			if (xys.getItemCount() > 0) {
 				data.addSeries(xys);
@@ -112,5 +99,4 @@ public class XYDepthRatioExtract {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);
 	}
-
 }

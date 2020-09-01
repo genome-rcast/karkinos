@@ -268,5 +268,4 @@ public class CapInterval implements WaveletIF, java.io.Serializable {
 	public void setVaridateval(final double varidateval) {
 		this.varidateval = varidateval;
 	}
-
 }

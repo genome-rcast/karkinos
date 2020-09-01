@@ -16,12 +16,9 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.wavelet;
 
 public class EMval {
-	
 	double value;
 
 	public void setValue(double value) {
 		this.value = value;
 	}
-	
-
 }

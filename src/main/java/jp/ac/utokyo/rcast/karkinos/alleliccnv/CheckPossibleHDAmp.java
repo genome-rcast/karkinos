@@ -28,10 +28,8 @@ import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class CheckPossibleHDAmp {
-
 	public static void check(DataSet dataset, PeaksInfo pi, int ploidy,
 			Peak peak) throws IOException {
-
 		if (peak == null)
 			return;
 		double stepsize = dataset.getBaselineLOHEstimate();
@@ -46,8 +44,6 @@ public class CheckPossibleHDAmp {
 		List<Peak> plist = pi.getPeaklist();
 
 		for (Peak eachpeak : plist) {
-
-			//
 			float u = (float) eachpeak.getU();
 
 			if ((lowmean == 0) || (u < lowmean)) {
@@ -58,14 +54,12 @@ public class CheckPossibleHDAmp {
 				highmean = u;
 				highestcn = eachpeak.getCopynum();
 			}
-
 		}
 		try {
 			double stepsize1 = (highmean - peak.getU()) / (highestcn - ploidy);
 			double stepsize2 = (peak.getU() - lowmean) / (ploidy - lowestcn);
 			stepsize = Math.max(stepsize1, stepsize2);
 		} catch (Exception ex) {
-
 		}
 
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
@@ -79,7 +73,6 @@ public class CheckPossibleHDAmp {
 
 		// Amp
 		for (CopyNumberInterval ampcand : ampCandidates) {
-
 			// if(ampcand.getChr().equals("chr11")){
 			// System.out.println("here");
 			// }
@@ -89,46 +82,37 @@ public class CheckPossibleHDAmp {
 				replace(clist, ampcand, listout);
 			}
 		}
-
 	}
 
 	private static void replace(List<CopyNumberInterval> clist,
 			CopyNumberInterval ampcand, List<CopyNumberInterval> listout) {
-
 		for (CopyNumberInterval cni : clist) {
-
 			if (cni.equals(ampcand)) {
-
 				clist.remove(cni);
 				for(CopyNumberInterval cni2:merge(ampcand, listout)){
 					if(!contain(cni2,clist)){
 						clist.add(cni2);
 					}
-				}				
+				}
 				break;
-
 			}
-
 		}
-
 	}
 
 	private static boolean contain(CopyNumberInterval cni2,
 			List<CopyNumberInterval> clist) {
-		
 		for(CopyNumberInterval cni:clist){
 			if(cni.getChr().equals(cni2.getChr())){
 				if(cni.getStart() == cni2.getStart()){
 					return true;
-				}				
+				}
 			}
-		}		
+		}
 		return false;
 	}
 
 	private static Collection<? extends CopyNumberInterval> merge(
 			CopyNumberInterval ampcand, List<CopyNumberInterval> listout) {
-
 		return listout;
 	}
 
@@ -136,41 +120,32 @@ public class CheckPossibleHDAmp {
 			CopyNumberInterval ampCand, double stepsize,
 			List<List<WaveletIF>> cap, int ploidy, double u, float highmean,
 			float highestcn) {
-
 		TwoStateHMM thmm = new TwoStateHMM();
 
 		List<WaveletIF> neighbors = getNB(ampCand, cap);
 		// find steep points
 		List<CopyNumberInterval> listout = thmm.checkAmp(neighbors, ampCand,
 				(float) stepsize, ploidy, u, highmean, highestcn);
-		//
 
 		return listout;
-
 	}
 
 	private static void findhdborder(List<CopyNumberInterval> hdCandidates,
 			double stepsize, List<List<WaveletIF>> cap2, float lowmean, float lowestcn)
 			throws IOException {
-
 		TwoStateHMM thmm = new TwoStateHMM();
 		for (CopyNumberInterval cni : hdCandidates) {
-
 			List<WaveletIF> neighbors = getNB(cni, cap2);
 			// find steep points
 			thmm.calcHD(neighbors, cni, (float) stepsize, lowmean,lowestcn);
-
 		}
-
 	}
 
 	private static List<WaveletIF> getNB(CopyNumberInterval cni,
 			List<List<WaveletIF>> cap2) {
-
 		List<WaveletIF> listo = new ArrayList<WaveletIF>();
 
 		for (List<WaveletIF> list : cap2) {
-
 			for (WaveletIF wi : list) {
 				CapInterval ci = ((CapInterval) wi);
 				if (!ci.getChr().equals(cni.getChr())) {
@@ -181,7 +156,6 @@ public class CheckPossibleHDAmp {
 				if (in1m(cni, ci)) {
 					listo.add(wi);
 				}
-
 			}
 		}
 
@@ -189,7 +163,6 @@ public class CheckPossibleHDAmp {
 	}
 
 	private static boolean in1m(CopyNumberInterval cni, CapInterval ci) {
-
 		int unit = 1000000;
 		if (cni.getStart() <= ci.getEnd() + unit
 				&& ci.getStart() - unit <= cni.getEnd()) {
@@ -210,23 +183,18 @@ public class CheckPossibleHDAmp {
 //			}
 		}
 		return list;
-
 	}
 
 	private static List<CopyNumberInterval> hdCandidate(
 			List<CopyNumberInterval> clist, float lowestcn) {
-
 		List<CopyNumberInterval> list = new ArrayList<CopyNumberInterval>();
 		if (lowestcn <= 2) {
 			for (CopyNumberInterval cni : clist) {
-
 				if (cni.getCopynumber() == lowestcn) {
 					list.add(cni);
 				}
 			}
 		}
 		return list;
-
 	}
-
 }

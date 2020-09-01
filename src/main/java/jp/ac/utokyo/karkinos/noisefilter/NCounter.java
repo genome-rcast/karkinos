@@ -16,13 +16,13 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.noisefilter;
 
 public class NCounter {
-	
 	int n=1;
+
 	public void inc(){
 		n++;
 	}
+
 	public int getN(){
 		return n;
 	}
-
 }

@@ -36,13 +36,11 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class GetCNVPreGraph {
-
 	private final static int SIZE = 2;
 
 	public static List<DisplayObject> getChartLists(DataSet dataset) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
-		//
+
 		List oList = new ArrayList();
 		oList.add(cnvPreList(dataset));
 		//CGparcent adjust maybe implimant later
@@ -52,8 +50,6 @@ public class GetCNVPreGraph {
 	}
 
 	private static JFreeChart cnvPreList(DataSet dataset) {
-
-		
 		//prepare adjustment grapth
 		XYSeries series0_0 = new XYSeries("CG Parcent Dist Median");
 		XYSeries series0_1 = new XYSeries("CG Parcent regression line");
@@ -65,19 +61,17 @@ public class GetCNVPreGraph {
 			series0_0.add(point.getX(), point.getY());
 		}
 		for(float f = 1;f<99;f=f+0.1f){
-			
 			double x = f;
 			double y = rg.getReg(x);
 			double y2 = rg.getRegOrg(x);
 			series0_1.add(x, y);
 			series0_2.add(x,y2);
-		}	
-		
+		}
+
 		data1_0.addSeries(series0_0);
 		data1_0.addSeries(series0_1);
 		data1_0.addSeries(series0_2);
-		
-		
+
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
 		int tsize = 0;
 		int cnt = 0;
@@ -89,7 +83,6 @@ public class GetCNVPreGraph {
 			tsize = tsize + list.size();
 
 			for (WaveletIF wi : list) {
-
 				CapInterval civ = (CapInterval) wi;
 				series1.add(civ.getCgParcent(), civ.getOriginalValue());
 				series2.add(civ.getCgParcent(), wi.getValue());
@@ -100,9 +93,7 @@ public class GetCNVPreGraph {
 		}
 		XYSeriesCollection data1 = new XYSeriesCollection();
 		data1.addSeries(series1);
-		
 
-		
 		XYSeriesCollection data2 = new XYSeriesCollection();
 		data2.addSeries(series2);
 //		XYSeriesCollection data3 = new XYSeriesCollection();
@@ -114,7 +105,6 @@ public class GetCNVPreGraph {
 
 	private static JFreeChart createScatterPlotPlus(XYDataset dataset0,
 			XYDataset dataset0_1,XYDataset dataset1,  PlotOrientation orientation) {
-
 		NumberAxis x0Axis = new NumberAxis("CG Parcent");
 		NumberAxis x0_1Axis = new NumberAxis("CG Parcent Distribution Median");
 		NumberAxis x1Axis = new NumberAxis("CG Parcent(adjusted)");
@@ -135,7 +125,7 @@ public class GetCNVPreGraph {
 		plot0.setDomainCrosshairVisible(false);
 		plot0.setRangeCrosshairVisible(false);
 		parent.add(plot0, 1);
-		
+
 		XYPlot plot0_1 = new XYPlot(dataset0_1, x0_1Axis, yAxis, null);
 		plot0.setDomainCrosshairVisible(false);
 		plot0.setRangeCrosshairVisible(false);
@@ -158,7 +148,7 @@ public class GetCNVPreGraph {
 		plot0.setRenderer(0, renderer0);
 		plot0.setRenderer(renderer0);
 		plot0.setOrientation(orientation);
-		
+
 		//dot and line
 		plot0_1.setRenderer(0, renderer0);
 		plot0_1.setRenderer(renderer0);
@@ -168,13 +158,13 @@ public class GetCNVPreGraph {
 		renderer1.setSeriesLinesVisible(0, true);
 		renderer1.setSeriesPaint(0, ChartColor.RED);
 		plot0_1.setRenderer(1, renderer1);
-		
+
 		final XYLineAndShapeRenderer renderer2 = new XYLineAndShapeRenderer();
 		renderer2.setSeriesShapesVisible(0, true);
 		renderer2.setSeriesLinesVisible(0, true);
 		renderer2.setSeriesPaint(0, ChartColor.YELLOW);
 		plot0_1.setRenderer(2, renderer2);
-		
+
 		plot1.setRenderer(0, renderer0);
 		plot1.setRenderer(renderer0);
 		plot1.setOrientation(orientation);
@@ -187,7 +177,5 @@ public class GetCNVPreGraph {
 				JFreeChart.DEFAULT_TITLE_FONT, parent, false);
 
 		return chart;
-
 	}
-
 }

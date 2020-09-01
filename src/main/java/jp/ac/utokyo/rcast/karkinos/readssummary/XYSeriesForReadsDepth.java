@@ -21,29 +21,22 @@ import java.util.Set;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class XYSeriesForReadsDepth {
-	
 	ReadsSummary readSummary;
+
 	public XYSeriesForReadsDepth(ReadsSummary readSummary){
-		
-		//
 		this.readSummary = readSummary;
-		
-		
 	}
 
 	public DefaultCategoryDataset getXYSeries(){
-
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		add(dataset,readSummary.getNormalDepth(),"normal");
 		add(dataset,readSummary.getTumorDepth(),"tumor");
 		return dataset;
 	}
-	
+
 	private void add(DefaultCategoryDataset dataset, DepthCounter depth,String label) {
-		
 		Set<Entry<Integer,CounterA>> set=depth.getMap().entrySet();
 		for(Entry<Integer,CounterA> e:set){
-			//
 			String s = "";
 			int n = e.getKey();
 			if(n>=1000){
@@ -58,10 +51,6 @@ public class XYSeriesForReadsDepth {
 				s=""+n;
 			}
 			dataset.addValue(e.getValue().cnt,label,s);
-		}		
-		
+		}
 	}
-
-
-	
 }

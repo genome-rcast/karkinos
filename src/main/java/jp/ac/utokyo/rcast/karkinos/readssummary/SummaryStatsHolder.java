@@ -18,9 +18,9 @@ package jp.ac.utokyo.rcast.karkinos.readssummary;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class SummaryStatsHolder {
-	
 	SummaryStatistics ratio = new SummaryStatistics();
 	SummaryStatistics oddsratio = new SummaryStatistics();
+
 	public SummaryStatistics getRatio() {
 		return ratio;
 	}
@@ -30,11 +30,7 @@ public class SummaryStatsHolder {
 	}
 
 	public void addValue(float ratio2, float oddsratio2) {
-		
 		ratio.addValue(ratio2);
 		oddsratio.addValue(oddsratio2);
-		
 	}
-
-
 }
