@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.distribution;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,12 +24,10 @@ import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import jp.ac.utokyo.rcast.karkinos.exec.PileUP;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
-import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.GenotypeKeyUtils;
 
 public class DataHolderByCN implements java.io.Serializable {
-
 	List<SNVHolder> hetroSNPlist = new ArrayList<SNVHolder>();
 	float[] snpDistN = new float[100];
 	float[] snpDistT = new float[100];
@@ -44,18 +41,13 @@ public class DataHolderByCN implements java.io.Serializable {
 	public float[] mutationDistTFinalFilter = new float[100];
 	public float[] mutationDistTFinalFilter100xdepth = new float[100];
 
-	
 	SummaryStatistics tumorhetrosnpMeanSd = new SummaryStatistics();
-			
-	public void add(SNVHolder holder) {
 
-		//
+	public void add(SNVHolder holder) {
 		float normalr = holder.getNormal().getRatio();
 		float tumorr = holder.getTumor().getRatio();
-		
-		
-		if (holder.isHetroSNP()) {
 
+		if (holder.isHetroSNP()) {
 			hetroSNPlist.add(holder);
 			addup(snpDistN, normalr);
 			if(tumorr > 0.02 && tumorr < 0.98){
@@ -63,7 +55,7 @@ public class DataHolderByCN implements java.io.Serializable {
 			}
 			float r = tumorr * 100;
 			if (r > 25 && r < 75) {
-				tumorhetrosnpMeanSd.addValue(r);				
+				tumorhetrosnpMeanSd.addValue(r);
 			}
 			if(!holder.getTumor().isIndel()){
 				addLogdist(holder,false);
@@ -71,10 +63,8 @@ public class DataHolderByCN implements java.io.Serializable {
 			if(!holder.getNormal().isIndel()){
 				addLogdist(holder,true);
 			}
-
 		} else if ((holder.getFlg() == PileUP.SomaticMutation)
 				|| (holder.getFlg() == PileUP.TumorINDEL)) {
-
 			if (holder.getDbSNPbean() != null) {
 				return;
 			}
@@ -95,33 +85,21 @@ public class DataHolderByCN implements java.io.Serializable {
 							addup(mutationDistTFinalFilter100xdepth, tumorr);
 						}
 					}
-
 				}
-
 			}
-		}		
-		
-		
+		}
 	}
 
-	
-	public Map<String, float[]> getNormalLogdist() {
-		return normallogdist;
-	}
-	public Map<String, float[]> getTumorLogdist() {
-		return tumorlogdist;
-	}
 	Map<String,float[]> normallogdist = new TreeMap<String,float[]>();
 	Map<String,float[]> tumorlogdist = new TreeMap<String,float[]>();
-	
+
 	private void addLogdist(SNVHolder holder,boolean normal) {
-		////
 		char ref = holder.getNormal().getGenomeR();
 		char alt = holder.getNormal().getALT();
 		String key = ref + "to" + alt;
 		key = GenotypeKeyUtils.aggrigateKeys(key);
 		if(key.equals(""))return;
-		////
+
 		double mutationlog = 0;
 		if(normal){
 			mutationlog = holder.getNormal().getMutationLogLikeHood()+50;
@@ -129,25 +107,19 @@ public class DataHolderByCN implements java.io.Serializable {
 			mutationlog = holder.getTumor().getMutationLogLikeHood()+50;
 		}
 		Map<String,float[]> map = normal?normallogdist:tumorlogdist;
-		////
+
 		float[] ary = null;
 		if(map.containsKey(key)){
-			
-			//
 			ary = map.get(key);
-			
 		}else{
-			
 			ary = new float[100];
 			map.put(key, ary);
-			
 		}
-		//
+
 		int idx = getIndex(mutationlog);
 		ary[idx] = ary[idx]+1;
-				
 	}
-	
+
 	private int getIndex(double d) {
 		//d = d*100;
 		int n = (int)d;
@@ -160,18 +132,10 @@ public class DataHolderByCN implements java.io.Serializable {
 		return n;
 	}
 
-	public SummaryStatistics getTumorhetrosnpMeanSd() {
-		return tumorhetrosnpMeanSd;
-	}
-
 	private void addup(float[] dist, float ratio) {
-
-		//
 		int idx = Math.round(ratio * 100);
 		if (idx > 99)
 			return;
 		dist[idx] = (dist[idx] + 1);
-
 	}
-
 }

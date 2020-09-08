@@ -21,13 +21,12 @@ import java.util.List;
 import jp.ac.utokyo.karkinos.ploidy.MatchMatrixBean;
 
 public class PeaksInfo {
-
 	List<Peak> peaklist;
 	int[] signalcount;
 	double[] ma;
 	double[] peaksignals;
 	float ploidy =0;
-	
+
 	public float getPloidy() {
 		return ploidy;
 	}
@@ -36,9 +35,6 @@ public class PeaksInfo {
 		this.ploidy = ploidy;
 	}
 
-	List<Double> peakdist;
-	List<Peak> mainpeakdist;
-	
 	MatchMatrixBean matchmatrix;
 
 	public MatchMatrixBean getMatchmatrix() {
@@ -47,14 +43,6 @@ public class PeaksInfo {
 
 	public void setMatchmatrix(MatchMatrixBean matchmatrix) {
 		this.matchmatrix = matchmatrix;
-	}
-
-	public List<Peak> getMainpeakdist() {
-		return mainpeakdist;
-	}
-
-	public void setMainpeakdist(List<Peak> mainpeakdist) {
-		this.mainpeakdist = mainpeakdist;
 	}
 
 	public double[] getPeaksignals() {
@@ -89,20 +77,6 @@ public class PeaksInfo {
 		this.ma = ma;
 	}
 
-	public double getVal(double x) {
-
-		double sum = 0;
-		for (Peak p : peaklist) {
-
-			double r = p.getR();
-			double d = getNdistP(x, p.getU(), p.getV());
-			sum = sum + (r * d);
-
-		}
-		return sum;
-
-	}
-
 	public Number getAcutualVal(double x) {
 		double sum = 0;
 		for (Peak p : peaklist) {
@@ -124,36 +98,21 @@ public class PeaksInfo {
 				double d = getNdistP(x, p.getU(), p.getV());
 				sum = sum + (r * d);
 			}
-
 		}
 		return sum;
 	}
 
 	public static double getNdistP(double x, double u, double v) {
-
 		double p = Math.exp(-0.5 * (Math.pow((x - u), 2) / v))
 				/ Math.sqrt(2 * Math.PI * v);
 		return p;
 	}
 
 	public List<Peak> getCopy() {
-
 		List<Peak> list = new ArrayList<Peak>();
 		for (Peak p : peaklist) {
 			list.add(p.deepCopy());
 		}
 		return list;
 	}
-
-	public double getSD() {
-		double maxsd = 0;
-		for (Peak p : peaklist) {
-			if(p.getSD()>maxsd){
-				maxsd = p.getSD();
-			}
-		}
-		return maxsd;
-	}
-	
-
 }

@@ -22,16 +22,12 @@ import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 
 public class GCParcentAdjust {
-
 	public static void calc(DataSet dataset) {
-
 		List<double[]> xyzList = new ArrayList<double[]>();
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
 		int minbaitlen = 0;
 		for (List<WaveletIF> list : cap) {
-
 			for (WaveletIF wi : list) {
-
 				CapInterval civ = (CapInterval) wi;
 				double[] ar = new double[3];
 				ar[0] = civ.getLength();
@@ -44,29 +40,22 @@ public class GCParcentAdjust {
 					xyzList.add(ar);
 				}
 			}
-
 		}
 
-		//
 		FunctionRegression fr = new FunctionRegression(xyzList,minbaitlen);
 		dataset.setGcFunctionRegression(fr);
 		
 		for (List<WaveletIF> list : cap) {
-
 			for (WaveletIF wi : list) {
-
 				CapInterval civ = (CapInterval) wi;
-				
+
 				double x = civ.getLength();
 				double y = civ.getCgParcent();
 				double z = civ.getOriginalValue();
-				//
+
 				double adjustedZ = fr.getAdjustedZ(x, y, z);
 				civ.setGCAdjustedTNratio(adjustedZ);
-				
 			}
-
 		}
-
 	}
 }

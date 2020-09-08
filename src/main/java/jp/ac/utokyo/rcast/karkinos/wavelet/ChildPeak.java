@@ -19,64 +19,56 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ChildPeak {
-	
 	public Set<String> getChrom() {
 		return chrom;
 	}
+
 	double u;
-	double v;
 	double r;
 	double peakdist;
 	Set<String> chrom = new HashSet<String>();
-	
+
 	float aaf;
 	float baf;
 	float taf;
-	
+
 	public float getAaf() {
 		return aaf;
 	}
+
 	public void setAaf(float aaf) {
 		this.aaf = aaf;
 	}
+
 	public float getBaf() {
 		return baf;
 	}
+
 	public void setBaf(float baf) {
 		this.baf = baf;
 	}
+
 	public float getTaf() {
 		return taf;
 	}
+
 	public void setTaf(float taf) {
 		this.taf = taf;
 	}
+
 	public double getPeakdist() {
 		return peakdist;
 	}
-	public void setPeakdist(double peakdist) {
-		this.peakdist = peakdist;
-	}
+
 	public double getU() {
 		return u;
 	}
-	public void setU(double u) {
-		this.u = u;
-	}
-	public double getV() {
-		return v;
-	}
-	public void setV(double v) {
-		this.v = v;
-	}
+
 	public double getR() {
 		return r;
 	}
-	public void setR(double r) {
-		this.r = r;
-	}
+
 	public boolean isNotSexChrom() {
-		
 		if(chrom==null){
 			return true;
 		}else{
@@ -92,5 +84,4 @@ public class ChildPeak {
 		}
 		return true;
 	}
-
 }

@@ -15,28 +15,10 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.wavelet;
 
-import java.util.List;
-
 public class EMval {
-	
 	double value;
-	List<Double> pforpeak;
-	
-	public List<Double> getPforpeak() {
-		return pforpeak;
-	}
-
-	public void setPforpeak(List<Double> pforpeak) {
-		this.pforpeak = pforpeak;
-	}
-
-	public double getValue() {
-		return value;
-	}
 
 	public void setValue(double value) {
 		this.value = value;
 	}
-	
-
 }

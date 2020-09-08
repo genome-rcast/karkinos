@@ -18,19 +18,16 @@ package jp.ac.utokyo.rcast.karkinos.wavelet;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.ac.utokyo.karkinos.noisefilter.NDist;
 import jp.ac.utokyo.karkinos.ploidy.PeakAnalysisComponent;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 
 public class Peak {
-
 	double x;
 	double y;
 
 	double u;
 	double v;
 	double r;
-	double vinit;
 	boolean artifitial;
 	int peakidx;
 	float copynum;
@@ -61,76 +58,15 @@ public class Peak {
 		return artifitial;
 	}
 
-	public void setArtifitial(boolean artifitial) {
-		this.artifitial = artifitial;
-	}
-
-	public double getVinit() {
-		return vinit;
-	}
-
-	public void setVinit(double vinit) {
-		this.vinit = vinit;
-	}
-
-	double SUMZ;
-	double SUMZX;
-	double SUMZX2;
-
 	float cn;
 
-	public float getCn() {
-		return cn;
-	}
-
-	public void setCn(float cn) {
-		this.cn = cn;
-	}
-
-	public double getSUMZ() {
-		return SUMZ;
-	}
-
-	public void setSUMZ(double sUMZ) {
-		SUMZ = sUMZ;
-	}
-
-	public double getSUMZX() {
-		return SUMZX;
-	}
-
-	public void setSUMZX(double sUMZX) {
-		SUMZX = sUMZX;
-	}
-
-	public double getSUMZX2() {
-		return SUMZX2;
-	}
-
-	public void setSUMZX2(double sUMZX2) {
-		SUMZX2 = sUMZX2;
-	}
-
 	public Peak(double x2, double y2) {
-
 		x = x2;
 		y = y2;
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public void setX(double x) {
-		this.x = x;
-	}
-
 	public double getY() {
 		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
 	}
 
 	public double getU() {
@@ -158,7 +94,6 @@ public class Peak {
 	}
 
 	public double getSD() {
-
 		if (v <= 0)
 			return 0;
 		return Math.sqrt(v);
@@ -166,16 +101,7 @@ public class Peak {
 
 	boolean defualt;
 
-	public void setDefault(boolean b) {
-		defualt = b;
-	}
-
-	public boolean getDefault() {
-		return defualt;
-	}
-
 	public Peak deepCopy() {
-
 		Peak p = new Peak(x, y);
 
 		p.u = u;
@@ -187,23 +113,19 @@ public class Peak {
 		p.artifitial = artifitial;
 		p.peakidx = peakidx;
 		return p;
-
 	}
 
 	public void setXYifYBigger(double x2, double y2) {
-
 		if (y2 > y) {
 			y = y2;
 			x = x2;
 			u = x2;
 		}
-
 	}
 
 	List<ChildPeak> childPeakList = null;
 
 	public float setCN(CapInterval ci) {
-
 		float aafreq = 0f;
 		float bafreq = 0f;
 		float cnvtotal = 0f;
@@ -214,10 +136,8 @@ public class Peak {
 		ci.setHMMValue((double) cnvtotal / (double) 2);
 		int idx = 0;
 		if (pac == null) {
-
-
 			copynum = cnvtotal;
-			
+
 			try {
 				ChildPeak cp = getChildPeaks().get(idx);
 				aafreq = cp.getAaf();
@@ -227,19 +147,13 @@ public class Peak {
 				ci.setBafreq(bafreq);
 				ci.setCnvtotal(cnvtotal);
 				ci.setHMMValue((double) cnvtotal / (double) 2);
-				
-				
 			} catch (Exception ex) {
-
 			}
 			return cnvtotal;
-
 		}else if (pac.isComplexPeak()) {
-
 			int maxidx = 0;
 			double maxr = 0;
 			for (ChildPeak cp : childPeakList) {
-
 				// ci.getChr();
 				if (cp.getChrom() != null) {
 					if (cp.getChrom().contains(ci.getChr())) {
@@ -255,7 +169,6 @@ public class Peak {
 			if (idx == getChildPeaks().size()) {
 				idx = maxidx;
 			}
-
 		}
 
 		ChildPeak cp = getChildPeaks().get(idx);
@@ -271,14 +184,12 @@ public class Peak {
 	}
 
 	public List<ChildPeak> getChildPeaks() {
-
 		if (childPeakList == null) {
 			childPeakList = new ArrayList<ChildPeak>();
 			if (pac == null)
 				return childPeakList;
 
 			if (pac.isComplexPeak()) {
-
 				ChildPeak even = new ChildPeak();
 				ChildPeak odd = new ChildPeak();
 				even.r = pac.getEvenR() * r;
@@ -293,19 +204,15 @@ public class Peak {
 
 				childPeakList.add(even);
 				childPeakList.add(odd);
-
 			} else {
-
 				ChildPeak peak = new ChildPeak();
 				peak.r = r;
 				peak.u = u;
 				peak.peakdist = pac.getHpeakdistance();
 				childPeakList.add(peak);
 			}
-
 		}
 
 		return childPeakList;
 	}
-
 }

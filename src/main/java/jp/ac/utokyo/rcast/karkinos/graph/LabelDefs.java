@@ -19,7 +19,6 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
 import java.util.Vector;
 import java.util.Iterator;
 
@@ -29,16 +28,16 @@ public class LabelDefs extends Vector {
 	public static int CATEGORY_TICK = 0;
 	public static int BOUNDS = 1;
 	public static int ANCHOR_POINT = 2;
-	public static int DRAWN = 3;
 	public static int TICK_MARK_LINE = 4;
-	
-	
+
 	public void add(String name, CategoryTick tick, Line2D mark, Shape bounds, Point2D anchorPoint){
 		this.add(new LabelDef(name, tick, mark, bounds, anchorPoint));
 	}
+
 	public Shape getCandidateShape(int candidatePosition){
 		return ((LabelDef)this.get(candidatePosition)).getBounds();
 	}
+
 	public Object getField(Object labelDef, int fieldID) throws Exception {
 		Object returnObj = null;
 		if (labelDef instanceof LabelDef){
@@ -62,6 +61,7 @@ public class LabelDefs extends Vector {
 		}
 		return returnObj;
 	}
+
 	public boolean drawThisLabel(Object labelDef) throws Exception {
 		boolean shouldIDrawThisLabel = false;
 		if (labelDef instanceof LabelDef) {
@@ -71,7 +71,6 @@ public class LabelDefs extends Vector {
 		}
 		return shouldIDrawThisLabel;
 	}
-	
 
 	// look through all drawn lables
 	public boolean intersectsAny(Shape candidateShape){
@@ -87,10 +86,11 @@ public class LabelDefs extends Vector {
 		}
 		return intersects;
 	}
-	  
+
 	public void markForDraw(int candidatePosition){
 		((LabelDef)this.get(candidatePosition)).markAsDrawn();
 	}
+
 	private void notifyInternalCastError(String caller, Object unknown, Class expectedClass) throws Exception {
 		String errorMessage = caller + "InternalCastError" +
 				"\n\tThe system tried to invoke this method with a " + unknown.getClass().getName()+ 
@@ -99,6 +99,7 @@ public class LabelDefs extends Vector {
 				"\n\tyou could also report this error to the author of this code at ray_lukas@comcast.net.";
 		throw new Exception(errorMessage);
 	}
+
 	private void notifyInvalidFieldIDReuquested(String caller, Object unknown, int fieldID) throws Exception {
 		String errorMessage = caller + "InvalidFieldIDReuquested" +
 		"\n\tThe system tried to request a filed from a LabelDef object, which is not supported. " +
@@ -109,7 +110,7 @@ public class LabelDefs extends Vector {
 		"\n\t\tOffending Field ID=>" + fieldID;
 		throw new Exception(errorMessage);
 	}
-	
+
 	private class LabelDef {
 		private String name = null;
 		private Boolean drawn = new Boolean(false);
@@ -130,14 +131,8 @@ public class LabelDefs extends Vector {
 		public void markAsDrawn() {
 			this.drawn = new Boolean(true);
 		}	
-		public void setDrawn(boolean markAsDrawnFlag) {
-			this.drawn = new Boolean(markAsDrawnFlag);
-		}
 		public CategoryTick getTick() {
 			return tick;
-		}
-		public Line2D getMark() {
-			return mark;
 		}
 		public Point2D getAnchorPoint() {
 			return anchorPoint;
@@ -149,6 +144,6 @@ public class LabelDefs extends Vector {
 			  return "LabelPoint" +  name +
 				  "\n\tanchorPoint=>(" + anchorPoint.getX() + ", " + anchorPoint.getY() + ")" + 
 				  "\n\tgetMinX()=>" + (bounds.getBounds2D()).getMinX() + " getMaxX()=>" + (bounds.getBounds2D()).getMaxX();
-		  }
-	  }	  
+		}
+	}
 }

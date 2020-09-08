@@ -15,7 +15,6 @@ limitations under the License.
 */
 package jp.ac.utokyo.rcast.karkinos.graph;
 
-import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +26,23 @@ import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.wavelet.FunctionRegression;
 
 public class GetGCAdjustGrapth {
-
 	private final static int SIZE = 2;
-	public static List<DisplayObject> getChartLists(DataSet dataset) {
 
+	public static List<DisplayObject> getChartLists(DataSet dataset) {
 		FunctionRegression fr = dataset.getFunctionRegression();
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
-		//
+
 		List oList = new ArrayList();
 		oList.add(getMeanGraph(fr));
 		oList.add(getSDGraph(fr));
 		list.add(new DisplayObject(oList, SIZE, "GC% Adjustment"));
 		return list;
 	}
-	
+
 	private static Object getSDGraph(FunctionRegression fr) {
-		
 		double[][] sd = fr.getSDAry();
 		HeatChart map = new HeatChart(sd); 
-		
+
 		map.setTitle("s.d.("+format(map.getLowValue())+" to "+format(map.getHighValue())+")");
 		map.setYAxisLabel("Bait length");
 		map.setXAxisLabel("GC %");
@@ -57,8 +54,6 @@ public class GetGCAdjustGrapth {
 	}
 
 	private static java.awt.Image getMeanGraph(FunctionRegression fr) {
-		
-		
 		double[][] mean = fr.getMeanAry();
 		HeatChart map = new HeatChart(mean); 
 		map.setTitle("Mean T/N depth ratio ("+format(map.getLowValue())+" to "+format(map.getHighValue())+")");
@@ -69,12 +64,10 @@ public class GetGCAdjustGrapth {
 		//map.setXValuesHorizontal(true);
 		java.awt.Image im = map.getChartImage();
 		return im;
-		
 	}
-	
+
 	private static String format(double num) {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);
 	}
-	
 }

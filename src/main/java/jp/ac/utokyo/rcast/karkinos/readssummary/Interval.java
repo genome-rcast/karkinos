@@ -16,8 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.readssummary;
 
 public class Interval implements java.io.Serializable{
-	
-	
 	public String getGeneSymbol() {
 		return geneSymbol;
 	}
@@ -28,7 +26,7 @@ public class Interval implements java.io.Serializable{
 		this.end = pos;
 		this.depth = depth;
 	}
-	
+
 	public Interval(String chr,int start,int end,String refseqid,String geneSymbol){
 		this.chr = chr;
 		this.start = start;
@@ -36,21 +34,18 @@ public class Interval implements java.io.Serializable{
 		this.refseqid = refseqid;
 		this.geneSymbol = geneSymbol;
 	}
-	
+
 	String refseqid = null;
+
 	public int getExonidx() {
 		return exonidx;
 	}
 
 	String geneSymbol= null;
 	int exonidx = 0;
-	
+
 	public String getRefseqid() {
 		return refseqid;
-	}
-
-	public void setRefseqid(String refseqid) {
-		this.refseqid = refseqid;
 	}
 
 	public boolean extendInterval(final String chr, final int end, final int depth) {
@@ -87,11 +82,9 @@ public class Interval implements java.io.Serializable{
 	int start;
 	int end;
 	int depth;
+
 	public boolean contain(String chr2, int pos) {
-		
 		boolean bool = chr.equals(chr2)&& (pos>=start && pos<=end);
 		return bool;
 	}
-	
-	
 }

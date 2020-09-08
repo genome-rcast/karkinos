@@ -18,20 +18,18 @@ package jp.ac.utokyo.rcast.karkinos.exec;
 import java.io.Serializable;
 
 public class OntagetInfo implements Serializable{
-
 	boolean ontag;
 	boolean onmarjin;
+
 	public boolean isOntag() {
 		return ontag;
 	}
+
 	public void setOntag(boolean ontag) {
 		this.ontag = ontag;
 	}
-	public boolean isOnmarjin() {
-		return onmarjin;
-	}
+
 	public void setOnmarjin(boolean onmarjin) {
 		this.onmarjin = onmarjin;
 	}
-	
 }

@@ -18,24 +18,20 @@ package jp.ac.utokyo.rcast.karkinos.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class PositionBrocks {
-		
 	TreeMap<Integer,Integer> treemap 
 		= new TreeMap<Integer,Integer>();
-	
+
 	public void read(int count,LittleEndian la) throws IOException{
-		
 		List<Integer> intv = new ArrayList<Integer>();
 		for(int n=0;n<count;n++)intv.add(la.readInt());
 		List<Integer> sizes = new ArrayList<Integer>();
 		for(int n=0;n<count;n++)sizes.add(la.readInt());
-		
+
 		int idx = 0;
 		for(int pos:intv){
-			
 			int size = sizes.get(idx);
 			treemap.put(pos, size);
 			//System.out.println(pos+":"+size);
@@ -43,11 +39,9 @@ public class PositionBrocks {
 		}
 		intv  = null;
 		sizes = null;
-		
 	}
-	
+
 	public boolean inBlock(int pos){
-		
 		if(treemap==null)return false;
 		if(treemap.containsKey(pos)){
 			return true;
@@ -57,8 +51,5 @@ public class PositionBrocks {
 		int floorBlockSize = treemap.get(floorPos);
 		int end = (floorPos+floorBlockSize);
 		return (pos<end);
-		
 	}
-	
-	
 }

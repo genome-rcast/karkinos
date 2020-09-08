@@ -20,24 +20,17 @@ import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_SUPPORTED_BY_
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 import jp.ac.utokyo.rcast.karkinos.exec.PileUP;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterResult;
 import jp.ac.utokyo.rcast.karkinos.filter.SupportReadsCheck;
-import jp.ac.utokyo.rcast.karkinos.readssummary.SNPDepthCounter;
 import jp.ac.utokyo.rcast.karkinos.utils.CalcUtils;
-import jp.ac.utokyo.rcast.karkinos.utils.GenotypeKeyUtils;
 
 public class NoiseAnalysis {
-	//
-
 	AFDepthMatrix afm = null;
 	List<BinData> binlist = null;
 
@@ -47,7 +40,6 @@ public class NoiseAnalysis {
 	boolean highErrorSample = false;
 
 	public void analysisNoiseRegion(DataSet dataset, int ploidy) {
-
 		int binsize = 20;
 
 		snvcount = 0;
@@ -64,7 +56,6 @@ public class NoiseAnalysis {
 		// from hetroSNP
 		afm = new AFDepthMatrix(binlist, binsize);
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			float f = (float) snv.getCi().getVaridateVal();
 			//
 			// if (ploidy == 4) {
@@ -81,15 +72,11 @@ public class NoiseAnalysis {
 				continue;
 			}
 			if (snv.isHetroSNP()) {
-
 				afm.regHetroSNP(snv, tumorContentsRatio);
-
 			}
-
 		}
 
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			float f = (float) snv.getCi().getVaridateVal();
 			if (!((f == 1.0) || (f == 2.0))) {
 				continue;
@@ -102,7 +89,6 @@ public class NoiseAnalysis {
 							.contains(FilterResult.illuminaSpecific) || (snv.getFilterResult().getPassFilterFlg()
 									.contains(FilterResult.INFO_ffpe)
 									|| (snv.getFilterResult().getPassFilterFlg().contains(FilterResult.INFO_oxoG)))))) {
-
 				afm.regSNV(snv, tumorContentsRatio);
 				snvcount++;
 				char genomeR = snv.getTumor().getGenomeR();
@@ -119,9 +105,7 @@ public class NoiseAnalysis {
 				if (genomeR == 'G' && altTumor == 'T') {
 					atocCount++;
 				}
-
 			}
-
 		}
 		// sort snv list for SNV cal
 		afm.sortList();
@@ -133,7 +117,6 @@ public class NoiseAnalysis {
 		double lowratio = ((double) lowcount) / ((double) snvcount);
 
 		highErrorSample = (snvcount >= 500) && ((atoCratio > 0.85) || (lowratio > 0.8));
-
 	}
 
 	public List<BinData> getBinlist() {
@@ -145,7 +128,6 @@ public class NoiseAnalysis {
 	}
 
 	private List<BinData> getBorderDepth(List<SNVHolder> snvlist, float tumorContentsRatio, int binsize) {
-
 		List<BinData> binlist = new ArrayList<BinData>();
 		Map<Integer, NCounter> counter = new HashMap<Integer, NCounter>();
 		int total = 0;
@@ -156,7 +138,6 @@ public class NoiseAnalysis {
 				continue;
 			}
 			if (snv.isHetroSNP()) {
-
 				total++;
 				int depth = snv.getTumor().getTotalcnt();
 				if (depth > depthmax) {
@@ -168,47 +149,37 @@ public class NoiseAnalysis {
 					NCounter nc = new NCounter();
 					counter.put(depth, nc);
 				}
-
 			}
 		}
 		int unit = total / binsize;
 		int cnt = 0;
 		int binstart = 0;
 		for (int n = 1; n < depthmax; n++) {
-
 			if (counter.containsKey(n)) {
-
 				if (binstart == 0) {
 					binstart = n;
 				}
-				//
+
 				cnt = cnt + counter.get(n).getN();
 				if (cnt > unit) {
 					binlist.add(new BinData(binstart, n));
 					cnt = 0;
 					binstart = 0;
 				}
-
 			}
-
 		}
 		return binlist;
-
 	}
 
 	public boolean reject(Point2D p2d) {
-
 		return afm.reject((int) p2d.getY(), (float) p2d.getX(), highErrorSample);
 	}
 
 	public float getPval(float adjustedratio, float readdepth) {
-
 		return afm.getPval(adjustedratio, readdepth);
-
 	}
 
 	public boolean reject(SNVHolder snv, float tumorContentsRatio, boolean indel) {
-
 		float adjusttedAF = CalcUtils.getTumorrateAdjustedRatio(snv, tumorContentsRatio);
 		int depth = snv.getTumor().getTotalcnt();
 		int depth_c = (int) (depth * tumorContentsRatio);
@@ -231,7 +202,6 @@ public class NoiseAnalysis {
 		}
 
 		if ((oxoGCand || ffpeCand)) {
-
 			if (tumorContentsRatio <= 0.15) {
 				if (depth_c <= 25 && adjusttedAF < 0.8) {
 					return true;
@@ -240,8 +210,6 @@ public class NoiseAnalysis {
 					return true;
 				}
 			}
-			
-
 		}
 
 		return false;
@@ -264,5 +232,4 @@ public class NoiseAnalysis {
 		// }
 		// return AFDepthMatrix.defultreject(depth_c, adjusttedAF);
 	}
-
 }

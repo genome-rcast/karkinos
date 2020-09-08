@@ -16,28 +16,27 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.ploidy;
 
 public class PeakTmpInfo {
-	
 	int idx;
 	float magnatude;
 	float peakpos;
-	
-	public float getPeakpos() {
-		return peakpos;
-	}
+
 	public void setPeakpos(float peakpos) {
 		this.peakpos = peakpos;
 	}
+
 	public int getIdx() {
 		return idx;
 	}
+
 	public void setIdx(int idx) {
 		this.idx = idx;
 	}
+
 	public float getMagnatude() {
 		return magnatude;
 	}
+
 	public void setMagnatude(float magnatude) {
 		this.magnatude = magnatude;
 	}
-
 }

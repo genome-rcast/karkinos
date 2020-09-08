@@ -31,31 +31,25 @@ import be.ac.ulg.montefiore.run.jahmm.OpdfGaussian;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianFactory;
 
 public class TwoStateHMM {
-
 	public static void calcHD(List<WaveletIF> neighbors,
 			CopyNumberInterval cni, float stepsize, float lowmean,
 			float lowestcn) throws IOException {
-
 		Hmm<ObservationReal> hmm = getLOWHMM(neighbors, cni, stepsize, lowmean,
 				lowestcn);
 		List<ObservationReal> neighborsl = getList(neighbors);
 		int[] hmmary = null;
 		try{
-		 
 			hmmary = hmm.mostLikelyStateSequence(neighborsl);
-		
 		} catch (Exception ex) {
 			return;
-		}		
-			
+		}
+
 		int n = 0;
 
-		//
 		boolean startunset = true;
 		int start = 0;
 		int end = 0;
 		for (int state : hmmary) {
-
 			WaveletIF wi = neighbors.get(n);
 			CapInterval ci = (CapInterval) wi;
 			if (isStart(cni, ci) && startunset) {
@@ -70,19 +64,15 @@ public class TwoStateHMM {
 			n++;
 		}
 
-		//
 		for (WaveletIF wi : neighbors) {
-
 			CapInterval ci = (CapInterval) wi;
 			if ((ci.getStart() <= end) && (start <= ci.getEnd())) {
 				ci.setCN(0);
 			}
 		}
-
 	}
 
 	private static int adjustEnd(int n, List<WaveletIF> neighbors, int[] hmmary) {
-
 		WaveletIF wi = neighbors.get(n);
 		CapInterval ci = (CapInterval) wi;
 
@@ -91,7 +81,6 @@ public class TwoStateHMM {
 
 		if (state == 0) {
 			while (n < hmmary.length) {
-				//
 				n++;
 				if (outofrange(neighbors, n)) {
 					break;
@@ -104,11 +93,9 @@ public class TwoStateHMM {
 				} else {
 					break;
 				}
-
 			}
 		} else {
 			while (n >= 0) {
-				//
 				n--;
 				if (outofrange(neighbors, n)) {
 					break;
@@ -121,16 +108,13 @@ public class TwoStateHMM {
 				} else {
 					break;
 				}
-
 			}
-
 		}
 		return end;
 	}
 
 	private static int adjustStart(int n, List<WaveletIF> neighbors,
 			int[] hmmary) {
-
 		WaveletIF wi = neighbors.get(n);
 		CapInterval ci = (CapInterval) wi;
 
@@ -138,7 +122,6 @@ public class TwoStateHMM {
 		int start = ci.getStart();
 		if (state == 0) {
 			while (n >= 0) {
-				//
 				n--;
 				if (outofrange(neighbors, n)) {
 					break;
@@ -151,11 +134,9 @@ public class TwoStateHMM {
 				} else {
 					break;
 				}
-
 			}
 		} else {
 			while (n < hmmary.length) {
-				//
 				n++;
 				if (outofrange(neighbors, n)) {
 					break;
@@ -168,14 +149,12 @@ public class TwoStateHMM {
 				} else {
 					break;
 				}
-
 			}
 		}
 		return start;
 	}
 
 	private static boolean outofrange(List<WaveletIF> list, int n) {
-
 		if (n < 0)
 			return true;
 		if (n >= list.size())
@@ -185,7 +164,6 @@ public class TwoStateHMM {
 	}
 
 	private static boolean isEnd(CopyNumberInterval cni, CapInterval ci) {
-
 		int end = cni.getEnd();
 		boolean bool1 = ci.getStart() <= end;
 		boolean bool2 = ci.getEnd() >= end;
@@ -193,7 +171,6 @@ public class TwoStateHMM {
 	}
 
 	private static boolean isStart(CopyNumberInterval cni, CapInterval ci) {
-
 		int start = cni.getStart();
 		boolean bool1 = ci.getStart() <= start;
 		boolean bool2 = ci.getEnd() >= start;
@@ -203,7 +180,6 @@ public class TwoStateHMM {
 	private static List<ObservationReal> getList(List<WaveletIF> neighbors) {
 		List<ObservationReal> olist = new ArrayList<ObservationReal>();
 		for (WaveletIF wi : neighbors) {
-
 			double d = ((CapInterval) wi).getDenioseValue();
 			// double d2 = ((CapInterval) wi).getOriginalValue();
 			// double max = Math.max(d, d2);
@@ -217,17 +193,12 @@ public class TwoStateHMM {
 	private static Hmm<ObservationReal> getLOWHMM(List<WaveletIF> neighbors,
 			CopyNumberInterval cni, double stepsize, float lowmean,
 			float lowestcn) {
-
 		OpdfGaussianFactory factory = new OpdfGaussianFactory();
 		Hmm<ObservationReal> hmm = new Hmm<ObservationReal>(2, factory);
 
 		SummaryStatistics ss = getCoreVariance(neighbors, cni);
-		double mean = ss.getMean();
 		double variance = ss.getVariance();
 		if (ss.getN() <= 1 || variance <= 0) {
-			//
-			if (ss.getN() == 0)
-				mean = 1;
 			variance = 0.5;
 		}
 		float minus = (float) (stepsize * 1.2);
@@ -253,7 +224,6 @@ public class TwoStateHMM {
 			CopyNumberInterval cni) {
 		SummaryStatistics ss = new SummaryStatistics();
 		for (WaveletIF wi : neighbors) {
-
 			CapInterval ci = (CapInterval) wi;
 			int s = ci.getStart();
 			int e = ci.getEnd();
@@ -275,10 +245,8 @@ public class TwoStateHMM {
 	public List<CopyNumberInterval> checkAmp(List<WaveletIF> neighbors,
 			CopyNumberInterval cni, float stepsize, int ploidy, double u,
 			float highmean, float highestcn) {
-
-		//
 		SummaryStatistics ss = getCoreVariance(neighbors, cni);
-		//
+
 		float copygain = (float) ((ss.getMean() - u) / stepsize) + ploidy;
 //		System.out.println(cni.getChr() +" copygain=" + copygain);
 //		if (copygain <= 2.0) {
@@ -301,14 +269,11 @@ public class TwoStateHMM {
 
 		List<CopyNumberInterval> list = new ArrayList<CopyNumberInterval>();
 
-		//
 		int n = 0;
 		CopyNumberInterval cnin = null;
-		CapInterval cib4 = null;
 		SummaryStatistics ss2 = new SummaryStatistics();
 		int cnt = 0;
 		for (int state : hmmary) {
-
 			WaveletIF wi = neighbors.get(n);
 			CapInterval ci = (CapInterval) wi;
 			if (state == 1) {
@@ -318,7 +283,6 @@ public class TwoStateHMM {
 			n++;
 		}
 		if (cnt > 0) {
-
 		} else {
 			return null;
 		}
@@ -329,21 +293,18 @@ public class TwoStateHMM {
 		n = 0;
 		int stateb4 = -1;
 		for (int state : hmmary) {
-
 			WaveletIF wi = neighbors.get(n);
 			CapInterval ci = (CapInterval) wi;
 			if(state==0){
 				if(ci.getDenioseValue() > 3.5){
 					state = 1;
 				}
-			}			
-			
+			}
+
 			boolean statechange = (stateb4 != state);
 
 			if (statechange) {
-
 				if (state == 0) {
-
 					if (cnin != null) {
 						list.add(cnin);
 						cnin = null;
@@ -351,9 +312,7 @@ public class TwoStateHMM {
 					cnin = new CopyNumberInterval(ci.getChr());
 					cnin.setStart(ci.getStart());
 					cnin.setCopynumber(cni.getCopynumber());
-
 				} else {
-
 					if (cnin != null) {
 						list.add(cnin);
 						cnin = null;
@@ -363,11 +322,9 @@ public class TwoStateHMM {
 					cnin.setStart(ci.getStart());
 					cnin.setCopynumber(copygain);
 				}
-
 			} else {
 				if (cnin != null) {
 					cnin.setEnd(ci.getEnd());
-
 				}
 			}
 
@@ -385,17 +342,11 @@ public class TwoStateHMM {
 	private Hmm<ObservationReal> getHighHMM(List<WaveletIF> neighbors,
 			CopyNumberInterval cni, float stepsize, SummaryStatistics ss,
 			float highmean, float highestcn) {
-
 		OpdfGaussianFactory factory = new OpdfGaussianFactory();
 		Hmm<ObservationReal> hmm = new Hmm<ObservationReal>(2, factory);
 
-		//
-		double mean = ss.getMean();
 		double variance = ss.getVariance();
 		if (ss.getN() <= 1 || variance <= 0) {
-			//
-			if (ss.getN() == 0)
-				mean = 1;
 			variance = 0.5;
 		}
 		float highmean2 = highmean + (2 * stepsize);
@@ -414,7 +365,5 @@ public class TwoStateHMM {
 		hmm.setAij(1, 0, 0.1);
 		hmm.setAij(1, 1, 0.9);
 		return hmm;
-
 	}
-
 }

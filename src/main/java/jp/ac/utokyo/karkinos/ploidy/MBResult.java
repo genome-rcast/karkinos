@@ -16,27 +16,31 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.ploidy;
 
 public class MBResult {
-	
 	MatchMatrixBean dup;
 	MatchMatrixBean tetra;
 	boolean dubtouse;
+
 	public MatchMatrixBean getDup() {
 		return dup;
 	}
+
 	public void setDup(MatchMatrixBean dup) {
 		this.dup = dup;
 	}
+
 	public MatchMatrixBean getTetra() {
 		return tetra;
 	}
+
 	public void setTetra(MatchMatrixBean tetra) {
 		this.tetra = tetra;
 	}
+
 	public boolean isDubtouse() {
 		return dubtouse;
 	}
+
 	public void setDubtouse(boolean dubtouse) {
 		this.dubtouse = dubtouse;
 	}
-
 }

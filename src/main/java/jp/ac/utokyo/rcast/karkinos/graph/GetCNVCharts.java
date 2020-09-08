@@ -16,12 +16,9 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.JFreeChart;
@@ -35,25 +32,21 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.Layer;
-import org.jfree.ui.RectangleInsets;
 
 import com.lowagie.text.Table;
 
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsCounter;
 import jp.ac.utokyo.rcast.karkinos.wavelet.Peak;
 import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class GetCNVCharts {
-
 	private final static int SIZE = 2;
 
 	public static List<DisplayObject> getChartLists(DataSet dataset,
 			PeaksInfo pi,String id) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		//
 		// list.add(cnvList(dataset));
@@ -64,7 +57,6 @@ public class GetCNVCharts {
 	}
 
 	public static List<DisplayObject> getTables(DataSet dataset) {
-
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 		list.add(new DisplayObject(cnvSummaryTable(dataset, 1), SIZE,
 				"CNV summary table"));
@@ -76,10 +68,8 @@ public class GetCNVCharts {
 	}
 
 	private static Object cnvSummaryTable(DataSet dataset, int dispFlg) {
-
 		Table table;
 		try {
-
 			if (dispFlg == 1) {
 				table = new Table(8);
 			} else {
@@ -101,7 +91,6 @@ public class GetCNVCharts {
 			// table.addCell("rejected");
 
 			for (CopyNumberInterval cni : dataset.getCopyNumberIntervalList(9)) {
-
 				if (cni.getCopynumber() == dataset.getBaseploidy()){
 					if(cni.getAaf()==dataset.getBaseploidy()/2){
 						continue;
@@ -128,7 +117,6 @@ public class GetCNVCharts {
 					if(cni.getCopynumber()!=0 && cni.isHdeletion()){
 						continue;
 					}
-					
 				}
 				table.addCell(cni.getChr());
 				table.addCell(format(cni.getStart()) + "");
@@ -145,20 +133,16 @@ public class GetCNVCharts {
 
 				// table.addCell(format(cni.getSnpclrrel())+"");
 				// table.addCell(cni.getRejected()+"");
-
 			}
 			return table;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 
 	private static JFreeChart cnvList(DataSet dataset, PeaksInfo pi) {
-
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
 		int tsize = 0;
 		int cnt = 0;
@@ -182,7 +166,6 @@ public class GetCNVCharts {
 			tsize = tsize + list.size();
 			chrMark.add(tsize);
 			for (WaveletIF wi : list) {
-
 				if (cnt % 2 == 0) {
 					// row data too heavy
 					// draw half
@@ -210,7 +193,7 @@ public class GetCNVCharts {
 				cnt++;
 			}
 		}
-		// //
+
 		// make a common vertical axis for all the sub-plots
 		NumberAxis xAxis = new NumberAxis("pos");
 		xAxis.setRange(0, tsize);
@@ -224,7 +207,7 @@ public class GetCNVCharts {
 		renderer0.setSeriesPaint(0, ChartColor.BLUE);
 
 		CombinedDomainXYPlot parent = new CombinedDomainXYPlot(xAxis);
-		
+
 		XYSeriesCollection data0 = new XYSeriesCollection();
 		data0.addSeries(series1); // add subplot 1...
 		XYPlot subplot1 = new XYPlot(data0, xAxis, yAxis, renderer0);
@@ -303,7 +286,6 @@ public class GetCNVCharts {
 		addChrMaker(subplot5, chrMark, dataset.getChromList());
 		parent.add(subplot5, 1);
 
-
 		final XYLineAndShapeRenderer renderer5 = new XYLineAndShapeRenderer();
 		renderer5.setSeriesShapesVisible(0, false);
 		renderer5.setSeriesPaint(0, ChartColor.RED);
@@ -323,12 +305,10 @@ public class GetCNVCharts {
 				JFreeChart.DEFAULT_TITLE_FONT, parent, true);
 
 		return chart;
-
 	}
 
 	private static void addChrMaker(XYPlot xyplot, List<Integer> chrMark,
 			List<String> labels) {
-
 		for (int cnt = 0; cnt + 1 < chrMark.size(); cnt++) {
 			Marker marker = new IntervalMarker(chrMark.get(cnt),
 					chrMark.get(cnt + 1));
@@ -344,78 +324,18 @@ public class GetCNVCharts {
 			marker.setAlpha(0.1f);
 			xyplot.addDomainMarker(marker, Layer.BACKGROUND);
 		}
-
 	}
 
 	private static void addMaker(XYPlot xyplot, List<Peak> list) {
-
 		for (Peak peak : list) {
 			Marker marker0 = new ValueMarker(peak.getU());
 			marker0.setPaint(Color.RED);
 			xyplot.addRangeMarker(marker0);
 		}
-
-	}
-
-	private static void addMaker(XYPlot xyplot, double baselineLOHEstimate) {
-		Marker marker0 = new ValueMarker(baselineLOHEstimate);
-		marker0.setPaint(Color.RED);
-		Marker marker1 = new ValueMarker(1);
-		marker1.setPaint(Color.RED);
-		Marker marker2 = new ValueMarker(2 - baselineLOHEstimate);
-		marker2.setPaint(Color.RED);
-		Marker marker3 = new ValueMarker(3 - (2 * baselineLOHEstimate));
-		marker3.setPaint(Color.RED);
-		xyplot.addRangeMarker(marker0);
-		xyplot.addRangeMarker(marker1);
-		xyplot.addRangeMarker(marker2);
-		xyplot.addRangeMarker(marker3);
-
-	}
-
-	//
-	//
-	//
-	// private static DisplayObject caprate(DataSet dataset) {
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getChart(1,dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	// }
-	//
-	// private static DisplayObject cnvList(DataSet dataset) {
-	//
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getcnvlist(dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	// }
-	//
-	// private static DisplayObject hetroSNP(DataSet dataset) {
-	//
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getChart(2,dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	// }
-	//
-	// private static DisplayObject mutation(DataSet dataset) {
-	//
-	// DisplayObject dobj = new DisplayObject();
-	// dobj.setObject(getChart(3,dataset));
-	// dobj.setSize(SIZE);
-	// return dobj;
-	//
-	// }
-
-	private static String format(double num) {
-		NumberFormat nf = NumberFormat.getNumberInstance();
-		return nf.format(num);
 	}
 
 	private static String format(int num) {
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		return nf.format(num);
 	}
-
 }

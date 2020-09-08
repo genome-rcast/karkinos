@@ -41,9 +41,7 @@ import jp.ac.utokyo.rcast.karkinos.graph.output.CNVVcf;
 import jp.ac.utokyo.rcast.karkinos.graph.output.FileOutPut;
 import jp.ac.utokyo.rcast.karkinos.graph.output.PdfReport;
 import jp.ac.utokyo.rcast.karkinos.graph.output.TextSummary;
-import jp.ac.utokyo.rcast.karkinos.hmm.AdjustBetweenState;
 import jp.ac.utokyo.rcast.karkinos.hmm.CountCNV;
-import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysis;
 import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysisFromEM;
 import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
@@ -65,12 +63,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class TumorGenotyper extends ReadWriteBase {
-
 	public static void main(String[] arg) {
-
 		BasicParser parcer = new BasicParser();
 		List<Option> optionList = getOptionListForKarkinos();
 		Options opts = new Options();
@@ -96,11 +91,9 @@ public class TumorGenotyper extends ReadWriteBase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private static List<Option> getOptionListForKarkinos() {
-
 		List<Option> optionlist = new ArrayList<Option>();
 		optionlist.add(getOption("n", "normalBam", true, "normal bam file",
 				true));
@@ -159,11 +152,8 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		// optionlist.add(getOption("cb", "chrBands", true,
 		// "Chromosome Band",false));
-		
-		
 
 		return optionlist;
-
 	}
 
 	public static Option getOption(String opt, String longOpt, boolean hasArg,
@@ -174,7 +164,6 @@ public class TumorGenotyper extends ReadWriteBase {
 	}
 
 	public void exec(CommandLine cl) throws Exception {
-
 		// String mappability =
 		// "/GLUSTER_DIST/data/users/ueda/SNVtest/wgEncodeCrgMapabilityAlign100mer.bw";
 
@@ -279,11 +268,9 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		String startend = null;
 		if (cl.hasOption("startend")) {
-
 			startend = cl.getOptionValue("startend");
-
 		}
-		
+
 		boolean useAvearageNormal = false;
 		if (cl.hasOption("nd")) {
 			useAvearageNormal = cl.getOptionValue("ng")
@@ -292,11 +279,9 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		String sites = null;
 		if (cl.hasOption("sites")) {
-			sites = cl.getOptionValue("sites");					
+			sites = cl.getOptionValue("sites");
 		}
-		
-		
-		
+
 		boolean allfileexsist = fileExsistanceCheck(files);
 		if (!allfileexsist) {
 			return;
@@ -314,10 +299,9 @@ public class TumorGenotyper extends ReadWriteBase {
 		TwoBitGenomeReader tgr = new TwoBitGenomeReader(new File(twobitref));
 		String startends = startend;
 		if(startends==null)startends="";
-		
+
 		if (targetChr != null) {
 			if (!targetChr.contains("chr")) {
-
 				String s = "chr" + targetChr;
 				if (tgr.isRefExsist(s)) {
 					targetChr = s;
@@ -374,15 +358,12 @@ public class TumorGenotyper extends ReadWriteBase {
 	}
 
 	protected boolean fileExsistanceCheck(List<String> files) {
-
 		for (String s : files) {
-
 			File f = new File(s);
 			if (!f.exists()) {
 				System.out.println("file does not exsist " + s);
 				return false;
 			}
-
 		}
 		return true;
 	}
@@ -390,114 +371,17 @@ public class TumorGenotyper extends ReadWriteBase {
 	protected SaveBean getReadsAndPileupDataFromFile(String outputsave,
 			String tumorbamf, TwoBitGenomeReader tgr) throws IOException,
 			ClassNotFoundException {
-
 		SAMFileReader tumorbamr = getReader(tumorbamf);
 		List<SAMSequenceRecord> ssrList = tumorbamr.getFileHeader()
 				.getSequenceDictionary().getSequences();
 		tumorbamr.close();
 		SaveBean sb = LoadSave.load(outputsave, ssrList, tgr);
 		return sb;
-
 	}
 
 	AllelicCNV alCNV;
 	NoiseAnalysis na;
 	PeaksInfo pi;
-
-	protected void analysis(SaveBean bean, String dbSNP, String mappability,
-			TwoBitGenomeReader tgr, String normalbamf,String tumorbamf, String g1000,
-			float g1000thres, String cosmic, double fixtumorratio,
-			String exonSNP, GeneExons ge) throws IOException {
-
-		System.out.println("analysis start");
-		DataSet dataset = bean.getDataset();
-		ReadsSummary readsSummary = bean.getReadsSummary();
-		// Excute CNV analysis using wavelet transform
-		System.out.println("CNV analysis 1 start");
-		GCParcentAdjust.calc(dataset);
-		denoizeAndHMM(dataset);
-		// if CNV exceed max num 25 denoize more
-		if (CountCNV.count(dataset) > 25) {
-			KarkinosProp.maxdenoiseLevel = KarkinosProp.maxdenoiseLevel + 1;
-			denoizeAndHMM(dataset);
-		}
-
-		// annotate datalist by CNV value
-		dataset.assginCaptureInterval();
-		// add betwwen states for poor fit chromosome
-		AdjustBetweenState.calc(dataset);
-
-		System.out.println("assgin dbSNP start");
-		// annotate datalist by dbSNP
-		DbSNPAnnotation dbAnno = new DbSNPAnnotation(dbSNP, g1000, g1000thres,
-				cosmic, exonSNP);
-		dataset.assgindbSNP(dbAnno);
-
-		// try to find allelic CNV
-		alCNV = new AllelicCNV(dataset, readsSummary);
-
-		// find hetro SNP correlation in each CMV interval
-		// reject if correration is high
-		CorrelVaridate.varidate(dataset, alCNV);
-		// CheckPossibleHDAmp.check(dataset);
-		// ///
-		CNVUtils.reflectToSNV(dataset, alCNV.getAllelicLOHLow(),
-				alCNV.getAllelicLOHhigh());
-
-		System.out.println("tumor ratio");
-		// calculate tumor ratio
-		dataset.getAnalyseDist();
-		if (fixtumorratio > 0) {
-			dataset.setFixtc((float) fixtumorratio);
-		}
-
-		// support reads,entropy,mappability check
-		System.out.println("filter annotation");
-		FilterAnnotation fa = new FilterAnnotation(mappability, tgr,normalbamf,tumorbamf,
-				dbAnno, ge);
-		// set filter1
-		float tc1 = dataset.getTumorRatio();
-		fa.filterAnnotation(dataset, readsSummary, 2);
-		// tcontents from somatic val
-		dataset.getAnalyseDist().reanalyseTC(dataset);
-
-		//
-		float tc2 = dataset.getTumorRatio();
-		if (tc1 != tc2) {
-			fa.filterAnnotation(dataset, readsSummary, 2);
-		}
-		// set filter stat
-		dataset.getAnalyseDist().analyseDist(dataset);
-		//
-
-		dataset.bailAnalysis();
-		System.out.println("analysis done");
-		na = fa.getNa();
-
-	}
-
-	private void _denoizeAndHMM(DataSet dataset) throws IOException {
-		System.out.println("CNV analysis 2 start");
-		WaveletDenoize.calc(dataset);
-
-		System.out.println("CNV analysis 3 start");
-		// HMM call for CNV
-		HMMCNVAnalysis.calc(dataset);
-	}
-
-	// for future use
-	private void denoizeAndHMM(DataSet dataset) throws IOException {
-		System.out.println("CNV analysis 2 start");
-		// MovingAverage.calc(dataset);
-		double baselineLOHEstimate = WaveletDenoize.calc(dataset);
-		// EMMethod to calc distribution
-		System.out.println("CNV analysis 3 start");
-		pi = EMMethod.calc(dataset, baselineLOHEstimate);
-		System.out.println("CNV analysis 4 start");
-		// HMM call for CNV
-		HMMCNVAnalysis.calc(dataset);
-
-	}
 
 	int baseploidy = 2;
 
@@ -506,22 +390,20 @@ public class TumorGenotyper extends ReadWriteBase {
 			float g1000thres, String cosmic, double fixtumorratio,
 			String exonSNP, GeneExons ge, boolean useAvearageNormal, String sites)
 			throws IOException, ClassNotFoundException {
-
 		System.out.println("analysis start");
 
 		DataSet dataset = bean.getDataset();
 		//debug
-		
+
 		dataset.setUseAvearageNormal(useAvearageNormal);
 		ReadsSummary readsSummary = bean.getReadsSummary();
 
 		// // Excute CNV analysis using wavelet transform
 		// System.out.println("CNV analysis 1 start");
 		GCParcentAdjust.calc(dataset);
-		
-			
+
 		GeneEachCNV.calcCNVForEachgene(dataset,ge);
-		
+
 		denoizeWTAndHMM(dataset);
 		// if CNV exceed max num 50 denoize more
 		if (CountCNV.count(dataset) > 100) {
@@ -549,8 +431,6 @@ public class TumorGenotyper extends ReadWriteBase {
 		if (interval > 0) {
 			dataset.setBaselineLOHEstimate(interval);
 		}
-		//
-		
 
 		FilterAnnotation fa = new FilterAnnotation(mappability, tgr, normalbamf,tumorbamf,
 				dbAnno, ge);
@@ -561,12 +441,12 @@ public class TumorGenotyper extends ReadWriteBase {
 			CheckPossibleHDAmp.check(dataset, pi, matchmatrix.getPloidyflg(),
 					matchmatrix.getpEvenMax());
 		}
-		// /////
+
 		baseploidy = matchmatrix.getPloidyflg();
 		CNVUtils.reflectToSNV(dataset, alCNV.getAllelicLOHLow(),
 				alCNV.getAllelicLOHhigh());
 		CorrelVaridate.recheck(dataset);
-		//
+
 		dataset.getAnalyseDist();
 		if (fixtumorratio > 0) {
 			dataset.setFixtc((float) fixtumorratio);
@@ -574,15 +454,14 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		// // support reads,entropy,mappability check
 		System.out.println("filter annotation");
-		//
+
 		// //set filter1
 		float tc1 = dataset.getTumorRatio();
 		fa.filterAnnotation(dataset, readsSummary, matchmatrix.getPloidyflg());
 		// tcontents from somatic val
 		dataset.getAnalyseDist().reanalyseTC(dataset);
 		dataset.setBaseploidy(baseploidy);
-		//
-		// //
+
 		float tc2 = dataset.getTumorRatio();
 		if (tc1 != tc2) {
 			fa.filterAnnotation(dataset, readsSummary,
@@ -590,25 +469,20 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 		// // set filter stat
 		dataset.getAnalyseDist().analyseDist(dataset);
-		// //
-		//
+
 		dataset.bailAnalysis();
 		System.out.println("analysis done");
 		na = fa.getNa();
-
 	}
 
 	private MatchMatrixBean resolvePloidy(DataSet dataset, AllelicCNV alCNV2,
 			PeaksInfo pi2, int cnvcount) {
-		//
 		PloidyResolve pr = new PloidyResolve();
 		pr.resolve(dataset, alCNV2, pi2, cnvcount);
 		return pr.getMmb1();
-
 	}
 
 	private void denoizeWTAndHMM(DataSet dataset) throws IOException {
-
 		System.out.println("CNV analysis 2 start");
 		// MovingAverage.calc(dataset);
 		double baselineLOHEstimate = WaveletDenoize.calc(dataset);
@@ -620,20 +494,12 @@ public class TumorGenotyper extends ReadWriteBase {
 			ex.printStackTrace();
 		}
 		HMMCNVAnalysisFromEM.calc(dataset, pi);
-
-	}
-
-	private String info(SummaryStatistics ss) {
-
-		return ss.getMean() + "\t" + ss.getStandardDeviation() + "\t"
-				+ ss.getN();
 	}
 
 	protected void output(SaveBean bean, String outdir, TwoBitGenomeReader tgr,
 			String id, String readsStat, AllelicCNV alCNV, GeneExons ge,
 			NoiseAnalysis na2, PeaksInfo pi, int baseploidy, boolean nopdf,String refflat, String sites)
 			throws Exception {
-
 		DataSet dataset = bean.getDataset();
 		float purity = dataset.getTumorRatio();
 		ReadsSummary readsSummary = bean.getReadsSummary();
@@ -641,30 +507,26 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		FileOutPut.lowcovBed(outdir + id + "_normal_lowcov.bed", outdir + id
 				+ "_tumor_lowcov.bed", readsSummary,ge);
-		
-		
+
 		TextSummary.outTextData(outdir + id + "_textdata.txt", readsSummary,
 				readsStat, dataset, pi.getPloidy());
-		
+
 		CNVVcf.outData(outdir + id + "_cnvdata.vcf", dataset);
-		
+
 		FileOutPut.outPutSNVDataVCF(outdir + id + "_snvdata.vcf", dataset, tgr,
 				na2);
-		
-				
+
 		FileOutPut.outPutSNVDataForAnnover(outdir + id + "_annover_input.txt",
 				dataset, tgr);
 
 		FileOutPut.outputSNP(outdir + id + "_normalsnp.vcf", dataset, tgr, ge);
-		
+
 		FileOutPut.outputgeneCNV(outdir + id + "_cnv_forgene.txt", ge,refflat);
-		
+
 		if(sites!=null){
-			
 			FileOutPut.sites(outdir + id + "_disignatedsites.vcf", dataset, tgr, ge,sites);
-			
-		}		
-		
+		}
+
 		FileOutPut.allDiff(outdir + id + "_alldiff.vcf", dataset, tgr, ge);
 
 		if (!nopdf) {
@@ -681,19 +543,15 @@ public class TumorGenotyper extends ReadWriteBase {
 					+ "_cnvAllelicDepth.txt",purity);
 		} catch (Exception ex) {
 		}
-
 	}
 
 	public SaveBean getReadsAndPileupDataFromBam(String normalbamf,
 			String tumorbamf, TwoBitGenomeReader tgr, String targetRegion,
 			String outputsave, String targetChr, String startend,String refflat, String sites)
 			throws Exception {
-
-		//
 		DataSet dataset = new DataSet(tgr.readIndex());
 		dataset.loadTargetBed(targetRegion, tgr);
-		
-		
+
 		// Iterate by Chromosome
 		SAMFileReader normalbamr = getReader(normalbamf);
 		SAMFileReader tumorbamr = getReader(tumorbamf);
@@ -711,7 +569,6 @@ public class TumorGenotyper extends ReadWriteBase {
 		System.out.println("start pileup " + targetChr);
 		int cnt = 0;
 		for (SAMSequenceRecord ssr : ssrList) {
-
 			String chrom = ssr.getSequenceName();
 			if (notEquals(targetChr, chrom)) {
 				continue;
@@ -730,12 +587,10 @@ public class TumorGenotyper extends ReadWriteBase {
 			chromcnt++;
 			readsSummary.resetAlreadyregset();
 			System.gc();
-
 		}
 		dataset.getNormal().clearmap();
 		dataset.getTumor().clearmap();
-		
-		
+
 		if (cnt == 0) {
 			System.out
 					.println("no chromosome match bam to reference. check reference name");
@@ -762,11 +617,9 @@ public class TumorGenotyper extends ReadWriteBase {
 		SaveBean sbean = new SaveBean(dataset, readsSummary);
 		LoadSave.save(sbean, outputsave);
 		return sbean;
-
 	}
 
 	private boolean notEquals(String targetChr, String chrom) {
-
 		if (targetChr == null) {
 			return false;
 		}
@@ -789,33 +642,27 @@ public class TumorGenotyper extends ReadWriteBase {
 			return;
 		}
 		while (normarIte.hasNext()) {
-
 			SAMRecord sam = normarIte.next();
 			if (sam.getReadUnmappedFlag())
 				continue;
 			readsSummary.regN(sam, false, null);
-
 		}
 		normarIte.close();
 		CloseableIterator<SAMRecord> tumorIte = tumorbamr.query(chrom, 0, 0,
 				false);
 		while (tumorIte.hasNext()) {
-
 			SAMRecord sam = tumorIte.next();
 			if (sam.getReadUnmappedFlag())
 				continue;
 			readsSummary.regT(sam, false, null);
 		}
 		tumorIte.close();
-
 	}
 
 	private void execChrom(DataSet dataset, String chrom, String startend, int length,
 			SAMFileReader normalbamr, SAMFileReader tumorbamr,
 			TwoBitGenomeReader tgr, ReadsSummary readsSummary, String sites)
 			throws IOException {
-
-		//
 		List<Interval> ivlist = ListUtils.getIntervalList(chrom, startend, length,
 				KarkinosProp.BINBITSIZE);
 		if(ivlist ==null){
@@ -823,33 +670,16 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 		DefinedSites ds = null;
 		if(sites!=null){
-			
-			//
 			ds = new DefinedSites(sites);
 			ds.load(sites,chrom);
-			
 		}
-
-		// debug
-		int debugpos = 309750;
-		boolean debug = true;
-		//boolean debug = false;
-		//
 
 		int n = 0;
 		for (Interval iv : ivlist) {
 			n++;
 			//debug
 			//if(n==10)break;
-			
-//			if((iv.getStart() < debugpos) && (debugpos<iv.getEnd())){
-//				
-//			}else{
-//				continue;
-//			}
-				
-			
-			
+
 			CloseableIterator<SAMRecord> normarIte = normalbamr.query(chrom,
 					iv.getStart(), iv.getEnd(), false);
 			CloseableIterator<SAMRecord> tumorIte = tumorbamr.query(chrom,
@@ -859,12 +689,10 @@ public class TumorGenotyper extends ReadWriteBase {
 			int readslenn = 0;
 			List<SamHolder> normalList = new ArrayList<SamHolder>();
 			while (normarIte.hasNext()) {
-
 				SAMRecord sam = normarIte.next();
 				if (sam.getReadUnmappedFlag())
 					continue;
 				if (qualityCheck(sam)) {
-
 					boolean onTarget = false;
 					OntagetInfo oi = dataset.setNomalCoverageInfo(sam);
 					if(oi!=null){
@@ -872,7 +700,6 @@ public class TumorGenotyper extends ReadWriteBase {
 					}
 					boolean dupli = sam.getDuplicateReadFlag();
 					if (onTarget && !dupli) {
-						
 						SamHolder sh = new SamHolder();
 						sh.setSam(sam);
 						sh.setOi(oi);
@@ -891,12 +718,10 @@ public class TumorGenotyper extends ReadWriteBase {
 			int tumorcnt = 0;
 			int readslent = 0;
 			while (tumorIte.hasNext()) {
-
 				SAMRecord sam = tumorIte.next();
 				if (sam.getReadUnmappedFlag())
 					continue;
 				if (qualityCheck(sam)) {
-
 					boolean onTarget = false;
 					OntagetInfo oi = dataset.setTumorCoverageInfo(sam);
 					if(oi!=null){
@@ -909,15 +734,13 @@ public class TumorGenotyper extends ReadWriteBase {
 						sh.setSam(sam);
 						sh.setOi(oi);
 						tumorList.add(sh);
-						
 					}
 					readsSummary.regT(sam, onTarget, iv);
 				}
 				tumorcnt++;
 				readslent = sam.getReadLength();
 			}
-			
-			
+
 			System.out.println(iv.getStr() + " tumor reads " + tumorcnt
 					+ " has been reads");
 
@@ -925,10 +748,10 @@ public class TumorGenotyper extends ReadWriteBase {
 			System.out.println(Calendar.getInstance().getTime());
 			PileUP.pileup(iv, dataset, normalList, tumorList, tgr, readsSummary,ds);
 			System.out.println(Calendar.getInstance().getTime());
-			
+
 			System.out.println("normal depth"+ readsSummary.getNormalDepth().getMeanOntagDepth());
 			System.out.println("tumor depth" + readsSummary.getTumorDepth().getMeanOntagDepth());
-			
+
 			readsSummary.setReadslent(readslent);
 			readsSummary.setReadslenn(readslenn);
 			normalList = null;
@@ -936,14 +759,11 @@ public class TumorGenotyper extends ReadWriteBase {
 			normarIte.close();
 			tumorIte.close();
 			System.gc();
-
 		}
-
 	}
 
 	private boolean qualityCheck(SAMRecord sam) {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
 }

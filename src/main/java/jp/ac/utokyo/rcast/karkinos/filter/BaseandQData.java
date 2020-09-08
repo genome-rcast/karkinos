@@ -16,20 +16,19 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.filter;
 
 public class BaseandQData {
-
 	char base;
 	byte qual;
-	
+
 	public BaseandQData(char base,byte qual) {
 		this.base = base;
 		this.qual = qual;
 	}
+
 	public char getBase() {
 		return base;
 	}
+
 	public byte getQual() {
 		return qual;
 	}
-
-	
 }

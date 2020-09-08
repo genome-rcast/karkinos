@@ -23,12 +23,11 @@ import java.util.List;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class BinData {
-
 	int udepth;
 	int ldepth;
 	SummaryStatistics hetroSNPAF = new SummaryStatistics();
 	SummaryStatistics secondAF = new SummaryStatistics();
-	//
+
 	List<Point2D> afdepth = new ArrayList<Point2D>();
 
 	public void setHetroSNPAF(int depth, double tr) {
@@ -36,18 +35,16 @@ public class BinData {
 	}
 
 	public void setSecondAF(int depth, double secondAlleleF) {
-		secondAF.addValue(secondAlleleF);		
+		secondAF.addValue(secondAlleleF);
 	}
-	
+
 	public void setSNV(int depth, double tr) {
 		afdepth.add(new Point2D.Double(tr, depth));
 	}
 
 	public BinData(int ldepth, int udepth) {
-
 		this.ldepth = ldepth;
 		this.udepth = udepth;
-
 	}
 
 	public int getDepth() {
@@ -58,24 +55,8 @@ public class BinData {
 		return udepth;
 	}
 
-	public void setUdepth(int udepth) {
-		this.udepth = udepth;
-	}
-
 	public int getLdepth() {
 		return ldepth;
-	}
-
-	public void setLdepth(int ldepth) {
-		this.ldepth = ldepth;
-	}
-
-	public SummaryStatistics getHetroSNPAF() {
-		return hetroSNPAF;
-	}
-
-	public void setHetroSNPAF(SummaryStatistics hetroSNPAF) {
-		this.hetroSNPAF = hetroSNPAF;
 	}
 
 	int numCandidate;
@@ -83,15 +64,13 @@ public class BinData {
 	double borerAF = 0.15f;
 
 	public void em() {
-
-
 		try {
 			EMCGM emcgm = new EMCGM();
 			emcgm.setInitVariance(hetroSNPAF.getVariance());
 			emcgm.analyse(afdepth);
 			numCandidate = emcgm.getNumcandidate();
 			borerAF = emcgm.getBorderAF();
-				
+
 			if (emcgm.isSuccess()) {
 				emExcuted = true;
 				usedefalt = false;
@@ -106,7 +85,6 @@ public class BinData {
 	}
 
 	public double getAFBorder() {
-		
 		double sd = hetroSNPAF.getStandardDeviation();
 		double defret = sd*2;
 		if (Double.isNaN(sd)) {
@@ -118,7 +96,6 @@ public class BinData {
 			// 3sd
 			return defret;
 		} else if (!emExcuted) {
-			
 			if(getSamplesize()<=10){
 				return defret;
 			}
@@ -129,15 +106,12 @@ public class BinData {
 			}
 			return r;
 		} else {
-			
 			System.out.println("EM used="+getDepth()+"\t"+borerAF);
 			if((borerAF<0.15) && (getDepth()<40)){
 				return defret;
-			}			
+			}
 			return borerAF;
-			
 		}
-
 	}
 
 	public int getNumCandidate() {
@@ -145,27 +119,22 @@ public class BinData {
 	}
 
 	public double getUpperAFNoise(int candnum) {
-
 		int idx = afdepth.size() - (candnum+1);
 		if (idx < 0){
 			return 0;
 			//no noise
-		}	
+		}
 		if(idx>=afdepth.size()){
 			return 0;
 		}
 		return afdepth.get(idx).getX();
-
 	}
 
 	public void sortList() {
-
 		sort(afdepth);
-
 	}
 
 	private void sort(List<Point2D> afdepth) {
-
 		Collections.sort(afdepth, new MyCompEM());
 	}
 
@@ -178,24 +147,19 @@ public class BinData {
 	int predictedCandnum = 0;
 
 	public void setPredictedCandnum(int predictedCandnum) {
-
 		this.predictedCandnum = predictedCandnum;
 		usedefalt = false;
 	}
 
 	public boolean includepeth(int d) {
-		
 		if(udepth==0){
 			udepth = 10000;
 		}
-		return d>= ldepth && d<=udepth;		
+		return d>= ldepth && d<=udepth;
 	}
 
 	public int getSamplesize() {
 		if(afdepth==null)return 0;
 		return afdepth.size();
 	}
-
-
-
 }

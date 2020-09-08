@@ -17,7 +17,6 @@ package jp.ac.utokyo.rcast.karkinos.wavelet;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,7 +31,6 @@ import org.apache.commons.math.linear.RealVector;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class DistMedian implements java.io.Serializable{
-
 	public float MIN = 0.25f;
 	public float MAX = 4.5f;
 	public static final float interval = 0.025f;
@@ -40,7 +38,7 @@ public class DistMedian implements java.io.Serializable{
 
 	Map<Integer, SummaryStatistics> map = new LinkedHashMap<Integer, SummaryStatistics>();
 	SummaryStatistics nettotal = new SummaryStatistics();
-	
+
 	public DistMedian(double min, double max,boolean considermean) {
 		MIN = (float)min;
 		MAX = (float)max;
@@ -48,16 +46,14 @@ public class DistMedian implements java.io.Serializable{
 	}
 
 	public DistMedian() {
-		
 	}
 
 	public void addValue(double z) {
-
 		if ((z < MIN) || (z > MAX) || (z == 1)) {
 			return;
 		}
 		nettotal.addValue(z);
-		
+
 		int n = getIntervalIndex(z);
 		SummaryStatistics ss = null;
 		if (map.containsKey(n)) {
@@ -70,50 +66,41 @@ public class DistMedian implements java.io.Serializable{
 	}
 
 	private int getIntervalIndex(double z) {
-
-		//
 		int n = (int) (z * 1000) / (int) (interval * 1000);
 		return n;
-
 	}
 
 	public double getDistributionMedian() {
-		
 		double defval = nettotal.getGeometricMean();
 		try{
 			double dm = _getDistributionMedian();
 			if(considermean&&Math.abs(defval-dm)>0.1){
 				return dm;
 			}
-			
 		}catch(Exception ex){
-			
 		}
 		//return default val
 		return defval;
 	}
-	
-	public double _getDistributionMedian() {
 
+	public double _getDistributionMedian() {
 		// get max distributed value
 		Iterator<Integer> ite = map.keySet().iterator();
-		//
+
 		int max = 0;
 		int maxidx = 0;
 		int secondbestidx = 0;
 
 		// get Max distributed point
 		while (ite.hasNext()) {
-
 			int idx = ite.next();
 			SummaryStatistics ss = map.get(idx);
-			//
+
 			if (ss.getN() > max) {
 				max = (int) ss.getN();
 				secondbestidx = maxidx;
 				maxidx = idx;
 			}
-
 		}
 		int neighbor = 20;
 
@@ -122,15 +109,10 @@ public class DistMedian implements java.io.Serializable{
 
 		// get +-5 max point
 		for (int n = maxidx - neighbor; n <= maxidx + neighbor; n++) {
-
 			SummaryStatistics ss = map.get(n);
 			if (ss != null) {
-
-				//
 				datapoints.add(new Point2D.Double(ss.getMean(), ss.getN()));
-
 			}
-
 		}
 
 		int n = 0;
@@ -145,8 +127,6 @@ public class DistMedian implements java.io.Serializable{
 
 		// LSM to find 2nd degree eq
 		for (Point2D.Double point : datapoints) {
-
-			//
 			double x0 = point.getX();
 			double y0 = point.getY();
 			double x2 = Math.pow(x0, 2);
@@ -158,11 +138,10 @@ public class DistMedian implements java.io.Serializable{
 			X3 += x3;
 			X4 += x4;
 			n++;
-			
+
 			Y += y0;
 			XY += x0 * y0;
 			X2Y += x2 * y0;
-
 		}
 		// resolve equation
 		double[][] vals = { { n, X, X2 }, { X, X2, X3 }, { X2, X3, X4 } };
@@ -172,7 +151,6 @@ public class DistMedian implements java.io.Serializable{
 
 		double a1 = 0;
 		double b1 = 0;
-		double c1 = 0;
 
 		try {
 			DecompositionSolver solver = new LUDecompositionImpl(a).getSolver();
@@ -180,7 +158,6 @@ public class DistMedian implements java.io.Serializable{
 			RealVector x = solver.solve(b);
 			a1 = x.getEntry(2);
 			b1 = x.getEntry(1);
-			c1 = x.getEntry(0);
 		} catch (Exception ex) {
 			//ex.printStackTrace();
 		}
@@ -193,21 +170,16 @@ public class DistMedian implements java.io.Serializable{
 			}else{
 				return nettotal.getGeometricMean();
 			}
-			
 		}
 
 		// derivative to find max
 		double maxX = -1 * (b1 / (2 * a1));
 
-		//
-
 		return maxX;
 	}
 
 	private int getNearToMean(int maxidx, int secondbestidx) {
-		
 		if(map.containsKey(secondbestidx)){
-			
 			double netmean = nettotal.getMean();
 			double mean1 = map.get(maxidx).getMean();
 			double mean2 = map.get(secondbestidx).getMean();
@@ -216,5 +188,4 @@ public class DistMedian implements java.io.Serializable{
 		}
 		return maxidx;
 	}
-
 }

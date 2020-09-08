@@ -15,12 +15,9 @@ limitations under the License.
 */
 package jp.ac.utokyo.karkinos.ploidy;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MatchMatrixEach {
-
-
 	Map<String, double[]> nodecounter;
 	double sumdist;
 	double sumratio;
@@ -29,20 +26,25 @@ public class MatchMatrixEach {
 	public int getNumhit() {
 		return numhit;
 	}
+
 	public void setNumhit(int numhit) {
 		this.numhit = numhit;
 	}
+
 	public double getSumratio() {
 		return sumratio;
 	}
+
 	public void setSumratio(double sumratio) {
 		this.sumratio = sumratio;
 	}
+
 	int purity;
-	
+
 	public int getPurity() {
 		return purity;
 	}
+
 	public void setPurity(int purity) {
 		this.purity = purity;
 	}
@@ -50,18 +52,16 @@ public class MatchMatrixEach {
 	public Map<String, double[]> getNodecounter() {
 		return nodecounter;
 	}
+
 	public void setNodecounter(Map<String, double[]> nodecounter) {
 		this.nodecounter = nodecounter;
 	}
-	public double getSumdist() {
-		return sumdist;
-	}
+
 	public void setSumdist(double sumdist) {
 		this.sumdist = sumdist;
 	}
-	
+
 	public String getHitnodes() {
-		
 		StringBuffer sb = new StringBuffer();
 		if(nodecounter!=null){
 			for(String s:nodecounter.keySet()){
@@ -70,6 +70,4 @@ public class MatchMatrixEach {
 		}
 		return sb.toString();
 	}
-	
-	
 }

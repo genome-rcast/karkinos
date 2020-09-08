@@ -16,21 +16,16 @@ limitations under the License.
 package jp.ac.utokyo.karkinos.noisefilter;
 
 public class NDist {
-	
 	double u  =0;
 	double v =0;
-	
+
 	public NDist(double u,double v){
-		
-		//
 		this.u =u;
-		this.v =v;		
+		this.v =v;
 	}
-	
+
 	public double getP(double x){
-		
 		double p = Math.exp(-0.5*(Math.pow((x-u),2)/v))/Math.sqrt(2*Math.PI*v);
 		return p;
 	}
-
 }

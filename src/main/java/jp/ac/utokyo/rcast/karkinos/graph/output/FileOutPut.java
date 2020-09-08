@@ -29,10 +29,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import jp.ac.utokyo.karkinos.noisefilter.NoiseAnalysis;
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.AllelicCNV;
 import jp.ac.utokyo.rcast.karkinos.alleliccnv.SNVHolderPlusACnv;
-import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.filter.DefinedSites;
 import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
@@ -43,12 +41,9 @@ import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class FileOutPut {
-
 	public static void outPutSNVDataVCF(String outpath, DataSet dataset,
 			TwoBitGenomeReader tgr, NoiseAnalysis na) {
-
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 			bw.append("##fileformat=VCFv4.1" + "\n");
@@ -160,33 +155,10 @@ public class FileOutPut {
 			bw.close();
 		} catch (IOException ex) {
 		}
-
-	}
-
-	public static void outPutCNVData(String outpath, DataSet dataset) {
-
-		try {
-
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(outpath)));
-			for (List<WaveletIF> list : dataset.getCapInterval()) {
-				for (WaveletIF wif : list) {
-
-					CapInterval ci = (CapInterval) wif;
-					bw.write(ci.getInfoStr() + "\n");
-
-				}
-			}
-			bw.close();
-		} catch (IOException ex) {
-		}
-
 	}
 
 	public static void lowcovBed(String outpathnormal, String outpathtumor,
 			ReadsSummary readsSummary, GeneExons ge) {
-
-		//
 		List<Interval> lowcoverageListN = readsSummary.getNormalDepth()
 				.getLowcoverageList();
 		List<Interval> lowcoverageListT = readsSummary.getTumorDepth()
@@ -199,7 +171,6 @@ public class FileOutPut {
 	private static void writeLowDepthBed(String filepath,
 			List<Interval> lowcoverageList, GeneExons ge) {
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(filepath)));
 			bw.append("#chr\t	start\t	end\t	name\t	depth\t geneSymbol\t  refseqid\t exonIdx \n");
@@ -210,7 +181,6 @@ public class FileOutPut {
 						+ iv.getDepth());
 
 				if (ge != null) {
-
 					Interval iv2 = ge.getGeneIntervalExon(iv.getChr(),
 							iv.getStart());
 					if (iv2 == null) {
@@ -224,13 +194,11 @@ public class FileOutPut {
 						bw.write("\t" + iv2.getRefseqid());
 						bw.write("\t" + iv2.getExonidx());
 					}
-
 				} else {
 					bw.write("\t \t");
 				}
 
 				bw.write("\n");
-
 			}
 			bw.close();
 		} catch (IOException ex) {
@@ -239,9 +207,7 @@ public class FileOutPut {
 
 	public static void outPutSNVDataForAnnover(String outpath, DataSet dataset,
 			TwoBitGenomeReader tgr) {
-
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -257,7 +223,6 @@ public class FileOutPut {
 			bw.close();
 		} catch (IOException ex) {
 		}
-
 	}
 
 	// chr
@@ -279,9 +244,7 @@ public class FileOutPut {
 
 	public static void sites(String outpath, DataSet dataset,
 			TwoBitGenomeReader tgr, GeneExons ge, String sites) {
-
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -293,36 +256,28 @@ public class FileOutPut {
 
 			// float tumorRratio = dataset.getTumorRatio();
 			for (SNVHolder holder : dataset.getSnvlist()) {
-
 				String chr = holder.getChr();
 				int pos = holder.getPos();
 				if (ds.contains(chr, pos)) {
-
 					String[] stra = FormatHelper.getLine(holder, tgr, ge);
 					if (stra != null) {
-
 						for (String s : stra) {
-
 							bw.write(s);
 							bw.write("\t");
 						}
 						bw.write("\n");
 					}
-
 				}
 			}
 			bw.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public static void allDiff(String outpath, DataSet dataset,
 			TwoBitGenomeReader tgr, GeneExons ge) {
-
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 			bw.append("##fileformat=VCFv4.1" + "\n");
@@ -343,7 +298,6 @@ public class FileOutPut {
 
 			// float tumorRratio = dataset.getTumorRatio();
 			for (SNVHolder holder : dataset.getSnvlist()) {
-
 				String str = FormatHelper.getVCFLineAllDiff(holder, tgr, ge);
 				if (str != null) {
 					bw.write(str + "\n");
@@ -353,14 +307,11 @@ public class FileOutPut {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public static void outputSNP(String outpath, DataSet dataset,
 			TwoBitGenomeReader tgr, GeneExons ge) {
-
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 			bw.append("##fileformat=VCFv4.1" + "\n");
@@ -390,14 +341,11 @@ public class FileOutPut {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public static void outputDepth(DataSet dataset, String outpath,
 			float purity, GeneExons ge) {
-
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -410,9 +358,7 @@ public class FileOutPut {
 
 			float factor = 1 / purity;
 			for (List<WaveletIF> list : dataset.getCapInterval()) {
-
 				for (WaveletIF wi : list) {
-
 					// Convert CapInterval format (1-based closed open range)
 					// into _cnvdepth.txt format (0-based half-opened range)
 					CapInterval ci = (CapInterval) wi;
@@ -431,13 +377,12 @@ public class FileOutPut {
 							+ format(ci.getHMMValue() * 2));
 
 					if (ge != null) {
-
 						Interval iv = ge.getGeneIntervalExon(ci.getChr(),
 								ci.getStart());
 						if (iv == null) {
 							iv = ge.getGeneIntervalExon(ci.getChr(), ci.getEnd());
 						}
-						//
+
 						if (iv == null) {
 							bw.write("\t \t");
 						} else {
@@ -445,13 +390,11 @@ public class FileOutPut {
 							bw.write("\t" + iv.getRefseqid());
 							bw.write("\t" + iv.getExonidx());
 						}
-
 					} else {
 						bw.write("\t \t \t");
 					}
 
 					bw.write("\n");
-
 				}
 			}
 
@@ -459,7 +402,6 @@ public class FileOutPut {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	private static String format(double num) {
@@ -470,7 +412,6 @@ public class FileOutPut {
 	public static void outputAlleleDepth(AllelicCNV alCNV, String outpath,
 			float purity) {
 		try {
-
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -483,14 +424,11 @@ public class FileOutPut {
 
 			float factor = 1 / purity;
 			for (List<SNVHolderPlusACnv> plist : alCNV.getList()) {
-
 				for (SNVHolderPlusACnv sc : plist) {
-
 					String id = ".";
 					if (sc.getSnv().getDbSNPbean() != null) {
 						// id
 						id = sc.getSnv().getDbSNPbean().getInfo();
-
 					}
 
 					bw.write(sc.getSnv().getChr() + "\t" + sc.getSnv().getPos()
@@ -504,7 +442,6 @@ public class FileOutPut {
 							+ sc.getLowera().getWtval() * factor + "\t"
 							+ sc.getHighera().getHmmval() + "\t"
 							+ sc.getLowera().getHmmval() + "\n");
-
 				}
 			}
 
@@ -512,7 +449,6 @@ public class FileOutPut {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	public static final String title = "genesymbol \t name \t chrom \t strand \t txStart \t txEnd"
@@ -522,9 +458,7 @@ public class FileOutPut {
 
 	public static void outputgeneCNV(String outpath, GeneExons ge,
 			String refflat) {
-
 		try {
-			//
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outpath)));
 
@@ -539,12 +473,11 @@ public class FileOutPut {
 			List<String> l = null;
 
 			while ((data = brcvs.readNext()) != null) {
-
 				String refseqid = data[1];
 				l = new ArrayList<String>();
 				for (String d : data)
 					l.add(d);
-				//
+
 				DataHolder df = counterForGene.get(refseqid);
 				if (df != null) {
 					df.setTotal(ge.getNormaltotal(), ge.getTumortotal());
@@ -563,9 +496,7 @@ public class FileOutPut {
 					l.add(String.valueOf(df.averages()[2]));
 					l.add(String.valueOf(df.averages()[3]));
 					l.add(String.valueOf(df.averages()[4]));
-
 				} else {
-
 					l.add(String.valueOf(0));
 					l.add(String.valueOf(0));
 
@@ -580,12 +511,10 @@ public class FileOutPut {
 					l.add(String.valueOf(0));
 					l.add(String.valueOf(0));
 					l.add(String.valueOf(0));
-
 				}
 
 				boolean first = true;
 				for (String s : l) {
-
 					if (first) {
 						first = false;
 
@@ -593,7 +522,6 @@ public class FileOutPut {
 						bw.write("\t");
 					}
 					bw.write(s);
-
 				}
 				bw.write("\n");
 			}
@@ -603,7 +531,5 @@ public class FileOutPut {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
-
 }

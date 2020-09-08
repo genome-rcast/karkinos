@@ -19,12 +19,8 @@ import java.awt.geom.Point2D;
 import java.util.Comparator;
 
 public class MyCompEM implements Comparator<Point2D> {
-
 	public int compare(Point2D arg0, Point2D arg1) {
-		
 		if(arg1.getX()==arg1.getX())return 0;
 		return arg0.getX()>arg1.getX()?1:-1;
-	
 	}
-
 }

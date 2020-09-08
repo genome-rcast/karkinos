@@ -20,15 +20,6 @@ repositories {
 }
 
 sourceSets {
-    utils {
-        compileClasspath += sourceSets.main.output
-        java {
-            srcDirs = ['src/utils/java']
-        }
-        resources {
-            srcDirs = ['src/utils/resources']
-        }
-    }
     test {
         java {
             srcDir 'test/main/java'
@@ -37,9 +28,6 @@ sourceSets {
 }
 
 configurations {
-    utilsCompile {
-        extendsFrom compile
-    }
     testImplementation.extendsFrom compileOnly
 }
 
@@ -65,7 +53,6 @@ dependencies {
     compile group: 'org.jfree', name: 'jfreechart', version:'1.0.19'
     compile group: 'org.apache.commons', name: 'commons-math3', version:'3.6'
     compile fileTree(dir: "dependencies", include: ["*.jar"])
-    utilsCompile sourceSets.test.output
     testCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.3.1'
     testCompile group: 'org.junit.platform', name: 'junit-platform-console', version: '1.3.1'
     testCompile group: 'org.junit.platform', name: 'junit-platform-console-standalone', version: '1.3.1'
@@ -110,10 +97,6 @@ jacocoTestReport {
         html.enabled = true
         xml.enabled = true
     }
-}
-
-task utilsJar(type: Jar) {
-    from sourceSets.utils.output
 }
 
 test {

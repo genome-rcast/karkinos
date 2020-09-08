@@ -24,36 +24,25 @@ import jp.ac.utokyo.rcast.karkinos.wavelet.Peak;
 import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
 
 public class TheoreticalNodematch {
-
 	public static void main(String[] arg) {
-
-		//
 		TheoreticalNodematch inst = new TheoreticalNodematch();
 		List<TheoreticalNodes> list = inst.getPossibleState(
 				states_diploid_base, 1.22);
 		for (TheoreticalNodes tn : list) {
-
 			System.out.println("ploidy=(" + tn.aAllelePloidy + ":"
 					+ tn.bAllelePloidy + ")");
 			for (int n = 0; n < 99; n++) {
-
 				float x = tn.imbalance2N[n];
 				float y = tn.getDistTo2N()[n];
 				System.out.println(x + "\t" + y);
-
 			}
-
 		}
-
 	}
 
-	public static final int diploid = 2;
 	public static final int tetraploid = 4;
 
 	public MatchMatrixBean matchPeak(PeaksInfo pi, int maxMagnatudeEvenIdx,
 			Map<Integer, PeakAnalysisComponent> map, int cnvcount) {
-
-		//
 		Peak pEven = pi.getPeaklist().get(maxMagnatudeEvenIdx);
 		PeakAnalysisComponent pacEven = map.get(maxMagnatudeEvenIdx);
 
@@ -78,29 +67,21 @@ public class TheoreticalNodematch {
 				sdposition, map);
 		boolean hdtoomach = checkHD(pi);
 		if (hdtoomach) {
-
-			//
 			if (ret.isDubtouse() && (size(ret.getTetra()) > 0)) {
-
 				mmb1 = ret.getTetra();
 				mmb1.setDiplist(diplist);
 				mmb1.setTetraplist(tetraplist);
 				annotatePeak(mmb1, pi, pEven.getU(), maxMagnatudeEvenIdx,
 						sdratio, sdposition, map);
-
 			} else {
-
 				mmb1.takeLargerTP();
 				annotatePeak(mmb1, pi, pEven.getU(), maxMagnatudeEvenIdx,
 						sdratio, sdposition, map);
 			}
 		}
 
-		//
-
 		mmb1.setpEvenMax(pEven);
 		return mmb1;
-		//
 
 		// tetraploid match if even lowpeak or two lower even peak exsit
 		// boolean checkTetraPloid = false;
@@ -117,7 +98,6 @@ public class TheoreticalNodematch {
 		// annotate(pEven,baseploidy, pi, maxMagnatudeEvenIdx,
 		// map,sdratio,sdposition);
 		//
-
 	}
 
 	private int size(MatchMatrixBean tetra) {
@@ -129,10 +109,7 @@ public class TheoreticalNodematch {
 	}
 
 	private boolean checkHD(PeaksInfo pi) {
-
 		for (Peak peak : pi.getPeaklist()) {
-
-			//
 			for (ChildPeak cp : peak.getChildPeaks()) {
 				if (cp.getTaf() == 0) {
 					if (cp.getR() > 0.01) {
@@ -140,16 +117,13 @@ public class TheoreticalNodematch {
 					}
 				}
 			}
-
 		}
 		return false;
-
 	}
 
 	private void annotatePeak(MatchMatrixBean mmb1, PeaksInfo pi, double u,
 			int maxMagnatudeEvenIdx, double sdratio, double sdposition,
 			Map<Integer, PeakAnalysisComponent> map) {
-
 		int ploidyflg = mmb1.ploidyflg;
 		int purity = 1;
 		if (mmb1.bestmme != null) {
@@ -163,7 +137,6 @@ public class TheoreticalNodematch {
 		List<TheoreticalNodes> theolist = getPossibleState(states, u);
 		MatchMatrix.anotate(ploidyflg, purity, theolist, pi,
 				maxMagnatudeEvenIdx, sdratio, sdposition, map);
-
 	}
 
 	static final int[][] states_dip = new int[][] { { 5, 1 }, { 6, 0 },
@@ -186,15 +159,11 @@ public class TheoreticalNodematch {
 
 	private List<TheoreticalNodes> getPossibleState(int[][] states,
 			double peakpos) {
-
 		List<TheoreticalNodes> list = new ArrayList<TheoreticalNodes>();
 		for (int[] ploidy : states) {
-
 			TheoreticalNodes tn = new TheoreticalNodes(ploidy, peakpos);
 			list.add(tn);
-
 		}
 		return list;
 	}
-
 }

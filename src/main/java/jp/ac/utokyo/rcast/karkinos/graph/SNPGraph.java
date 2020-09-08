@@ -18,21 +18,16 @@ package jp.ac.utokyo.rcast.karkinos.graph;
 import java.awt.geom.Ellipse2D;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -49,61 +44,47 @@ import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
-import jp.ac.utokyo.rcast.karkinos.readssummary.CounterA;
-import jp.ac.utokyo.rcast.karkinos.readssummary.DepthCounter;
-import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 
 public class SNPGraph {
-
 	public static List<DisplayObject> getChartList(DataSet dataset) {
-
-		//
 		List<DisplayObject> list = new ArrayList<DisplayObject>();
 
-		
 		XYSeriesCollection data0 = new XYSeriesCollection();
 		XYSeries series0 = null;
 		Map<Double,XYSeries> md = new TreeMap<Double,XYSeries>();
-		//
+
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			if (snv.getDbSNPbean() != null) {
-
 				boolean ed1 = (snv.getNormal().getTotalcnt() >= 10);
 				boolean ed2 = (snv.getTumor().getTotalcnt() >= 10);
-				//
-				double cn = snv.getCi().getVaridateVal();				
+
+				double cn = snv.getCi().getVaridateVal();
 				if(md.containsKey(cn)){
 					series0 = md.get(cn);
 				}else{
 					series0 = new XYSeries((float)cn);
-					md.put(cn, series0);					
-				}	
-				////
-					if (ed1 && ed2) {
-						DbSNPBean dbb = snv.getDbSNPbean();
-						if (dbb.getMode() == DbSNPAnnotation.MODEdbSNP) {
-
-							double x = snv.getNormal().getRatio();
-							double y = snv.getTumor().getRatio();
-							series0.add(x, y);								
-					}					
-					
+					md.put(cn, series0);
 				}
 
+				if (ed1 && ed2) {
+					DbSNPBean dbb = snv.getDbSNPbean();
+					if (dbb.getMode() == DbSNPAnnotation.MODEdbSNP) {
+						double x = snv.getNormal().getRatio();
+						double y = snv.getTumor().getRatio();
+						series0.add(x, y);
+					}
+				}
 			}
-		}	
-		
+		}
+
 		Iterator<Double> ite = md.keySet().iterator();
 		while(ite.hasNext()){
 			data0.addSeries(md.get(ite.next()));
-		}		
-		
+		}
+
 		JFreeChart chart0 = createScatterPlot("all SNP allele frequency", "Normal",
 				"Tumor", data0, PlotOrientation.VERTICAL, false, false, false);
 
-		
-		
 		XYSeriesCollection data = new XYSeriesCollection();
 		XYSeries series = new XYSeries("tumor/normal SNP");
 
@@ -111,17 +92,13 @@ public class SNPGraph {
 		long snpDiff = 0;
 
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			if (snv.getDbSNPbean() != null) {
-
 				boolean ed1 = (snv.getNormal().getTotalcnt() >= 10);
 				boolean ed2 = (snv.getTumor().getTotalcnt() >= 10);
 				if (snv.getCi().getVaridateVal() == 1) {
-
 					if (ed1 && ed2) {
 						DbSNPBean dbb = snv.getDbSNPbean();
 						if (dbb.getMode() == DbSNPAnnotation.MODEdbSNP) {
-
 							double x = snv.getNormal().getRatio();
 							double y = snv.getTumor().getRatio();
 							if ((x >= 0.4)) {
@@ -132,14 +109,11 @@ public class SNPGraph {
 									snpDiff++;
 								}
 							}
-
 						}
 					}
-
 				}
-
 			}
-		}	
+		}
 
 		data.addSeries(series);
 		JFreeChart chart = createScatterPlot("SNP allele frequency", "Normal",
@@ -153,7 +127,6 @@ public class SNPGraph {
 		list.add(new DisplayObject(oList, 2, "dbSNP info"));
 
 		return list;
-
 	}
 
 	private static Object getTable(long snpRecurrent, long snpDiff) {
@@ -173,7 +146,6 @@ public class SNPGraph {
 			table.addCell(format(ratio)+"%");
 
 			return table;
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -194,7 +166,6 @@ public class SNPGraph {
 	public static JFreeChart createScatterPlot(String title, String xAxisLabel,
 			String yAxisLabel, XYDataset dataset, PlotOrientation orientation,
 			boolean legend, boolean tooltips, boolean urls) {
-
 		if (orientation == null) {
 			throw new IllegalArgumentException("Null 'orientation' argument.");
 		}
@@ -229,7 +200,5 @@ public class SNPGraph {
 		JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
 				plot, legend);
 		return chart;
- 
 	}
-
 }

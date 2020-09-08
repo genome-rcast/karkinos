@@ -16,13 +16,11 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.wavelet;
 
 public interface WaveletIF {
-	
-	public double getValue();	
-	public double getDenioseValue();	
+	public double getValue();
+	public double getDenioseValue();
 	public double getCN();	
 	public void setDenioseValue(double denoise);
 	public void setCN(double copynumber);
 	public void setHMMValue(double d);
 	public double getHMMValue();
-	
 } 

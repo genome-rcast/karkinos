@@ -16,7 +16,6 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.annotation;
 
 public class DbSNPBean implements java.io.Serializable{
-
 	String[] sa;
 	int mode;
 	float freq =0;
@@ -28,12 +27,15 @@ public class DbSNPBean implements java.io.Serializable{
 	public boolean isCosmicvalid() {
 		return cosmicvalid || cosmiccount>=8;
 	}
+
 	public void setCosmicvalid(boolean cosmicvalid) {
 		this.cosmicvalid = cosmicvalid;
 	}
+
 	public int getCosmiccount() {
 		return cosmiccount;
 	}
+
 	public void setCosmiccount(int cosmiccount) {
 		this.cosmiccount = cosmiccount;
 	}
@@ -44,16 +46,14 @@ public class DbSNPBean implements java.io.Serializable{
 	public String getVaridationStr() {
 		return varidationStr;
 	}
+
 	public void setVaridationStr(String varidationStr) {
 		this.varidationStr = varidationStr;
 	}
+
 	public boolean isCosmic() {
 		return cosmic;
 	}
-	public boolean isCosmicHigh() {
-		return isCosmic()&& isValid() && cnt > 1;
-	}
-	
 
 	public void setCosmic(boolean cosmic) {
 		this.cosmic = cosmic;
@@ -87,25 +87,16 @@ public class DbSNPBean implements java.io.Serializable{
 		sa = _sa;
 	}
 
-	public String toStr() {
-
-		StringBuffer sb = new StringBuffer();
-		for (String s : sa) {
-			sb.append(s+"\t");
-		}
-		return sb.toString();
-	}
-
 	public String getInfo() {
 		if(mode==0){
 			String id = sa[4];
 			if(id.length()==1){
 				id =".";
 			}
-			return id;			
-		}else if(mode==DbSNPAnnotation.MODEcosmic){	
+			return id;
+		}else if(mode==DbSNPAnnotation.MODEcosmic){
 			return "cosmic_"+sa[3];
-		}else if(mode==DbSNPAnnotation.MODE1000g){	
+		}else if(mode==DbSNPAnnotation.MODE1000g){
 			return "1000g_"+sa[5];
 		}else{
 			return "exomeSNP "+ freq;
@@ -115,5 +106,4 @@ public class DbSNPBean implements java.io.Serializable{
 	public void inc() {
 		cnt++;		
 	}
-	
 }

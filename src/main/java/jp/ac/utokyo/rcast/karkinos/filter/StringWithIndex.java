@@ -16,41 +16,28 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.filter;
 
 public class StringWithIndex {
-	
-	
 	public StringWithIndex(String s){
 		str = s;
 	}
-	
+
 	String str;
 	int start;
 	int end;
-	
+
 	public char getCharAt(int index){
 		return str.charAt(index+start);
 	}
-	
-	public String getStr() {
-		return str;
-	}
-	public void setStr(String str) {
-		this.str = str;
-	}
+
 	public int getStart() {
 		return start;
 	}
-	public void setStart(int start) {
-		this.start = start;
-	}
+
 	public int getEnd() {
 		return end;
 	}
-	public void setEnd(int end) {
-		this.end = end;
-	}
+
 	public void setStartEnd(int start, int end) {
 		this.start = start;
 		this.end = end;
 	}
-
 }

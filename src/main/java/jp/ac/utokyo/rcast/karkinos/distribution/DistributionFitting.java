@@ -19,7 +19,6 @@ import org.apache.commons.math.distribution.NormalDistribution;
 import org.apache.commons.math.distribution.NormalDistributionImpl;
 
 public class DistributionFitting {
-
 	public static float[] getObserveRatio(DataHolderByCN dataHolderByCN,
 			float degree, double tumorvariance) {
 		if (dataHolderByCN == null) {
@@ -28,63 +27,55 @@ public class DistributionFitting {
 		if(tumorvariance>5){
 			tumorvariance=5;
 		}
-		//
+
 		int maxratio = 0;
 		double maxcp = 0;
 		for (int n = 50; n <= 100; n++) {
-			//
 			float[] theoreticalDist = getThereticalDist(n, degree,
 					tumorvariance);
-				
+
 			double cp = crossProduct(theoreticalDist, dataHolderByCN.snpDistT);
 			System.out.println("n="+n+"cp="+cp);
 			if (cp > maxcp) {
 				maxratio = n;
 				maxcp = cp;
 			}
-
 		}
 		return new float[]{maxratio,(float) maxcp};
 	}
-	
+
 	public static float[] getObserveRatio(DataHolderByCN dataHolderByCN,
 			float degree, double tumorvariance,int start,int end) {
 		if (dataHolderByCN == null) {
 			return new float[]{0,0};
 		}
 
-		//
 		if(tumorvariance>5){
 			tumorvariance=5;
 		}
-		
+
 		int maxratio = 0;
 		double maxcp = 0;
 		for (int n = start; n <= end; n++) {
-			//
 			float[] theoreticalDist = getThereticalDist(n, degree,
 					tumorvariance);
-				
+
 			double cp = crossProduct(theoreticalDist, dataHolderByCN.snpDistT);
 			System.out.println("n="+n+"cp="+cp);
 			if (cp > maxcp) {
 				maxratio = n;
 				maxcp = cp;
 			}
-
 		}
 		return new float[]{maxratio,(float) maxcp};
 	}
-	
 
 	private static double crossProduct(float[] theoreticalDist, float[] snpDistT) {
-
 		// exclude < 2 and > 98 : both edge
 		// exclude 47 to 53 : 6% center 
 		float[] normalizesnpDistT = norm(snpDistT);
 		double d = 0;
 		for (int n = 2; n < 98; n++) {
-			//
 			if(n>=47 && n<=53){
 				continue;
 			}
@@ -113,8 +104,7 @@ public class DistributionFitting {
 			idx++;
 		}
 		float[] ndist = new float[dist.length];
-		
-		//
+
 		int n= 0;
 		for(float f:dist){
 			if(n==0){
@@ -131,18 +121,16 @@ public class DistributionFitting {
 			}
 			ndist[n] = (float)((double)f/(double)sum);
 			n++;
-		}				
+		}
 		return ndist;
 	}
 
 	private static float[] getThereticalDist(int ratio, float degree,
 			double variance) {
-
 		float x = 0;
 		double sum = 0;
 		float[] dist = new float[100];
 		for (int n = 0; n < 100; n++) {
-
 			x = n + 0.5f;
 			float y = dist(x, variance, ratio);
 			sum = sum+y;
@@ -150,7 +138,6 @@ public class DistributionFitting {
 		}
 		int idx =0;
 		for(double d:dist){
-			
 			dist[idx] = (float) (dist[idx]/sum);
 			idx++;
 		}
@@ -158,7 +145,6 @@ public class DistributionFitting {
 	}
 
 	private static float dist(float x, double sd, int ratio) {
-		
 		if(sd==0){
 			sd = 10;// to avoid error
 		}
@@ -168,15 +154,11 @@ public class DistributionFitting {
 			NormalDistribution normald = new NormalDistributionImpl(mean, sd);
 			return (float) normald.density((double) x);
 		} else {
-
 			NormalDistribution normald1 = new NormalDistributionImpl(ratio, sd);
 			NormalDistribution normald2 = new NormalDistributionImpl(
 					50 - (ratio - 50), sd);
 			return (float) (normald1.density((double) x) + normald2
 					.density((double) x));
-
 		}
-
 	}
-
 }

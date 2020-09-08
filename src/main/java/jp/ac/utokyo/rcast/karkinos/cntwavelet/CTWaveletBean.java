@@ -16,28 +16,31 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.cntwavelet;
 
 public class CTWaveletBean {
-	
 	double[] data;
 	double mostfittingvariance;
 	double sd;
+
 	public double getSd() {
 		return sd;
 	}
+
 	public void setSd(double sd) {
 		this.sd = sd;
 	}
+
 	public double[] getData() {
 		return data;
 	}
+
 	public void setData(double[] data) {
 		this.data = data;
 	}
+
 	public double getMostfittingvariance() {
 		return mostfittingvariance;
 	}
+
 	public void setMostfittingvariance(double mostfittingvariance) {
 		this.mostfittingvariance = mostfittingvariance;
 	}
-	
-	
 }

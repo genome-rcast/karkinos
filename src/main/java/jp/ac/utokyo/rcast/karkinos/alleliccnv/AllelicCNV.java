@@ -23,24 +23,20 @@ import java.util.List;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 import jp.ac.utokyo.rcast.karkinos.wavelet.FunctionRegression;
 
 public class AllelicCNV {
-
 	DataSet dataset;
 	List<List<SNVHolderPlusACnv>> list = new ArrayList<List<SNVHolderPlusACnv>>();
 	ReadsSummary readsSummary;
 
 	public AllelicCNV(DataSet dataset, ReadsSummary readsSummary) {
-
 		this.dataset = dataset;
 		this.readsSummary = readsSummary;
 		analysis(dataset);
 		setIntervalList();
-
 	}
 
 	List<CopyNumberInterval> allelicLOHhigh;
@@ -48,7 +44,6 @@ public class AllelicCNV {
 	List<CopyNumberInterval> hdList;
 
 	private void setIntervalList() {
-
 		allelicLOHLow = getLOH(false);
 		allelicLOHhigh = getLOH(true);
 		hdList = analyse(allelicLOHLow, allelicLOHhigh);
@@ -67,14 +62,11 @@ public class AllelicCNV {
 	}
 
 	private void sort(List<CopyNumberInterval> list) {
-
 		Collections.sort(list, new MyComp());
-
 	}
 
 	private List<CopyNumberInterval> takeHighOnly(
 			List<CopyNumberInterval> allelicCNLIST) {
-
 		List<CopyNumberInterval> list = new ArrayList<CopyNumberInterval>();
 		for (CopyNumberInterval cni : allelicCNLIST) {
 			if (cni.getCopynumber() > 2) {
@@ -103,18 +95,12 @@ public class AllelicCNV {
 		return allelicLOHLow;
 	}
 
-	public List<CopyNumberInterval> getHdList() {
-		return hdList;
-	}
-
 	private static List<CopyNumberInterval> analyse(
 			final List<CopyNumberInterval> allelicLOHLow,
 			final List<CopyNumberInterval> allelicLOHhigh) {
-
 		List<CopyNumberInterval> hdlist = new ArrayList<CopyNumberInterval>();
 
 		for (CopyNumberInterval cni : allelicLOHLow) {
-			//
 			for (CopyNumberInterval cnihigh : allelicLOHhigh) {
 				if (include(cnihigh, cni)) {
 					if (cnihigh.getCopynumber() == 1) {
@@ -129,7 +115,6 @@ public class AllelicCNV {
 	}
 
 	private static boolean include(final CopyNumberInterval cnihigh, final CopyNumberInterval cni) {
-
 		if (!cnihigh.getChr().equals(cni.getChr())) {
 			return false;
 		}
@@ -138,9 +123,7 @@ public class AllelicCNV {
 		}
 		if ((cni.getStart() <= cnihigh.getStart())
 				&& (cni.getEnd() >= cnihigh.getEnd())) {
-
 			if (cni.length() > cnihigh.length()) {
-
 				return true;
 			}
 		}
@@ -148,17 +131,14 @@ public class AllelicCNV {
 	}
 
 	public List<CopyNumberInterval> getLOH(boolean higher) {
-
 		List<CopyNumberInterval> copyNumberIntervalList = new ArrayList<CopyNumberInterval>();
 
-		//
 		for (List<SNVHolderPlusACnv> plist : list) {
 			int statusb4 = -1;
 			CopyNumberInterval cni = null;
 			int posb4 = 0;
 			int noSNP = 0;
 			for (SNVHolderPlusACnv sc : plist) {
-				//
 				int hmmv = 0;
 				if (higher) {
 					hmmv = (int) sc.highera.hmmval;
@@ -166,7 +146,6 @@ public class AllelicCNV {
 					hmmv = (int) sc.lowera.hmmval;
 				}
 				if (hmmv != statusb4) {
-
 					if (cni != null && cni.getCopynumber() != 2) {
 						cni.setEnd(posb4);
 						cni.setNoSNP(noSNP);
@@ -183,21 +162,17 @@ public class AllelicCNV {
 				posb4 = sc.getSnv().getPos();
 			}
 			if (cni != null && cni.getCopynumber() != 2) {
-
 				if (posb4 > cni.getStart()) {
 					cni.setEnd(posb4);
 					copyNumberIntervalList.add(cni);
 				}
 			}
 		}
-		//
 
 		return copyNumberIntervalList;
-
 	}
 
 	private void analysis(DataSet dataset) {
-
 		// set low data and GC adjusted
 		// FunctionRegression fr = dataset.getFunctionRegression();
 		//
@@ -207,7 +182,6 @@ public class AllelicCNV {
 
 		double ntratio = 1;
 		try {
-
 			int nrc = readsSummary.getNormalCounter().getTotalOnTarget();
 			int trc = readsSummary.getTumorCounter().getTotalOnTarget();
 			ntratio = trc / nrc;
@@ -215,15 +189,11 @@ public class AllelicCNV {
 					|| (ntratio < 0.2) || (ntratio > 5)) {
 				ntratio = 1;
 			}
-
 		} catch (Exception ex) {
-
 		}
 
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			if (snv.isHetroSNP()) {
-
 				SNVHolderPlusACnv sp = new SNVHolderPlusACnv(snv,ntratio);
 				if (sp.valid) {
 					CapInterval civ = snv.getCi();
@@ -246,7 +216,6 @@ public class AllelicCNV {
 					}
 				}
 			}
-
 		}
 		// getGCAdjstFunction
 		System.out.println("GC AL High");
@@ -259,11 +228,8 @@ public class AllelicCNV {
 		List<SNVHolderPlusACnv> sublist = null;
 		String chrom = "";
 		for (SNVHolder snv : dataset.getSnvlist()) {
-
 			if (snv.isHetroSNP()) {
-
 				if (!snv.getChr().equals(chrom)) {
-
 					chrom = snv.getChr();
 					if (sublist != null) {
 						list.add(sublist);
@@ -275,7 +241,6 @@ public class AllelicCNV {
 				CapInterval civ = snv.getCi();
 				double x = civ.getLength();
 				double y = civ.getCgParcent();
-				//
 
 				if (sp.valid) {
 					sp.lowera.gcadjusted = (float) frLow.getAdjustedZ(x, y,
@@ -284,15 +249,12 @@ public class AllelicCNV {
 							sp.highera.row);
 					sublist.add(sp);
 				}
-				//
-
 			}
 		}
 		if (sublist != null) {
 			list.add(sublist);
 		}
 
-		// //
 		// wavelet transform
 		try {
 			WaveletDenoizeACNV.calc(list);
@@ -307,11 +269,9 @@ public class AllelicCNV {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	public List<List<SNVHolderPlusACnv>> getList() {
 		return list;
 	}
-
 }

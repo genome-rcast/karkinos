@@ -28,7 +28,6 @@ import java.util.Set;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPAnnotation;
 import jp.ac.utokyo.rcast.karkinos.annotation.DbSNPBean;
 import jp.ac.utokyo.rcast.karkinos.distribution.AnalyseDist;
-import jp.ac.utokyo.rcast.karkinos.distribution.DataHolderByCN;
 import jp.ac.utokyo.rcast.karkinos.utils.Interval;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 import jp.ac.utokyo.rcast.karkinos.wavelet.FunctionRegression;
@@ -37,7 +36,6 @@ import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class DataSet implements java.io.Serializable {
-
 	/**
 	 * 
 	 */
@@ -62,7 +60,6 @@ public class DataSet implements java.io.Serializable {
 	Coverage tumor = new Coverage();
 
 	public void bailAnalysis() {
-
 		normal.analysisBaitSampling();
 		tumor.analysisBaitSampling();
 	}
@@ -82,10 +79,8 @@ public class DataSet implements java.io.Serializable {
 	}
 
 	public void assginCaptureInterval() {
-
 		int assumedReadlen = 100;
 		for (SNVHolder holder : snvlist) {
-
 			CapInterval ci = ch
 					.getCapInterval(holder.getChr(), holder.getPos());
 			if (ci == null) {
@@ -104,14 +99,11 @@ public class DataSet implements java.io.Serializable {
 			}
 
 			holder.setCi(ci);
-
 		}
 	}
 
 	public void assgindbSNP(DbSNPAnnotation dbSNPAnnotation) {
-
 		for (SNVHolder holder : snvlist) {
-
 			DbSNPBean dbSNPbean = dbSNPAnnotation.lookup(holder.getChr(),
 					holder.getPos());
 			holder.setDbSNPbean(dbSNPbean);
@@ -119,30 +111,22 @@ public class DataSet implements java.io.Serializable {
 			if (dbSNPbean != null && !dbSNPbean.isCosmic()) {
 				hetroSNP = (holder.normal.getRatio() >= KarkinosProp.hetroSNPMin)
 						&& (holder.normal.getRatio() <= KarkinosProp.hetroSNPMax);
-
 			} else {
-
 				if (holder.normal.totalcnt >= 20) {
 					hetroSNP = (holder.normal.getRatio() >= KarkinosProp.hetroSNPMin)
 							&& (holder.normal.getRatio() <= KarkinosProp.hetroSNPMax);
 				}
-
 			}
 			holder.serHetroSNP(hetroSNP);
-
 		}
-
 	}
 
 	public void setBinReads(Interval iv, int normalcount, int tumorcount) {
-
 		normal.addBinCount(iv, normalcount);
 		tumor.addBinCount(iv, tumorcount);
-
 	}
 
 	public OntagetInfo setNomalCoverageInfo(SAMRecord sam) {
-
 		//boolean inTarget = false;
 		OntagetInfo ret = null;
 		normal.setCoverageInfo(sam);
@@ -150,11 +134,9 @@ public class DataSet implements java.io.Serializable {
 			ret = normal.setCaptureInfo(sam, ch);
 		//}
 		return ret;
-
 	}
 
 	public OntagetInfo setTumorCoverageInfo(SAMRecord sam) {
-
 		//boolean inTarget = false;
 		OntagetInfo ret = null;
 		tumor.setCoverageInfo(sam);
@@ -189,36 +171,29 @@ public class DataSet implements java.io.Serializable {
 		} else {
 			return capinterval;
 		}
-
 	}
 
 	List<CopyNumberInterval> copyNumberIntervalList = null;
 
 	public List<CopyNumberInterval> getCopyNumberIntervalList(int mode) {
-
 		if (copyNumberIntervalList == null) {
 			copyNumberIntervalList = calcCopyNumberIntervalList(mode);
 		}
 		return copyNumberIntervalList;
 //		return calcCopyNumberIntervalList(mode);
-
 	}
 
 	public static final int MODE_HMM = 0;
 	public static final int MODE_CorrelVaridate = 1;
 
 	private List<CopyNumberInterval> calcCopyNumberIntervalList(int mode) {
-
-		//
 		List<CapInterval> alist = new ArrayList<CapInterval>();
 		for (List<WaveletIF> list : getCapInterval()) {
-
 			float ab4 = 0;
 			float bb4 = 0;
 			CapInterval cib4 = null;
 			int cnt = 0;
 			for (WaveletIF wi : list) {
-
 				boolean isFirst = cnt == 0;
 				boolean isLast = cnt == list.size() - 1;
 				cnt++;
@@ -239,28 +214,21 @@ public class DataSet implements java.io.Serializable {
 						&& (ci.getBafreq() == bb4);
 				boolean statechage = !statesame;
 
-			
-			
-				
 				if (statechage || isFirst || isLast) {
-					//
 					if (cib4 != null && !isLast) {
 						alist.add(cib4);
 					}
 					alist.add(ci);
-
 				}
 				ab4 = ci.getAafreq();
 				bb4 = ci.getBafreq();
 				cib4 = ci;
-
 			}
 		}
 
 		List<CopyNumberInterval> copyNumberIntervalList = new ArrayList<CopyNumberInterval>();
 
 		for (int m = 0; m + 1 < alist.size(); m = m + 2) {
-
 			CapInterval cistart = alist.get(m);
 			CapInterval ciend = alist.get(m + 1);
 			CopyNumberInterval cni = new CopyNumberInterval(cistart.getChr(), cistart.getAafreq(), cistart.getBafreq());
@@ -312,7 +280,6 @@ public class DataSet implements java.io.Serializable {
 	Set<String> chrSet = new LinkedHashSet<String>();
 
 	public List<List<WaveletIF>> _getCapInterval() {
-
 		List<List<WaveletIF>> plist = new ArrayList<List<WaveletIF>>();
 		List<WaveletIF> list = new ArrayList<WaveletIF>();
 		Map<CapInterval, Coverage.Container> m1 = normal.capregion;
@@ -321,11 +288,9 @@ public class DataSet implements java.io.Serializable {
 		System.out.println("normal million adjust=" + normal.millionAdjust());
 		System.out.println("tumor million adjust=" + tumor.millionAdjust());
 
-		// /
 		SummaryStatistics ss = new SummaryStatistics();
 		SummaryStatistics tnss = new SummaryStatistics();
 		while (ite.hasNext()) {
-
 			CapInterval key = ite.next();
 			Coverage.Container co = m1.get(key);
 			Coverage.Container co2 = m2.get(key);
@@ -336,17 +301,15 @@ public class DataSet implements java.io.Serializable {
 			double tumordepth = key.getDepth(tumorcnt);
 			double tumordepthAdj = tumordepth * tumor.millionAdjust();
 			double tnratio = tumordepthAdj / normaldepthAdj;
-			//
+
 			if (!Double.isInfinite(normaldepthAdj)
 					&& !Double.isNaN(normaldepthAdj)) {
-
 				ss.addValue(normaldepthAdj);
 			}
 			if (!Double.isInfinite(tnratio) && !Double.isNaN(tnratio)) {
 				tnss.addValue(tnratio);
 			}
 		}
-		//
 
 		ite = m1.keySet().iterator();
 		int cnt = 0;
@@ -382,17 +345,14 @@ public class DataSet implements java.io.Serializable {
 					tnratio);
 			key.setCNVInfo(cnvinfo);
 			list.add(key);
-
 		}
 		plist.add(list);
 		capinterval = plist;
 		capintervalinit = true;
 		return plist;
-
 	}
 
 	private boolean notSexChrom(String chrom) {
-
 		chrom = chrom.toUpperCase();
 		if (chrom.contains("X")) {
 			return false;
@@ -406,39 +366,28 @@ public class DataSet implements java.io.Serializable {
 	private double tnAdjust(double tnratio, long normalcnt, long tumorcnt,
 			double normaldepthAdj, double tumordepthAdj, SummaryStatistics ss,
 			SummaryStatistics tnss, CapInterval key, boolean notSexChorm) {
-
 		//double mean = tnss.getMean();
 		if (lowCnt(normalcnt) || Double.isInfinite(tnratio)
 				|| Double.isNaN(tnratio)) {
-			
-			
 			//tnratio = tumordepthAdj / ss.getMean();
 			tnratio = 1;
 			//
 //			if (Double.isInfinite(tnratio) || Double.isNaN(tnratio)) {
 //				tnratio = mean;
 //			}
-
 		}
-		//
-		if (useAvearageNormal && notSexChorm) {
 
-			//
+		if (useAvearageNormal && notSexChorm) {
 			float nad = key.getNormalAveDepth();
 			// nad = nad*100;
 			if (nad > 0) {
 				double fromnorm = tumordepthAdj / nad;
 				if (fromnorm > 10 || fromnorm < 0.1) {
-
 				} else {
 					tnratio = fromnorm;
 				}
-
 			}
-
 		}
-
-		//
 
 		// if (outof2sd(normaldepthAdj, ss)) {
 		// double tn1 = tumordepthAdj / ss.getMean();
@@ -455,13 +404,6 @@ public class DataSet implements java.io.Serializable {
 		return tnratio;
 	}
 
-	private boolean outof2sd(double val, SummaryStatistics ss) {
-
-		double diff = ss.getMean() - val;
-		boolean loerend = (diff > (ss.getStandardDeviation() * 2));
-		return loerend;
-	}
-
 	public List<String> getChromList() {
 		List<String> chromList = new ArrayList<String>();
 		for (String s : chrSet) {
@@ -471,13 +413,7 @@ public class DataSet implements java.io.Serializable {
 	}
 
 	private boolean lowCnt(long cnt) {
-
 		return cnt < KarkinosProp.mincoverbase;
-	}
-
-	private boolean lowCnt2(long cnt) {
-
-		return cnt < (KarkinosProp.mincoverbase * 10);
 	}
 
 	double baselineLOHEstimate;
@@ -490,12 +426,10 @@ public class DataSet implements java.io.Serializable {
 		baselineLOHEstimate = _baselineLOHEstimate;
 	}
 
-	Map<Float, DataHolderByCN> map = null;
 	AnalyseDist as = null;
 
 	public AnalyseDist getAnalyseDist() {
 		if (as == null) {
-			//
 			as = new AnalyseDist();
 			as.analyseDist(this);
 		}
@@ -520,7 +454,6 @@ public class DataSet implements java.io.Serializable {
 	}
 
 	public float getTumorRatio() {
-
 		if (fixtc > 0) {
 			return fixtc;
 		}
@@ -528,9 +461,7 @@ public class DataSet implements java.io.Serializable {
 		float tratio = 1f;
 
 		if (as != null) {
-
 			tratio = as.getTumorratio();
-
 		}
 		if (tumorratioFiitiingMatrix > 0) {
 			tratio = (float) tumorratioFiitiingMatrix;
@@ -540,12 +471,10 @@ public class DataSet implements java.io.Serializable {
 						tratio = as.getTumorratio();
 					}
 				} else if (as.getTcflg() == 1) {
-
 					if (as.getTumorratioFromLOH().getNumber() > 300) {
 						tratio = as.getTumorratio();
 					}
 				}
-
 			}
 			boolean notenoughLOHSNP = as.getTumorratioFromLOH().getNumber() < 300;
 			if ((tratio == 1) || (baseploidy == 4) || ((tratio < 0.4)&&notenoughLOHSNP)) {
@@ -558,7 +487,6 @@ public class DataSet implements java.io.Serializable {
 					tratio = (float) as.getTumorratioFromSomatic()
 							.getObservedratio();
 				} catch (Exception ex) {
-
 				}
 				if (tratio > 0.2) {
 					tratio = KarkinosProp.mintumorpurity;
@@ -583,7 +511,6 @@ public class DataSet implements java.io.Serializable {
 
 	public void setGcFunctionRegression(FunctionRegression fr) {
 		gcfr = fr;
-
 	}
 
 	public FunctionRegression getFunctionRegression() {
@@ -599,7 +526,4 @@ public class DataSet implements java.io.Serializable {
 	public List<CopyNumberInterval> getCniVaridateList() {
 		return cniVaridateList;
 	}
-
-
-
 }

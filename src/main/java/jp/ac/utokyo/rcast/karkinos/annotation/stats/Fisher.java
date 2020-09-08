@@ -19,21 +19,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
-
 public class Fisher {
-	
-	
 	public static void main(String[] arg){
-		
 		System.out.println(calcPValue(8,2,8,0));
-		
-		
 	}
-	
-	
+
 	public static double calcPValue(int a,int b,int c,int d) {
-		
 		int[][] data = new int[2][2];
 		data[0][0] = a;
 		data[0][1] = b;
@@ -41,7 +32,7 @@ public class Fisher {
 		data[1][1] = d;
 		return calcPValue(data);
 	}
-	
+
 	/**
 	 * Pvalue fisher
 	 *
@@ -72,8 +63,6 @@ public class Fisher {
 		}
 	}
 
-	
-	
 	/**
 	 * feasible list
 	 */
@@ -103,6 +92,7 @@ public class Fisher {
 		}
 		return feasibleTableList;
 	}
+
 	/**
 	 * result = ((a+b)!/a! (b+d)!/b! (a+c)!/c! (c+d)!/d!) / (a+b+c+d)!
 	 */
@@ -139,6 +129,7 @@ public class Fisher {
 		}
 		return result;
 	}
+
 	/**
 	 * 
 	 */
@@ -156,66 +147,4 @@ public class Fisher {
 			throw new IllegalArgumentException();
 		}
 	}
-
-	private static int max(int n1,int n2){
-		return Math.max(n1, n2);
-	}
-	
-	/**
-	 * オッズ比を求める
-	 *
-	 * @param data
-	 *            ２×２の非負整数行列
-	 * @return オッズ比
-	 */
-	public static double calcOddsRatio(int _a, int _b,int _c,int _d) {
-		
-		double a = (double) _a;
-		double b = (double) _b;
-		double c = (double) _c;
-		double d = (double) _d;
-
-
-		if (a == 0 || b == 0 || c == 0 || d == 0) {
-			a += 0.5;
-			b += 0.5;
-			c += 0.5;
-			d += 0.5;
-		}
-		double result = (a * d) / (b * c);
-
-		return result;
-	}
-
-	/**
-	 * オッズ比の下側95%信頼限界値を求めます。
-	 *
-	 * @param data
-	 *            ２×２の非負整数行列
-	 * @return オッズ比の下側95%信頼限界値
-	 */
-	public static double calcOddsRatioCI(int _a, int _b,int _c,int _d,boolean posi,double bound) {
-
-		double a = (double) _a;
-		double b = (double) _b;
-		double c = (double) _c;
-		double d = (double) _d;
-
-		if (a == 0 || b == 0 || c == 0 || d == 0) {
-			a += 0.5;
-			b += 0.5;
-			c += 0.5;
-			d += 0.5;
-		}
-		double oddsRatio = calcOddsRatio(_a,_b,_c,_d);
-		if(!posi){
-			bound = bound * -1;
-		} 
-		double result = oddsRatio
-				* Math.exp(bound
-						* Math.sqrt(1 / a + 1 / b + 1 / c + 1 / d));
-		return result;
-	}
-
-
 }

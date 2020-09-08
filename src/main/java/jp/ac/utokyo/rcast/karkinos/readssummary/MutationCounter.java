@@ -20,67 +20,60 @@ import java.util.Map;
 
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-
 public class MutationCounter implements java.io.Serializable{
-	
 	int total=0;
-	//
+
 	int lowdepthcnt=0;
 	int x2count=0;
 	int x3count=0;
 	int x4count=0;
 	int highdepthcnt=0;
-	
+
 	int lowdepthcntH=0;
 	int x2countH=0;
 	int x3countH=0;
 	int x4countH=0;
 	int highdepthcntH=0;
-	
+
 	public void regStat(int cn,float ratio,float oddsratio,int depth){
-		
-		//
 		total++;
 		SummaryStatsHolder ss = null;
 		if(!data.containsKey(cn)){
 			ss = new SummaryStatsHolder();
-			data.put(cn,ss);			
+			data.put(cn,ss);
 		}else{
 			ss=data.get(cn);
 		}
-		//
+
 		ss.addValue(ratio,oddsratio);
-		//
+
 		if(depth > (KarkinosProp.mindepth*5)){
-			highdepthcnt++;	
+			highdepthcnt++;
 		}else if(depth > (KarkinosProp.mindepth*4)){
-			x4count++;	
+			x4count++;
 		}else if(depth > (KarkinosProp.mindepth*3)){
-			x3count++;	
+			x3count++;
 		}else if(depth > (KarkinosProp.mindepth*2)){
-			x2count++;		
+			x2count++;
 		}else{
 			lowdepthcnt++;
 		}
-		
 	}
-	
+
 	public void regStat2( int depth) {
 		if(depth > (KarkinosProp.mindepth*5)){
-			highdepthcntH++;	
+			highdepthcntH++;
 		}else if(depth > (KarkinosProp.mindepth*4)){
-			x4countH++;	
+			x4countH++;
 		}else if(depth > (KarkinosProp.mindepth*3)){
-			x3countH++;	
+			x3countH++;
 		}else if(depth > (KarkinosProp.mindepth*2)){
-			x2countH++;		
+			x2countH++;
 		}else{
 			lowdepthcntH++;
 		}
-		
 	}
-	
+
 	public int getLowdepthcntH() {
 		return lowdepthcntH;
 	}
@@ -91,10 +84,6 @@ public class MutationCounter implements java.io.Serializable{
 
 	public int getX3countH() {
 		return x3countH;
-	}
-
-	public int getX4countH() {
-		return x4countH;
 	}
 
 	public int getHighdepthcntH() {
@@ -109,10 +98,6 @@ public class MutationCounter implements java.io.Serializable{
 		return x3count;
 	}
 
-	public int getX4count() {
-		return x4count;
-	}
-
 	public int getLowdepthcnt() {
 		return lowdepthcnt;
 	}
@@ -123,21 +108,15 @@ public class MutationCounter implements java.io.Serializable{
 
 	public SummaryStatsHolder getSummaryStatsHolder(int key){
 		if(data.containsKey(key)){
-			
 			return data.get(key);
 		}
 		return null;
 	}
-	
+
 	public int getTotal() {
 		return total;
 	}
 
 	Map<Integer,SummaryStatsHolder> data 
 		= new HashMap<Integer,SummaryStatsHolder>();
-
-
-	
-	
-
 }

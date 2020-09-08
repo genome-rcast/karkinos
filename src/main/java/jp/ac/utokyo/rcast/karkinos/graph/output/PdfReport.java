@@ -16,19 +16,14 @@ limitations under the License.
 package jp.ac.utokyo.rcast.karkinos.graph.output;
 
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import org.jfree.chart.JFreeChart;
 
 import com.lowagie.text.Annotation;
-import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -47,10 +42,8 @@ import jp.ac.utokyo.rcast.karkinos.graph.GetCNVCharts;
 import jp.ac.utokyo.rcast.karkinos.graph.GetCNVPeaksCharts;
 import jp.ac.utokyo.rcast.karkinos.graph.GetCNVPreGraph;
 import jp.ac.utokyo.rcast.karkinos.graph.GetGCAdjustGrapth;
-import jp.ac.utokyo.rcast.karkinos.graph.GetReadDirectionChart;
 import jp.ac.utokyo.rcast.karkinos.graph.GetReadsStatsChart;
 import jp.ac.utokyo.rcast.karkinos.graph.GetSNVChart;
-import jp.ac.utokyo.rcast.karkinos.graph.GetSNVDistChart;
 import jp.ac.utokyo.rcast.karkinos.graph.GetThresholdsCharts;
 import jp.ac.utokyo.rcast.karkinos.graph.NoisePeakChart;
 import jp.ac.utokyo.rcast.karkinos.graph.SNPGraph;
@@ -58,29 +51,25 @@ import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
 import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
 
 public class PdfReport {
-
 	public static void report(ReadsSummary readsSummary, String readsStat,
 			DataSet dataset, AllelicCNV alCNV, NoiseAnalysis na, 
 			PeaksInfo pi,String id, String outfile) throws Exception {
-
 		List<DisplayObject> chartList = new ArrayList<DisplayObject>();
 		chartList.addAll(GetReadsStatsChart.getChartLists(readsSummary,
 				readsStat));
-		// chartList.addAll(GetReadDirectionChart.getChartLists(dataset));
 		chartList.addAll(SNPGraph.getChartList(dataset));
-		
+
 		chartList.addAll(GetGCAdjustGrapth.getChartLists(dataset));
 		chartList.addAll(GetCNVPreGraph.getChartLists(dataset));
 		chartList.addAll(GetCNVPeaksCharts.getChartLists(pi));
 		chartList.addAll(GetCNVCharts.getChartLists(dataset,pi,id));
-		
+
 		//allelic CNV
 		chartList.addAll(GetAllelicCNVGraph.getChartLists(alCNV,id));		
 		chartList.addAll(GetCNVCharts.getTables(dataset));
 
 		// chartList.addAll(GetSNVDistChart.getChartLists(dataset));
 		
-		//
 		try{
 		 chartList.addAll(NoisePeakChart.getChartLists(na,dataset.getTumorRatio()));
 		}catch(Exception ex){
@@ -106,7 +95,6 @@ public class PdfReport {
 			int i = 0;
 			int figcount = 0;
 			for (DisplayObject dobj : chartList) {
-
 				int size = dobj.getSize();
 				Object obj = dobj.getObject();
 				if (obj == null)
@@ -114,7 +102,6 @@ public class PdfReport {
 
 				document.add(new Paragraph(String.valueOf(dobj.getTitle())));
 				if (obj instanceof List) {
-
 					for (Object childObj : (List) obj) {
 						addObj(document, childObj, width, hight, size, writer,figcount);
 						if ((childObj instanceof Table)
@@ -154,14 +141,12 @@ public class PdfReport {
 				}
 			}
 		}
-
 	}
 
 	private static void addObj(Document document, Object obj, int width,
 			int hight, int size, PdfWriter writer, int figcount) throws Exception,
 			IOException {
 		if (obj instanceof JFreeChart) {
-
 			JFreeChart chart = (JFreeChart) obj;
 			BufferedImage bufferedImage = chart.createBufferedImage(width
 					* size, hight * size);
@@ -169,24 +154,15 @@ public class PdfReport {
 			image.scalePercent(20);
 			image.setAnnotation(new Annotation("fig"+figcount, "karkinos fig"+figcount));
 			document.add(image);
-
 		} else if (obj instanceof Element) {
-
 			document.add((Element) obj);
-
 		} else if (obj instanceof java.awt.Image) {
-
 			java.awt.Image aim = (java.awt.Image)obj;
 			Image image = Image.getInstance(writer, aim, 1.0f);
 			image.scalePercent(50);
 			document.add(image);
-
 		} else {
-
 			document.add(new Paragraph(String.valueOf(obj)));
-
 		}
-
 	}
-
 }

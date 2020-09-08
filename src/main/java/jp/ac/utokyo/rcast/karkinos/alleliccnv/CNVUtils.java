@@ -21,30 +21,16 @@ import java.util.List;
 import jp.ac.utokyo.rcast.karkinos.exec.CapInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.CopyNumberInterval;
 import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
-import jp.ac.utokyo.rcast.karkinos.exec.SNVHolder;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class CNVUtils {
-
 	public static void reflectToSNV(DataSet dataset,
 			List<CopyNumberInterval> lohs, List<CopyNumberInterval> gains) {
-
 		List<CopyNumberInterval> hdAmp = new ArrayList<CopyNumberInterval>();
-		int unit = 5000000;
 
 		for (CopyNumberInterval cni : dataset.getCniVaridateList()) {
-
 			if (cni.getCopynumber() == 2)
 				continue;
-			//
-			// int length = Math.abs(cni.getEnd()-cni.getStart());
-			// boolean amp = cni.getCopynumber()>2;
-			// boolean narrowamp = amp&&(length<unit);
-			// if(cni.isAllelic()&&cni.getNoSNP()>100&&(length>unit)&&!narrowamp){
-			//
-			//
-			// al.add(cni);
-			// }
 			if (cni.getCopynumber() == 0 ) {
 				hdAmp.add(cni);
 			}
@@ -55,16 +41,13 @@ public class CNVUtils {
 
 		List<List<WaveletIF>> cap = dataset.getCapInterval();
 		for (List<WaveletIF> list : cap) {
-
 			for (WaveletIF wi : list) {
 				CapInterval ci = (CapInterval) wi;
 				CopyNumberInterval ic1 = intercect(lohs, ci, false);
 				// set UPD
 				if (ic1 != null) {
-
 					CopyNumberInterval icgain = intercect(gains, ci, true);
 					if (icgain != null) {
-
 						if (ci.getCnvtotal() == 2.0) {
 							float sumallele = ci.getAafreq() + ci.getBafreq();
 							ci.setBafreq(0);
@@ -77,10 +60,8 @@ public class CNVUtils {
 				if (ic2 != null) {
 					ci.setVaridateval(ic2.getCopynumber() / 2);
 				}
-
 			}
 		}
-
 	}
 
 	private static boolean focalamp(final CopyNumberInterval cni) {
@@ -89,10 +70,8 @@ public class CNVUtils {
 
 	private static CopyNumberInterval intercect(List<CopyNumberInterval> lohs,
 			CapInterval ci, boolean gain) {
-
 		CopyNumberInterval ret = null;
 		for (CopyNumberInterval cil : lohs) {
-
 			if (gain) {
 				if (cil.getCopynumber() < 1)
 					continue;
@@ -106,10 +85,7 @@ public class CNVUtils {
 			if (cil.getStart() <= ci.getEnd() && ci.getStart() <= cil.getEnd()) {
 				return cil;
 			}
-
 		}
 		return ret;
-
 	}
-
 }

@@ -20,7 +20,6 @@ import java.util.List;
 import jp.ac.utokyo.rcast.karkinos.wavelet.Peak;
 
 public class MatchMatrixBean {
-
 	int ploidyflg;
 	List<MatchMatrixEach> macthlist;
 	MatchMatrixEach bestmme;
@@ -73,10 +72,6 @@ public class MatchMatrixBean {
 		this.bestmme = bestmme;
 	}
 
-	public List<MatchMatrixEach> getMacthlist() {
-		return macthlist;
-	}
-
 	public void setMacthlist(List<MatchMatrixEach> macthlist) {
 		this.macthlist = macthlist;
 	}
@@ -89,28 +84,8 @@ public class MatchMatrixBean {
 		this.ploidyflg = ploidyflg;
 	}
 
-	int nummatch = 0;
-	double summatchdist = 0;
-
-	public int getNummatch() {
-		return nummatch;
-	}
-
-	public void setNummatch(int nummatch) {
-		this.nummatch = nummatch;
-	}
-
-	public double getSummatchdist() {
-		return summatchdist;
-	}
-
-	public void setSummatchdist(double summatchdist) {
-		this.summatchdist = summatchdist;
-	}
-
 	public double getInterval() {
 		if (pEvenMax != null) {
-
 			double pp = pEvenMax.getU();
 			double pt = 0.01 * getBestmme().getPurity();
 			return getUnitDist(pt, getPloidyflg(), pp);
@@ -119,14 +94,12 @@ public class MatchMatrixBean {
 	}
 
 	private static float getUnitDist(double pt, int baseploidy, double peakpos) {
-
 		if (baseploidy == 2) {
 			return (float) ((pt / 2) * peakpos);
 		} else {
 			// y = -0.15x2+0.4x
 			return (float) ((-0.15 * Math.pow(pt, 2) + (0.4 * pt)) * peakpos);
 		}
-
 	}
 
 	public void takeLargerTP() {
@@ -140,6 +113,5 @@ public class MatchMatrixBean {
 				
 			}
 		}
-
 	}
 }

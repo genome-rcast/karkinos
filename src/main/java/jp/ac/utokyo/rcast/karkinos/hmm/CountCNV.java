@@ -22,25 +22,20 @@ import jp.ac.utokyo.rcast.karkinos.exec.DataSet;
 import jp.ac.utokyo.rcast.karkinos.wavelet.WaveletIF;
 
 public class CountCNV {
-
 	public static int count(DataSet dataset) {
 		int cnt = 0;
 		List<List<WaveletIF>> plist = dataset.getCapInterval();
 		int b4 = 0;
 		for (List<WaveletIF> list : plist) {
-
 			for (WaveletIF wi : list) {
-				
 				CapInterval ci = (CapInterval)wi;
 				int cn = ci.getPeakIdx();
 				if(cn!=b4){
 					cnt++;
-				}				
+				}
 				b4 = cn;
 			}
-	
 		}
 		return cnt/2;
 	}
-
 }

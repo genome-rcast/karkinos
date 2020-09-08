@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class ReadsCounter implements java.io.Serializable {
-
 	int totalmap = 0;
 	int totalunique = 0;
 	int totalOnTarget = 0;
@@ -54,7 +53,6 @@ public class ReadsCounter implements java.io.Serializable {
 	}
 
 	void inserSizeAdd(int insertSize) {
-
 		if (insertSize < -100 || insertSize > 2000) {
 			return;
 		}
@@ -68,7 +66,6 @@ public class ReadsCounter implements java.io.Serializable {
 			cnt = inserSizeMap.get(insertSize);
 		}
 		cnt.inc();
-
 	}
 
 	public int getDuplicatereads() {
@@ -98,7 +95,6 @@ public class ReadsCounter implements java.io.Serializable {
 	}
 
 	public void inc(SAMRecord sam, boolean onTarget) {
-
 		if (sam.getDuplicateReadFlag()) {
 			duplicatereads++;
 			return;
@@ -118,7 +114,6 @@ public class ReadsCounter implements java.io.Serializable {
 		}
 
 		if (sam.getReadPairedFlag()) {
-
 			pairStats = true;
 			if (sam.getProperPairFlag()) {
 				propermap++;
@@ -154,9 +149,7 @@ public class ReadsCounter implements java.io.Serializable {
 			} else {
 				secondReads++;
 			}
-
 		}
-
 	}
 
 	public boolean isPairStats() {
@@ -180,7 +173,6 @@ public class ReadsCounter implements java.io.Serializable {
 	}
 
 	private boolean unique(SAMRecord sam) {
-
 		Integer nh = null;
 		Integer x0 = null;
 		try {
@@ -205,7 +197,6 @@ public class ReadsCounter implements java.io.Serializable {
 	}
 
 	public void merge(ReadsCounter rc) {
-
 		totalmap = totalmap + rc.getTotalmap();
 		totalunique = totalunique + rc.getTotalunique();
 		totalOnTarget = totalOnTarget + rc.getTotalOnTarget();
@@ -219,11 +210,10 @@ public class ReadsCounter implements java.io.Serializable {
 		propermap = propermap + rc.getPropermap();
 		count4insert = count4insert + rc.count4insert;
 		suminsersize = suminsersize + rc.suminsersize;
-		//
+
 		try {
 			Set<Entry<Integer, CounterA>> set = rc.inserSizeMap.entrySet();
 			for (Entry<Integer, CounterA> et : set) {
-
 				int key = et.getKey();
 				CounterA value = et.getValue();
 				if (inserSizeMap.containsKey(key)) {
@@ -232,11 +222,8 @@ public class ReadsCounter implements java.io.Serializable {
 				} else {
 					inserSizeMap.put(key, value);
 				}
-
 			}
 		} catch (Exception ex) {
 		}
-
 	}
-
 }

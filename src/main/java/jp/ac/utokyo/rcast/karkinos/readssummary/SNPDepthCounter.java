@@ -18,34 +18,26 @@ package jp.ac.utokyo.rcast.karkinos.readssummary;
 import jp.ac.utokyo.rcast.karkinos.exec.KarkinosProp;
 
 public class SNPDepthCounter {
-	
-	
 	int lowdepthcnt=0;
 	int x2count=0;
 	int x3count=0;
 	int x4count=0;
 	int highdepthcnt=0;
 	int total = 0;
-	
+
 	public void reg(int depth){
-		
 		if(depth > (KarkinosProp.mindepth*5)){
 			highdepthcnt++;	
 		}else if(depth > (KarkinosProp.mindepth*4)){
-			x4count++;	
+			x4count++;
 		}else if(depth > (KarkinosProp.mindepth*3)){
-			x3count++;	
+			x3count++;
 		}else if(depth > (KarkinosProp.mindepth*2)){
-			x2count++;		
+			x2count++;
 		}else{
 			lowdepthcnt++;
 		}
 		total++;
-		
-	}
-
-	public int getTotal() {
-		return total;
 	}
 
 	public int getLowdepthcnt() {
@@ -60,12 +52,7 @@ public class SNPDepthCounter {
 		return x3count;
 	}
 
-	public int getX4count() {
-		return x4count;
-	}
-
 	public int getHighdepthcnt() {
 		return highdepthcnt;
 	}
-
 }

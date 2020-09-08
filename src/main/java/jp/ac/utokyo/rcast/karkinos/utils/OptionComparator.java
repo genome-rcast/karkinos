@@ -21,9 +21,8 @@ import java.util.List;
 import org.apache.commons.cli.Option;
 
 public class OptionComparator implements Comparator<Option> {
-
-
 	List<Option> optionList = null;
+
 	public OptionComparator(List<Option> _optionList) {
 		optionList = _optionList;
 	}
@@ -33,5 +32,4 @@ public class OptionComparator implements Comparator<Option> {
 		int idx2 = optionList.lastIndexOf(o2);
 		return idx1-idx2;
 	}
-
 }

@@ -30,7 +30,6 @@ import org.apache.commons.math.linear.RealVector;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 public class FunctionRegression implements java.io.Serializable {
-
 	List<double[]> l;
 	int minbaitlen = 0;
 	int baitmargin = 30;
@@ -39,7 +38,6 @@ public class FunctionRegression implements java.io.Serializable {
 	RegressionInfo regInfo = null;
 
 	public static void main(String[] arg) {
-
 		List<Point2D> list = new ArrayList<Point2D>();
 		list.add(new Point2D.Double(25, 0.35));
 		list.add(new Point2D.Double(30, 0.50));
@@ -60,17 +58,15 @@ public class FunctionRegression implements java.io.Serializable {
 		for (int n = 25; n <= 75; n = n + 5) {
 			System.out.println(fr.function(n));
 		}
-
 	}
 
 	public FunctionRegression(List<double[]> l, int minbaitlen) {
-
 		this.l = l;
 		this.minbaitlen = minbaitlen;
 		unit = ((minbaitlen / 10) * 10) + baitmargin;
 		analyse();
 		baseAdjust = getBaseAdjust(l);
-		
+
 		regInfo = new RegressionInfo();
 		regInfo.setA(a);
 		regInfo.setB(b);
@@ -88,7 +84,6 @@ public class FunctionRegression implements java.io.Serializable {
 	}
 
 	private float getBaseAdjust(List<double[]> l) {
-		
 		float startval = 0.4f;
 		float endval = 1.6f;
 		//decide bin
@@ -96,12 +91,10 @@ public class FunctionRegression implements java.io.Serializable {
 		int maxidx = 0;
 		int maxdatacount = 0;
 		for (float f = startval; f <= endval-0.4f; f = f + 0.1f) {
-			
 			int datacount = 0;
 			float binstart = f;
 			float binend = f+0.4f;
 			for(double[] da : l){
-				int x = (int) Math.round(da[0]);
 				// gc%
 				int y = (int) Math.round(da[1]);
 				// value
@@ -114,26 +107,23 @@ public class FunctionRegression implements java.io.Serializable {
 				if((val>=binstart)&&(val<=binend)){
 					datacount++;
 				}
-				
-			}	
+			}
 			if(maxdatacount<datacount){
 				maxdatacount=datacount;
 				maxidx = binidx;
 			}
-			
+
 			binidx++;
 		}
-		
+
 		float binstartval = (float) (startval+(0.1*maxidx));
 		float binendval = binstartval + 0.4f;
-		
+
 		float fmin = startval;
 		float sdmin = 100;
 		for (float f =  binstartval; f <= binendval; f = f + 0.01f) {
-			
 			SummaryStatistics ss = new SummaryStatistics();
 			for(double[] da : l){
-				int x = (int) Math.round(da[0]);
 				// gc%
 				int y = (int) Math.round(da[1]);
 				// value
@@ -143,26 +133,22 @@ public class FunctionRegression implements java.io.Serializable {
 				}
 				double  val = getGCAdjustedVal(y,z);
 				if(val==1)continue;
-				//
+
 				if((val>binendval)||(val<binstartval)){
 					continue;
 				}
-				//
+
 				double diff = Math.abs(f - val);
 				ss.addValue(diff);
-				
-			}			
-			
+			}
+
 			System.out.println(f+"\t"+ss.getStandardDeviation());
 			if(sdmin>ss.getStandardDeviation()){
-				
 				sdmin=(float) ss.getStandardDeviation();
 				fmin = f;
-				
 			}
-			
 		}
-		//
+
 		if((fmin==binstartval)||(fmin==binendval)){
 			return 0f;
 		}else{
@@ -182,7 +168,6 @@ public class FunctionRegression implements java.io.Serializable {
 	Map<Integer, DistMedian> map = new HashMap<Integer, DistMedian>();
 
 	private void analyse() {
-		//
 		// SummaryStatistics total = new SummaryStatistics();
 		for (double[] da : l) {
 			// length
@@ -203,22 +188,18 @@ public class FunctionRegression implements java.io.Serializable {
 			// total.addValue(z);
 			adjustmap.put(key, ss);
 
-			//
 			DistMedian ssreg = map.get(y);
 			if (ssreg == null) {
 				ssreg = new DistMedian();
 			}
 			ssreg.addValue(z);
 			map.put(y, ssreg);
-
 		}
-		//
+
 		totalmean = 1.0f;
 
-		//
 		List<Point2D> list = new ArrayList<Point2D>();
 		for (int n = 10; n < 90; n++) {
-			//
 			DistMedian ssreg = map.get(n);
 			if (ssreg != null) {
 				double x = ((double) n);
@@ -229,16 +210,14 @@ public class FunctionRegression implements java.io.Serializable {
 				}
 			}
 		}
-		//
+
 		calcRegression(list);
 		gcMedianList = list;
-
 	}
 
 	int gridnum = 20;
 
 	private String getGrid(int x, int y) {
-
 		int n = 0;
 		int m = 0;
 
@@ -273,36 +252,33 @@ public class FunctionRegression implements java.io.Serializable {
 	public static final int Poly3 = 4;
 
 	private double[] calcRegression(List<Point2D> list) {
-
 		//debug
 		for (Point2D point : list) {
 			System.out.println("X=\t"+point.getX()+"\t Y=\t"+point.getY());
 		}
-		
+
 		list = trimList(list);
-		
+
 		//1.regression by 2nd degree polynomial
 		int n = 0;
 		double X = 0;
 		double X2 = 0;
 		double X3 = 0;
 		double X4 = 0;
-		
+
 		//for poly3
 		double X5 = 0;
-		double X6 = 0;		
+		double X6 = 0;
 
 		double Y = 0;
 		double XY = 0;
 		double X2Y = 0;
-		
+
 		//for poly3
 		double X3Y = 0;
 
 		// LSM to find 2nd degree eq
 		for (Point2D point : list) {
-
-			//
 			double x0 = point.getX();
 			double y0 = point.getY();
 			double x2 = Math.pow(x0, 2);
@@ -318,17 +294,15 @@ public class FunctionRegression implements java.io.Serializable {
 			// poly3
 			X5 += x5;
 			X6 += x6;
-			
+
 			n++;
-			
+
 			Y += y0;
 			XY += x0 * y0;
 			X2Y += x2 * y0;
-			
+
 			// poly3
 			X3Y += x3 * y0;
-			
-
 		}
 		// resolve equation
 		double[][] vals = { { n, X, X2 }, { X, X2, X3 }, { X2, X3, X4 } };
@@ -351,11 +325,10 @@ public class FunctionRegression implements java.io.Serializable {
 			//ex.printStackTrace();
 		}
 		double z = 0;
-		
+
 		double diffpow = 0;
 		int n_2 = 0;
 		for (Point2D point : list) {
-
 			double x0 = point.getX();
 			double y0 = point.getY();
 
@@ -364,11 +337,10 @@ public class FunctionRegression implements java.io.Serializable {
 			diffpow = diffpow + Math.pow(diff,2);
 			n_2++;
 			z = z + pow(diff, 2);
-
 		}
 		double diffpoly =z;
 		double BIC2 = n_2* Math.log((diffpow/n_2))+2*Math.log(n_2);
-		
+
 		//for poly3
 		double[][] vals3 = { { n, X, X2, X3 }, { X, X2, X3,X4 }, 
 				{ X2, X3, X4,X5 }, { X3, X4, X5,X6 } };
@@ -396,7 +368,6 @@ public class FunctionRegression implements java.io.Serializable {
 		double diffpow_3 = 0;
 		int n_3 = 0;
 		for (Point2D point : list) {
-
 			double x0 = point.getX();
 			double y0 = point.getY();
 
@@ -417,33 +388,28 @@ public class FunctionRegression implements java.io.Serializable {
 		double InXY = 0;
 
 		for (Point2D point : list) {
-
 			double x0 = point.getX();
 			double y0 = point.getY();
 			double lnX0 = Math.log(x0);
 
-			//
 			Y += y0;
 			InXY += lnX0 * y0;
 			InX += lnX0;
 			InX2 += pow(lnX0, 2);
-
 		}
 
 		n = list.size();
 		double ea = (n * InXY - InX * Y) / (n * InX2 - InX * InX);
 		double eb = (InX2 * Y - InXY * InX) / (n * InX2 - InX * InX);
-		//
+
 		z = 0;
 		for (Point2D point : list) {
-
 			double x0 = point.getX();
 			double y0 = point.getY();
 
 			double y = ea * Math.log(x0) + eb;
 			double diff = y0 - y;
 			z = z + pow(diff, 2);
-
 		}
 		double alog = ea;
 		double blog = eb;
@@ -451,7 +417,6 @@ public class FunctionRegression implements java.io.Serializable {
 
 		//3 regression by exponental
 		for (float z0 = -0.15f; z0 < 0.15; z0 = z0 + 0.01f) {
-			//
 			X = 0;
 			X2 = 0;
 			double InY = 0;
@@ -477,7 +442,6 @@ public class FunctionRegression implements java.io.Serializable {
 					if (!posi) {
 						val = -1 * val;
 					}
-
 				}
 				double lnY0 = Math.log(y0 - z0);
 				InY += lnY0;
@@ -485,7 +449,6 @@ public class FunctionRegression implements java.io.Serializable {
 				double x2 = pow(x0, 2);
 				X += x0;
 				X2 += x2;
-
 			}
 
 			if (n != size) {
@@ -497,28 +460,24 @@ public class FunctionRegression implements java.io.Serializable {
 
 			z = 0;
 			for (Point2D point : list) {
-
 				double x0 = point.getX();
 				double y0 = point.getY();
 
 				double y = ea * Math.exp(eb * x0) + z0;
 				double diff = y0 - y;
 				z = z + pow(diff, 2);
-
 			}
 			if (zmin == 0 || zmin > z) {
 				zmin = z;
 				a = ea;
 				b = eb;
 				c = z0;
-
 			}
-
 		}
 		System.out.println("zpoly="+"\t"+ diffpoly+"zmineop="+zmin+"\t"+"zminlog="+zminlog);
-		
+
 		funcflg = getFuncFlg(diffpoly,diffpoly_3,BIC2,BIC3,zminlog,zmin);
-		
+
 		if(funcflg == Poly2){
 			System.out.println("2nd degree polynomial");
 			a = a1;
@@ -526,13 +485,11 @@ public class FunctionRegression implements java.io.Serializable {
 			c= c1;
 			return new double[] { a, b, c };
 		}else if (funcflg == Poly3){
-			
 			a = a1_3;
 			b = b1_3;
 			c= c1_3;
 			d = d1_3;
 			return new double[] { a, b, c, d };
-				
 		}else if (funcflg == Exp) {
 			System.out.println("exp");
 			return new double[] { a, b, c };
@@ -544,17 +501,15 @@ public class FunctionRegression implements java.io.Serializable {
 			return new double[] { alog, blog ,0};
 		}
 		return null;
-
 	}
 
 //	public static final int Poly2 = 1;
 //	public static final int Log = 2;
 //	public static final int Exp = 3;
+
 	private int getFuncFlg(double diffpoly,double diffpoly_3,
 			double BIC2, double BIC3,
 			double zminlog, double zminexp) {
-		
-		//
 		if(diffpoly==0){
 			diffpoly=10000;
 		}
@@ -570,32 +525,29 @@ public class FunctionRegression implements java.io.Serializable {
 		if(BIC2<BIC3){
 			if(diffpoly<zminlog && diffpoly<zminexp){
 				return Poly2;
-			}	
+			}
 			if(zminlog<diffpoly && zminlog<zminexp){
 				return Log;
-			}	
+			}
 			if(zminexp<zminlog && zminexp<diffpoly){
 				return Exp;
-			}	
+			}
 			return Log;
 		}else{
 			if(diffpoly_3<zminlog && diffpoly_3<zminexp){
 				return Poly3;
-			}	
+			}
 			if(zminlog<diffpoly_3 && zminlog<zminexp){
 				return Log;
-			}	
+			}
 			if(zminexp<zminlog && zminexp<diffpoly_3){
 				return Exp;
-			}	
+			}
 			return Log;
-		}		
-		
-		
+		}
 	}
 
 	private List<Point2D> trimList(List<Point2D> list) {
-
 		ArrayList al = new ArrayList<Point2D>();
 		for (Point2D p : list) {
 			if ((useXmin <= p.getX()) && (useXMax >= p.getX())) {
@@ -610,7 +562,6 @@ public class FunctionRegression implements java.io.Serializable {
 	}
 
 	private double getGCAdjustedVal(double y, double z) {
-
 		double adjustmean = function(y);
 		if(adjustmean<0.1){
 			return z;
@@ -618,11 +569,9 @@ public class FunctionRegression implements java.io.Serializable {
 		double diff = totalmean - adjustmean;
 		z = z + diff;
 		return z;
-
 	}
 
 	private double function(double x) {
-		
 		double val = 0;
 		if (funcflg==Exp) {
 			double y = a * Math.exp(b * x) + c;
@@ -644,7 +593,6 @@ public class FunctionRegression implements java.io.Serializable {
 	}
 
 	public double getAdjustedZ(double x, double y, double z) {
-
 		if (z == 1)
 			return 1;
 		// GC% adjusted val
@@ -703,19 +651,15 @@ public class FunctionRegression implements java.io.Serializable {
 	}
 
 	public double[][] getMeanAry() {
-
 		double[][] dary = new double[gridnum][gridnum];
 		for (int n = 0; n < gridnum; n++) {
 			for (int m = 0; m < gridnum; m++) {
-
-				//
 				String key = n + "-" + m;
 				double val = 0;
 				if (adjustmap.containsKey(key)) {
 					val = adjustmap.get(key).getMean();
 				}
 				dary[n][m] = val;
-
 			}
 		}
 
@@ -723,12 +667,9 @@ public class FunctionRegression implements java.io.Serializable {
 	}
 
 	public double[][] getSDAry() {
-
 		double[][] dary = new double[gridnum][gridnum];
 		for (int n = 0; n < gridnum; n++) {
 			for (int m = 0; m < gridnum; m++) {
-
-				//
 				String key = n + "-" + m;
 				double val = 0;
 				if (adjustmap.containsKey(key)) {
@@ -739,16 +680,12 @@ public class FunctionRegression implements java.io.Serializable {
 			}
 		}
 		return dary;
-
 	}
 
 	public Object[] getCGLabel() {
-
 		List<Integer> list = new ArrayList<Integer>();
 		int dev = 100 / gridnum;
 		for (int n = 0; n < gridnum; n++) {
-
-			//
 			list.add(dev * (n + 1));
 		}
 		return list.toArray();
@@ -756,13 +693,9 @@ public class FunctionRegression implements java.io.Serializable {
 
 	public Object[] getBaitLabel() {
 		List<Integer> list = new ArrayList<Integer>();
-		int dev = 100 / gridnum;
 		for (int n = 0; n < gridnum; n++) {
-
-			//
 			list.add(unit * (n + 1));
 		}
 		return list.toArray();
 	}
-
 }
