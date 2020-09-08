@@ -378,7 +378,7 @@ public class WaveletDenoizeTest {
                 Arguments.of(
                         l5, l5,
                         deNoiseValue2,
-                        0.2f));
+                        0.3f));
     }
 
     @ParameterizedTest
@@ -412,17 +412,17 @@ public class WaveletDenoizeTest {
 
         return Stream.of(
                 //f, firstPeak, deNoiseValues, expected
-                Arguments.of(0.99f, 0.71, deNoiseValues, true),
-                Arguments.of(1.0f, 0.71, deNoiseValues, false),
-                Arguments.of(1.01f, 0.71, deNoiseValues, false),
-                Arguments.of(0.019f, 0.70, deNoiseValues, true),
-                Arguments.of(0.02f, 0.70, deNoiseValues, true),
-                Arguments.of(0.021f, 0.70, deNoiseValues, false));
+                Arguments.of(0.99, 0.71, deNoiseValues, true),
+                Arguments.of(1.0, 0.71, deNoiseValues, false),
+                Arguments.of(1.01, 0.71, deNoiseValues, false),
+                Arguments.of(0.019, 0.70, deNoiseValues, true),
+                Arguments.of(0.02, 0.70, deNoiseValues, false),
+                Arguments.of(0.021, 0.70, deNoiseValues, false));
     }
 
     @ParameterizedTest
     @MethodSource("moreThanParcentLowAreaParameters")
-    void moreThanParcentLowAreaTest(final float f,
+    void moreThanParcentLowAreaTest(final double f,
                                     final double firstPeak,
                                     final double[][] deNoiseValues,
                                     final boolean expected) {
