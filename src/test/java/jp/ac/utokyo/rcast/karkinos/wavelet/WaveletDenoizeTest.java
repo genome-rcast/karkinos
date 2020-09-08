@@ -33,11 +33,11 @@ public class WaveletDenoizeTest {
                 Arguments.of(
                         new int[][]{{1, 2, 3, 4, 5, 6}},
                         new double[][] {{2.1, 2.2, 2.3, 2.1, 2.2, 2.3}},
-                        0.90,
+                        0.0,
                         new double[][] {{2.2109080498231073, 2.2109080498231073,
                                 2.2109080498231073, 2.2109080498231073,
                                 2.2109080498231073, 2.2109080498231073}},
-                        new double[][] {{7.0, 7.0, 7.0, 7.0, 7.0, 7.0}}));
+                        new double[][] {{1.5, 1.5, 1.5, 1.5, 1.5, 1.5}}));
     }
 
     @ParameterizedTest
@@ -234,7 +234,7 @@ public class WaveletDenoizeTest {
                         0.44),
                 Arguments.of(
                         new double[][] {{2.077, 2.078, 2.079, 0.48, 0.2}},
-                        0.58),
+                        0.47),
                 Arguments.of(
                         new double[][] {{1.577, 1.578, 0.65, 0.6, 0.68}},
                         0.53),
@@ -279,10 +279,10 @@ public class WaveletDenoizeTest {
                         0.45f, 0.75f, false, 0.55),
                 Arguments.of(
                         new double[][] {{2.077, 2.078, 2.079, 2.076, 2.080}},
-                        0.45f, 0.75f, false, 0.53),
+                        0.45f, 0.75f, false, 0.45),
                 Arguments.of(
                         new double[][] {{2.077, 2.078, 2.079, 2.076, 2.081}},
-                        0.45f, 0.75f, false, 0.64),
+                        0.45f, 0.75f, false, 0.46),
                 Arguments.of(
                         new double[][] {{0.9, 0.83, 0.8, 0.75, 0.7}},
                         0.65f, 0.95f, false, 0.78));
@@ -470,7 +470,7 @@ public class WaveletDenoizeTest {
                 Arguments.of(0.15, 1.22, true, 1.15),
                 Arguments.of(0.15, 1.225, true, 1.3),
                 Arguments.of(0.15, 1.23, true, 1.3),
-                Arguments.of(0.15, 1.3, false, 1.3)
+                Arguments.of(0.15, 1.3, false, 1.15)
         );
     }
 
