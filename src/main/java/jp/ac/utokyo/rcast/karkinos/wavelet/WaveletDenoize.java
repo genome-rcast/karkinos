@@ -153,10 +153,10 @@ public class WaveletDenoize {
 			detected = false;
 		}
 
-		float margin = 0.05f;
+		double margin = 0.05;
 
 		if(detected0&&detected){
-			boolean morelwpeak = moreThanParcentLowArea(0.02f,loh-margin, dlist);
+			boolean morelwpeak = moreThanParcentLowArea(0.02,loh - margin, dlist);
 			if(morelwpeak){
 				return Math.min(loh0,loh);
 			}else{
@@ -240,10 +240,10 @@ public class WaveletDenoize {
 			if (firstPeak[0] < secondPeak[0]) {
 				return (float) firstPeak[0];
 			} else {
-				float parcent = 0.03f;
-				float margin = 0.05f;
+				double parcent = 0.03;
+				double margin = 0.05;
 				if (firstPeak[0] - margin> secondPeak[0]) {
-					if (moreThanParcentLowArea(parcent, firstPeak[0]-margin, dlist)) {
+					if (moreThanParcentLowArea(parcent, firstPeak[0] - margin, dlist)) {
 						return (float) secondPeak[0];
 					}
 				}
@@ -252,7 +252,7 @@ public class WaveletDenoize {
 		}
 	}
 
-	private static boolean moreThanParcentLowArea(float f, double firstPeak,
+	private static boolean moreThanParcentLowArea(double f, double firstPeak,
 			List<List<WaveletIF>> dlist) {
 		try {
 			long total = 0;
