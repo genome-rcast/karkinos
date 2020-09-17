@@ -283,7 +283,7 @@ public class WaveletDenoize {
 	private static double getNearistLine(double interval, double val, boolean include3n) {
 		// up to 3n copy number gain
 		double l1 = 1 + interval;
-		if(include3n=false){
+		if (!include3n) {
 			return l1;
 		}
 		double l2 = 1 + 2 * interval;
