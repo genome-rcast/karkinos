@@ -27,12 +27,22 @@ Also, Noise calls in low depth region are removed using EM algorithm.
  limitations under the License.
 
 
+# Prerequisites
 
+- git
+- JDK >= 1.8 (Recommended 11)
 
-# Install
+# Build
 
-- Download karkinos.jar from web sites.
-- Install Java Runtime 1.5 or later.
+```
+$ git clone https://github.com/genome-rcast/karkinos.git
+$ cd karkinos
+$ ./gradlew uberjar
+```
+
+You don't need to install Gradle command.
+
+`karkinos-standalone-X.Y.Z-SNAPSHOT.jar` is created in the `./build/libs/` directory.
 
 # Required files
 
@@ -82,22 +92,12 @@ example line
 
 # Run
 
-command
+The current version of karkinos supports only one subcommand, `analysis`.
 
-- analysis - pileup and analysis SNV,CNV,Tumor purity
-- analysis - pileup only if chr is disgnated
-- reanalysis - analysis SNV,CNV,Tumor purity from piled up files.
-
-For single computational node use analysis command to excute all genomic range.
-
-If parallel computational nodes are avilavle, use analysis command to each chromosome and use reanalysis command to maerge the result.
-
-Example shell script is on the web sites.
+This subcommand will pileup reads then analyze SNVs, CNVs, and Tumor purity.
 
 ```
-karkinos.jar analysis
-
-usage: karkinos.jar analysis -n <arg> -t <arg> -r <arg> -snp <arg> -ct
+usage: java -jar karkinos.jar analysis -n <arg> -t <arg> -r <arg> -snp <arg> -ct
        <arg> -o <arg> -id <arg> [-prop <arg>] [-mp <arg>] [-g1000 <arg>]
        [-cosmic <arg>] [-g1000freq <arg>] [-chr <arg>] [-rs <arg>] [-rg
        <arg>] [-exonSNP <arg>] [-nopdf]
@@ -125,39 +125,5 @@ usage: karkinos.jar analysis -n <arg> -t <arg> -r <arg> -snp <arg> -ct
  -rg,--refFlatGenes <arg>            optional,gene reference for depth
                                      stats
  -exonSNP,--exonSNP <arg>            additional Exon SNP
- -nopdf,--nopdf                      no graphic summary pdf output
-```
-
-```
-usage: karkinos.jar reanalysis -md <arg> -t <arg> -r <arg> -snp <arg> -ct
-       <arg> -o <arg> -id <arg> [-prop <arg>] [-mp <arg>] [-g1000 <arg>]
-       [-cosmic <arg>] [-g1000freq <arg>] [-rs <arg>] [-rg <arg>] [-tc
-       <arg>] [-exonSNP <arg>] [-nd <arg>] [-nopdf]
- -md,--middledate <arg>              middle data object
- -t,--tumorBam <arg>                 tumor bam file
- -r,--reference <arg>                2 bit genome reference file
- -snp,--dbSNP <arg>                  dbSNP list from annover
-                                     sites,(bin,chr,start,end)
- -ct,--captureTarget <arg>           Capture target regions(bed format)
- -o,--outdir <arg>                   output directory
- -id,--uniqueid <arg>                unique id for this sample
- -prop,--property <arg>              path to property file( otherwise
-                                     default val)
- -mp,--mappability <arg>             optional,mappability from ucsc (bw,
-                                     big wig format)
- -g1000,--1000genome <arg>           optional,1000 genome list from
-                                     annover
-                                     sites,(chr,pos,ref,alt,freq,id)
- -cosmic,--cosmicSNV <arg>           cosmic snv vcf format
- -g1000freq,--1000genomefreq <arg>   optional,1000 genome frequency
-                                     threshold to use
- -rs,--readsStats <arg>              reads stats files(normal,tumor)
- -rg,--refFlatGenes <arg>            optional,gene reference for depth
-                                     stats
- -tc,--tumorContents <arg>           fixed tumor contents (and skip tc
-                                     calculation)
- -exonSNP,--exonSNP <arg>            additional Exon SNP
- -nd,--normaldepth <arg>             use averaged normal depth if
-                                     available
  -nopdf,--nopdf                      no graphic summary pdf output
 ```
