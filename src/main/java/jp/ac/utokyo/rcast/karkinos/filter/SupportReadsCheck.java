@@ -518,13 +518,13 @@ public class SupportReadsCheck extends ReadWriteBase {
 		// // regrec = true;
 		// // }
 		// }
-		if (recnt >= 2) {
+		if (recnt >= 4) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
-		if (diffrecnt >= 1) {
+		if (diffrecnt >= 3) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
-		if (diffcountneighbor >= 8) {
+		if (diffcountneighbor >= 10) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
 		// change value 2013.07.03
