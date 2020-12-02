@@ -158,7 +158,7 @@ public class KarkinosProp implements java.io.Serializable {
 		minPhredQual = getFloatProperty(KEY_minPhredQual,minPhredQual);
 		minMappability = getFloatProperty(KEY_minMappability,minMappability);
 		minEntropy = getFloatProperty(KEY_minEntropy,minEntropy);
-		//minMisMatchRate = getFloatProperty(KEY_minMisMatchRate,minMisMatchRate);
+		minMisMatchRate = getFloatProperty(KEY_minMisMatchRate,minMisMatchRate);
 
 		Fisher_Thres_For_Reads_Direction = getDoubleProperty(KEY_Fisher_Thres_For_Reads_Direction,Fisher_Thres_For_Reads_Direction);
 		Fisher_Thres_For_SNV_Detection = getDoubleProperty(KEY_Fisher_Thres_For_SNV_Detection,Fisher_Thres_For_SNV_Detection);
