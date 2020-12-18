@@ -133,7 +133,23 @@ public class KarkinosProp implements java.io.Serializable {
 	public static String KEY_nearindelbt  ="nearindelbt";
 	public static String KEY_baysianFilterdepth  ="baysianFilterdepth";
 
+	//2020.12.18 H.Ueda
+	public static int extraReadTerminalCheckLen = 20;
+	public static int extraReadTerminalMismatchThres = 2;
+	public static float TerminalMismatchNGThres = 0.4f;
+
+	public static String Key_extraReadTerminalCheckLen = "extraReadTerminalCheckLen";
+	public static String Key_extraReadTerminalMismatchThres = "extraReadTerminalMismatchThres";
+	public static String Key_TerminalMismatchNGThres = "TerminalMismatchNGThres";
+
+
 	private static void loadEach() {
+
+		//2020.12.18 H.Ueda
+		extraReadTerminalCheckLen = getIntProperty(KEY_denozeToSD,(int)extraReadTerminalCheckLen);
+		extraReadTerminalMismatchThres = getIntProperty(Key_extraReadTerminalMismatchThres,(int)extraReadTerminalMismatchThres);
+		TerminalMismatchNGThres = getFloatProperty(Key_TerminalMismatchNGThres,(float)TerminalMismatchNGThres);
+
 		BINBITSIZE = getIntProperty(KEY_BINBITSIZE,BINBITSIZE);
 		denozeToSD = getFloatProperty(KEY_denozeToSD,(float)denozeToSD);
 		maxdenoiseLevel = getIntProperty(KEY_maxdenoiseLevel,maxdenoiseLevel);
@@ -158,7 +174,7 @@ public class KarkinosProp implements java.io.Serializable {
 		minPhredQual = getFloatProperty(KEY_minPhredQual,minPhredQual);
 		minMappability = getFloatProperty(KEY_minMappability,minMappability);
 		minEntropy = getFloatProperty(KEY_minEntropy,minEntropy);
-		minMisMatchRate = getFloatProperty(KEY_minMisMatchRate,minMisMatchRate);
+		//minMisMatchRate = getFloatProperty(KEY_minMisMatchRate,minMisMatchRate);
 
 		Fisher_Thres_For_Reads_Direction = getDoubleProperty(KEY_Fisher_Thres_For_Reads_Direction,Fisher_Thres_For_Reads_Direction);
 		Fisher_Thres_For_SNV_Detection = getDoubleProperty(KEY_Fisher_Thres_For_SNV_Detection,Fisher_Thres_For_SNV_Detection);

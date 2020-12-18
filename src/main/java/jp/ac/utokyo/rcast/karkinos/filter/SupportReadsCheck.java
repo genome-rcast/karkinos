@@ -15,23 +15,6 @@ limitations under the License.
  */
 package jp.ac.utokyo.rcast.karkinos.filter;
 
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.CONTAIN_Reccurent_MISMATCH;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_AllelicInfoAvailable;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_SUPPORTED_BY_ONEDirection;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.LOW_PROPER;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.MutationAtSameCycle;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.NEARINDEL;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.NOISE_IN_NORMAL;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.READSENDSONLY;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.SUPPORTED_BY_ONEDirection;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.SUPPORTED_READSNG;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TNQualityDiff;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TooManyMismatchReads;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.noStrandSpecific;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.softClip;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_ffpe;
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_oxoG;
-
 import htsjdk.samtools.CigarElement;
 import htsjdk.samtools.CigarOperator;
 import htsjdk.samtools.SAMFileReader;
@@ -62,6 +45,8 @@ import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.*;
 
 public class SupportReadsCheck extends ReadWriteBase {
 	String bam;
@@ -119,6 +104,9 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int f1r2else = 0;
 		int f2r1else = 0;
 
+		//add for terminal mismatch check 2020/12/18 H.Ueda
+		int teminalmismatchread = 0;
+
 		while (ite.hasNext()) {
 			SAMRecord sam = ite.next();
 			// System.out.println(sam.getReadString());
@@ -174,6 +162,15 @@ public class SupportReadsCheck extends ReadWriteBase {
 				// }
 				// }
 
+				//add for terminal mismatch check 2020/12/18 H.Ueda
+				Object tnm = sam.getAttribute("TM");
+				if(tnm!=null){
+					int tmnI = (Integer)tnm;
+					if(tmnI >= KarkinosProp.extraReadTerminalMismatchThres){
+						teminalmismatchread++;
+					}
+				}
+
 				SCounter cyclecounter = null;
 				if (cycleCheck.containsKey(mutationidx)) {
 					cyclecounter = cycleCheck.get(mutationidx);
@@ -213,6 +210,12 @@ public class SupportReadsCheck extends ReadWriteBase {
 			}
 		}
 		ite.close();
+
+		//add for terminal mismatch check 2020/12/18 H.Ueda
+		float terminalNGratio = (float)((double)teminalmismatchread/(double)supportreads.size());
+		if(terminalNGratio > KarkinosProp.TerminalMismatchNGThres){
+			filter.add(TERMINAL_MISMATCH);
+		}
 
 		// add near indel check around SNV 2012.08.03
 		if (!isindel) {
@@ -518,13 +521,13 @@ public class SupportReadsCheck extends ReadWriteBase {
 		// // regrec = true;
 		// // }
 		// }
-		if (recnt >= 4) {
+		if (recnt >= 2) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
-		if (diffrecnt >= 3) {
+		if (diffrecnt >= 1) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
-		if (diffcountneighbor >= 10) {
+		if (diffcountneighbor >= 8) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
 		// change value 2013.07.03

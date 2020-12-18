@@ -84,6 +84,8 @@ public class FilterResult implements java.io.Serializable {
 	public static final int INFO_adjustLowdepth = 204;
 	public static final int INFO_minimumSupportReads = 205;
 
+	public static final int TERMINAL_MISMATCH = 35;
+
 	// bw.append("##FILTER=<ID=qf,Description=\"Quality below threshold\">");
 	// bw.append("##FILTER=<ID=bf,Description=\"Bayesian filterling\">");
 	// bw.append("##FILTER=<ID=snp,Description=\"dbSNP snp\">");
@@ -215,6 +217,11 @@ public class FilterResult implements java.io.Serializable {
 
 			// case High_normal_adjustedRatio:
 			// return "high_adj_ratio";
+
+			// add 2020/12/17 for FFPE anneling near repeat, H.Ueda
+		case TERMINAL_MISMATCH:
+			return "terminal_mismatch";
+
 		}
 
 		if (flg != 0) {
