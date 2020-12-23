@@ -732,7 +732,9 @@ public class TumorGenotyper extends ReadWriteBase {
 				if (sam.getIntegerAttribute("NM")>=2) {
 
 					int terminalMismatch = TerminalMismatch.terminalMismatch(sam, tgr, KarkinosProp.extraReadTerminalCheckLen);
-					sam.setAttribute("TM",terminalMismatch);
+					if(terminalMismatch>=2){
+						continue;
+					}
 
 				}
 				if (qualityCheck(sam)) {
