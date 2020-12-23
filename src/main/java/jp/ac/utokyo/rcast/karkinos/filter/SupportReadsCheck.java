@@ -15,6 +15,24 @@ limitations under the License.
  */
 package jp.ac.utokyo.rcast.karkinos.filter;
 
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.CONTAIN_Reccurent_MISMATCH;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_AllelicInfoAvailable;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_SUPPORTED_BY_ONEDirection;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.LOW_PROPER;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.MutationAtSameCycle;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.NEARINDEL;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.NOISE_IN_NORMAL;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.READSENDSONLY;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.SUPPORTED_BY_ONEDirection;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.SUPPORTED_READSNG;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TNQualityDiff;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TooManyMismatchReads;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.noStrandSpecific;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.softClip;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_ffpe;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_oxoG;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TERMINAL_MISMATCH;
+
 import htsjdk.samtools.CigarElement;
 import htsjdk.samtools.CigarOperator;
 import htsjdk.samtools.SAMFileReader;
@@ -45,8 +63,6 @@ import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-
-import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.*;
 
 public class SupportReadsCheck extends ReadWriteBase {
 	String bam;
@@ -359,14 +375,14 @@ public class SupportReadsCheck extends ReadWriteBase {
 		if (mismatchRate > KarkinosProp.minMisMatchRate) {
 			filter.add(TooManyMismatchReads);
 		}
-		
+
 		//For todai top SNV
 		if (supportreads != null && supportreads.size() <= 5) {
 			float readratiothres = KarkinosProp.falseReadratio;
 			if ((oxoGCand)||(ffpeCand)) {
 				readratiothres = KarkinosProp.falseReadratio2;
 			}
-			
+
 			float falseReadRatio = getFalseReadRate(supportreads, pos, KarkinosProp.falseReadMismatchratio);
 			if (falseReadRatio >= readratiothres) {
 				filter.add(TooManyMismatchReads);
@@ -521,13 +537,13 @@ public class SupportReadsCheck extends ReadWriteBase {
 		// // regrec = true;
 		// // }
 		// }
-		if (recnt >= 2) {
+		if (recnt >= 4) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
-		if (diffrecnt >= 1) {
+		if (diffrecnt >= 3) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
-		if (diffcountneighbor >= 8) {
+		if (diffcountneighbor >= 10) {
 			filter.add(CONTAIN_Reccurent_MISMATCH);
 		}
 		// change value 2013.07.03
