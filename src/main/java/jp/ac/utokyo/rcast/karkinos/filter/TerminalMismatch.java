@@ -24,16 +24,13 @@ import htsjdk.samtools.SAMRecord;
 
 import java.util.List;
 
+
 public class TerminalMismatch {
+
     //add 2020/12/17 for FFPE anneling near repeat, extends soft clipping
     public static int terminalMismatch(SAMRecord sam, TwoBitGenomeReader tgr, int extraCheckLen) {
         try {
-            //does not check Indel read
-            if(containIndel(sam)){
-                return 0;
-            }
             return Math.max(leftMismatch(sam,tgr,extraCheckLen),rightMismatch(sam,tgr,extraCheckLen));
-
         }catch(Exception ex){
             //
             ex.printStackTrace();
@@ -41,7 +38,7 @@ public class TerminalMismatch {
         return 0;
     }
 
-    private static boolean containIndel(SAMRecord sam){
+    private static boolean containIndel(SAMRecord sam) {
         List<CigarElement> l = sam.getCigar().getCigarElements();
         for(CigarElement ce: l){
             if(ce.getOperator().equals(CigarOperator.I))return true;
@@ -53,15 +50,10 @@ public class TerminalMismatch {
     private static int leftMismatch(SAMRecord sam, TwoBitGenomeReader tgr, int extraCheckLen) {
         int alignmentStart = sam.getAlignmentStart();
         int miscount = 0;
-        CigarElement first = sam.getCigar().getCigarElements().get(0);
-        int scidx = 0;
-        if(isClipped(first)){
-            scidx = first.getLength();
-        }
         for(int n=alignmentStart;n<=alignmentStart+extraCheckLen;n++){
             //
             char refNuc = tgr._getGenomeNuc(n,true);
-            int idx = sam.getReadPositionAtReferencePosition(n)-1+scidx;
+            int idx = sam.getReadPositionAtReferencePosition(n)-1;
             if(idx>=0 && idx<sam.getReadLength()){
                 char readNuc = sam.getReadString().charAt(idx);
                 if(!equalnuc(refNuc,readNuc)){
@@ -75,15 +67,10 @@ public class TerminalMismatch {
     private static int rightMismatch(SAMRecord sam, TwoBitGenomeReader tgr, int extraCheckLen) {
         int alignmentEnd = sam.getAlignmentEnd();
         int miscount = 0;
-        CigarElement first = sam.getCigar().getCigarElements().get(0);
-        int scidx = 0;
-        if(isClipped(first)){
-            scidx = first.getLength();
-        }
         for(int n=alignmentEnd;n>=alignmentEnd-extraCheckLen;n--){
             //
             char refNuc = tgr._getGenomeNuc(n,true);
-            int idx = sam.getReadPositionAtReferencePosition(n)-1+scidx;
+            int idx = sam.getReadPositionAtReferencePosition(n)-1;
             if(idx>=0 && idx<sam.getReadLength()){
                 char readNuc = sam.getReadString().charAt(idx);
                 if(!equalnuc(refNuc,readNuc)){
@@ -94,7 +81,7 @@ public class TerminalMismatch {
         return miscount;
     }
 
-    private static boolean equalnuc(char refNuc,char readNuc) {
+    private static boolean equalnuc(char refNuc, char readNuc) {
         return Character.toUpperCase(refNuc) == Character.toUpperCase(readNuc);
     }
 

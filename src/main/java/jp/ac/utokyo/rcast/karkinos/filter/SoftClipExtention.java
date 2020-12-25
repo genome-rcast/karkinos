@@ -45,7 +45,6 @@ public class SoftClipExtention {
         CigarElement first = list.get(0);
         CigarElement second = list.get(1);
         int extraCheckLen = 15;
-
         if(isClipped(first)&&isM(second)&&second.getLength()>extraCheckLen){
 
             int alignmentStart = sam.getAlignmentStart();
@@ -56,7 +55,7 @@ public class SoftClipExtention {
             for(int n=alignmentStart;n<=alignmentStart+extraCheckLen;n++){
                 //
                 char refNuc = tgr._getGenomeNuc(n,true);
-                int idx = sam.getReadPositionAtReferencePosition(n)-1+first.getLength();
+                int idx = sam.getReadPositionAtReferencePosition(n)-1;
                 if(idx>=0 && idx<sam.getReadLength()){
                     char readNuc = sam.getReadString().charAt(idx);
                     if(!equalnuc(refNuc,readNuc)){
@@ -81,8 +80,6 @@ public class SoftClipExtention {
             }
             //
             if(clipidx>0){
-
-                //
                 Cigar cgn = new Cigar();
                 CigarElement sc = new CigarElement(clipidx+1,CigarOperator.S);
                 cgn.add(sc);
@@ -92,7 +89,7 @@ public class SoftClipExtention {
                     cgn.add(list.get(m));
                 }
                 sam.setCigar(cgn);
-                int alstart = sam.getStart()+clipidx+1;
+                int alstart = sam.getStart()+(clipidx+1-first.getLength());
                 sam.setAlignmentStart(alstart);
                 int  nm = sam.getIntegerAttribute("NM");
                 nm = nm - miscount;
@@ -108,11 +105,6 @@ public class SoftClipExtention {
         CigarElement second = list.get(size-2);
         int extraCheckLen = 15;
 
-        CigarElement leftmost = sam.getCigar().getCigarElements().get(0);
-        int scidx = 0;
-        if(isClipped(leftmost)){
-            scidx = leftmost.getLength();
-        }
         if(isClipped(first)&&isM(second)&&second.getLength()>extraCheckLen){
 
             int alignmentEnd = sam.getAlignmentEnd();
@@ -123,7 +115,7 @@ public class SoftClipExtention {
             for(int n=alignmentEnd;n>=alignmentEnd-extraCheckLen;n--){
                 //
                 char refNuc = tgr._getGenomeNuc(n,true);
-                int idx = sam.getReadPositionAtReferencePosition(n)-1+scidx;
+                int idx = sam.getReadPositionAtReferencePosition(n)-1;
                 if(idx>=0 && idx<sam.getReadLength()){
                     char readNuc = sam.getReadString().charAt(idx);
                     if(!equalnuc(refNuc,readNuc)){
