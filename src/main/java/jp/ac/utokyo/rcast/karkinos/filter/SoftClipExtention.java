@@ -44,7 +44,8 @@ public class SoftClipExtention {
         List<CigarElement> list = sam.getCigar().getCigarElements();
         CigarElement first = list.get(0);
         CigarElement second = list.get(1);
-        int extraCheckLen = 15;
+        int extraCheckLen = 20;
+
         if(isClipped(first)&&isM(second)&&second.getLength()>extraCheckLen){
 
             int alignmentStart = sam.getAlignmentStart();
@@ -63,15 +64,15 @@ public class SoftClipExtention {
                         lastidx = idx;
                     }
                 }
-                if(m==4){
+                if(m==9){
                     if(miscount>0){
                         clipidx = lastidx;
                     }
-                }else if(m==9){
+                }else if(m==14){
                     if(miscount>1){
                         clipidx = lastidx;
                     }
-                }else if(m==14){
+                }else if(m==19){
                     if(miscount>2){
                         clipidx = lastidx;
                     }
@@ -103,7 +104,7 @@ public class SoftClipExtention {
         int size = list.size();
         CigarElement first = list.get(size-1);
         CigarElement second = list.get(size-2);
-        int extraCheckLen = 15;
+        int extraCheckLen = 20;
 
         if(isClipped(first)&&isM(second)&&second.getLength()>extraCheckLen){
 
@@ -123,15 +124,15 @@ public class SoftClipExtention {
                         lastidx = idx;
                     }
                 }
-                if(m==4){
+                if(m==9){
                     if(miscount>0){
                         clipidx = lastidx;
                     }
-                }else if(m==9){
+                }else if(m==14){
                     if(miscount>1){
                         clipidx = lastidx;
                     }
-                }else if(m==14){
+                }else if(m==19){
                     if(miscount>2){
                         clipidx = lastidx;
                     }
@@ -145,7 +146,6 @@ public class SoftClipExtention {
                 for(m=0;m<list.size()-2;m++){
                     cgn.add(list.get(m));
                 }
-
                 int sclen = sam.getReadLength()-(clipidx+1);
                 int mlen = second.getLength() - (sclen - first.getLength());
                 CigarElement mc = new CigarElement(mlen,CigarOperator.M);
