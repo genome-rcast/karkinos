@@ -169,7 +169,7 @@ public class PileUP implements java.io.Serializable {
 				snvHolder.setNormal(normal2);
 				snvHolder.setTumor(tumor2);
 				int iflg = NormalINDEL;
-				if (tumor.indel && normal.indel) {
+			    if (bothIndel(normal,tumor,normal2,tumor2)) {
 					iflg = BothINDEL;
 				} else if (tumor.indel) {
 					iflg = TumorINDEL;
@@ -289,7 +289,7 @@ public class PileUP implements java.io.Serializable {
 		boolean isFirst = false;
 		int retindex = startidx;
 		int lowqual = 0;
-		int ontarget = 0; 
+		int ontarget = 0;
 
 		for (int n = startidx; n < samList.size(); n++) {
 			SamHolder sh = samList.get(n);
@@ -471,5 +471,15 @@ public class PileUP implements java.io.Serializable {
 			end = start + sam.getReadLength() - 1;
 		}
 		return pos >= start && pos <= end;
+	}
+
+	private static boolean bothIndel(PileUPResult normal,PileUPResult tumor,PileUPResult normal2,PileUPResult tumor2){
+		if(tumor.indel && normal.indel){
+			if(tumor2.getRatio() > 0.1 && normal2.getRatio() < 0.01){
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 }

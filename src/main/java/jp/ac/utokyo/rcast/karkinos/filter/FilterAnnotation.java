@@ -210,7 +210,7 @@ public class FilterAnnotation {
 			boolean indelinrepeat = false;
 			int start = pos + 1;
 			int end = pos + 10;
-			
+
 			int dellenn = 0;
 			String del="";
 			if (isindel) {
@@ -221,7 +221,7 @@ public class FilterAnnotation {
 						start = pos + dellenn;
 						end = pos + dellenn + 10;
 						del = tgr.getGenomicSeq(chrom, pos+1,pos+dellenn, true);
-						
+
 					}
 				} catch (Exception ex) {
 				}
@@ -254,6 +254,10 @@ public class FilterAnnotation {
 				sseq = after10;
 			}
 
+			if (isindel) {
+				seqEntropy = 100;
+			}
+
 			// high isoform
 			boolean highisoform = false;
 			if (ge != null) {
@@ -283,7 +287,7 @@ public class FilterAnnotation {
 			}
 			// 20170317 todai
 			if(indelinrepeat){
-				
+
 				if((normalTotal<snv.getTumor().getTotalcnt()*0.5) && (normalTotal<50) && snv.getTumor().getAltCnt()<=12){
 				  supportReadsFlgs.add(FilterResult.Low_complexty);
 				}
