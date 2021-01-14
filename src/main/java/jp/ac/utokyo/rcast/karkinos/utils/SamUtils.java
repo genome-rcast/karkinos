@@ -9,13 +9,12 @@ public class SamUtils {
 
     public static boolean lowmap(SAMRecord sam) {
 
-        //System.out.println("mq"+sam.getMappingQuality());
-        if (sam.getMappingQuality() <= 3) {
+        if(sam.getReadUnmappedFlag()
+         || (sam.getMappingQuality() <= 3)
+         || sam.getNotPrimaryAlignmentFlag()){
             return true;
         }
-        if(sam.getNotPrimaryAlignmentFlag()){
-            return true;
-        }
+
 
         int seqlen = sam.getReadLength();
         int match = 0;

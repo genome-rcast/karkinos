@@ -717,9 +717,7 @@ public class TumorGenotyper extends ReadWriteBase {
 			int readslent = 0;
 			while (tumorIte.hasNext()) {
 				SAMRecord sam = tumorIte.next();
-				if (sam.getReadUnmappedFlag())
-					continue;
-				if(qualityCheck(sam)==false) {
+				if(SamUtils.lowmap(sam)) {
 					continue;
 				}
 				//add 2020/12/17 for FFPE anneling near repeat, H.Ueda
@@ -775,9 +773,5 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 	}
 
-	private boolean qualityCheck(SAMRecord sam) {
-		// TODO Auto-generated method stub
-		boolean lowmap = SamUtils.lowmap(sam);
-		return !lowmap;
-	}
+
 }
