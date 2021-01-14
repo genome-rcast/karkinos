@@ -474,8 +474,22 @@ public class PileUP implements java.io.Serializable {
 	}
 
 	private static boolean bothIndel(PileUPResult normal,PileUPResult tumor,PileUPResult normal2,PileUPResult tumor2){
+
 		if(tumor.indel && normal.indel){
-			if(tumor2.getRatio() > 0.1 && normal2.getRatio() < 0.01){
+			if(normal2.getAltCnt()>=3){
+				return true;
+			}
+			if(normal2.getAltCnt()==1 && normal2.getRatio() < 0.005){
+				if(normal2.insersion != tumor2.insersion){
+					return true;
+				}
+			}
+			if(normal2.getRatio()==0){
+				//should not come here
+				return false;
+			}
+			double r = tumor2.getRatio()/normal2.getRatio();
+			if(r >  20.0 && normal2.getRatio() < 0.005 && tumor2.getAltCnt()>=20){
 				return false;
 			}
 			return true;

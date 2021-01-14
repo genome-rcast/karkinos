@@ -47,13 +47,7 @@ import jp.ac.utokyo.rcast.karkinos.hmm.CountCNV;
 import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysisFromEM;
 import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
-import jp.ac.utokyo.rcast.karkinos.utils.CorrelVaridate;
-import jp.ac.utokyo.rcast.karkinos.utils.GeneEachCNV;
-import jp.ac.utokyo.rcast.karkinos.utils.Interval;
-import jp.ac.utokyo.rcast.karkinos.utils.ListUtils;
-import jp.ac.utokyo.rcast.karkinos.utils.OptionComparator;
-import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
-import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
+import jp.ac.utokyo.rcast.karkinos.utils.*;
 import jp.ac.utokyo.rcast.karkinos.wavelet.EMMethod;
 import jp.ac.utokyo.rcast.karkinos.wavelet.GCParcentAdjust;
 import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
@@ -725,6 +719,9 @@ public class TumorGenotyper extends ReadWriteBase {
 				SAMRecord sam = tumorIte.next();
 				if (sam.getReadUnmappedFlag())
 					continue;
+				if(qualityCheck(sam)==false) {
+					continue;
+				}
 				//add 2020/12/17 for FFPE anneling near repeat, H.Ueda
 				//extends softclip
 				SoftClipExtention.extendSoftclip(sam, tgr);
@@ -780,6 +777,7 @@ public class TumorGenotyper extends ReadWriteBase {
 
 	private boolean qualityCheck(SAMRecord sam) {
 		// TODO Auto-generated method stub
-		return true;
+		boolean lowmap = SamUtils.lowmap(sam);
+		return !lowmap;
 	}
 }
