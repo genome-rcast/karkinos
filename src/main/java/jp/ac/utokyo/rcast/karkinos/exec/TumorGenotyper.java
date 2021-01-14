@@ -724,9 +724,6 @@ public class TumorGenotyper extends ReadWriteBase {
 			int readslent = 0;
 			while (tumorIte.hasNext()) {
 				SAMRecord sam = tumorIte.next();
-				if(SamUtils.lowmap(sam)) {
-					continue;
-				}
 				//add 2020/12/17 for FFPE anneling near repeat, H.Ueda
 				//extends softclip
 				SoftClipExtention.extendSoftclip(sam, tgr);
@@ -781,6 +778,6 @@ public class TumorGenotyper extends ReadWriteBase {
 	}
 
 	private boolean qualityCheck(SAMRecord sam) {
-		return true;
+		return !SamUtils.lowmap(sam);
 	}
 }
