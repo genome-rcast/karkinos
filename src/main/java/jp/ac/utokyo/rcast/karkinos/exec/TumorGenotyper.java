@@ -47,7 +47,14 @@ import jp.ac.utokyo.rcast.karkinos.hmm.CountCNV;
 import jp.ac.utokyo.rcast.karkinos.hmm.HMMCNVAnalysisFromEM;
 import jp.ac.utokyo.rcast.karkinos.readssummary.GeneExons;
 import jp.ac.utokyo.rcast.karkinos.readssummary.ReadsSummary;
-import jp.ac.utokyo.rcast.karkinos.utils.*;
+import jp.ac.utokyo.rcast.karkinos.utils.CorrelVaridate;
+import jp.ac.utokyo.rcast.karkinos.utils.GeneEachCNV;
+import jp.ac.utokyo.rcast.karkinos.utils.Interval;
+import jp.ac.utokyo.rcast.karkinos.utils.ListUtils;
+import jp.ac.utokyo.rcast.karkinos.utils.OptionComparator;
+import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
+import jp.ac.utokyo.rcast.karkinos.utils.SamUtils;
+import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 import jp.ac.utokyo.rcast.karkinos.wavelet.EMMethod;
 import jp.ac.utokyo.rcast.karkinos.wavelet.GCParcentAdjust;
 import jp.ac.utokyo.rcast.karkinos.wavelet.PeaksInfo;
@@ -129,7 +136,7 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		optionlist.add(getOption("startend", "startend", true,
 				"start-end position", false));
-		
+
 		optionlist.add(getOption("rs", "readsStats", true,
 				"optional,reads stats files(normal,tumor)", false));
 
@@ -141,8 +148,8 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		optionlist.add(getOption("nopdf", "nopdf", false,
 				"no graphic summary pdf output", false));
-		
-		
+
+
 		optionlist.add(getOption("sites", "pileupsites", true,
 				"disgnated pileup sites", false));
 
@@ -321,7 +328,7 @@ public class TumorGenotyper extends ReadWriteBase {
 					// }
 				}
 			}
-			outputsave = outobjdir + targetChr + "_" + id + "_"+ startends 
+			outputsave = outobjdir + targetChr + "_" + id + "_"+ startends
 					+ "_saveobj.obj";
 		}
 
@@ -708,7 +715,7 @@ public class TumorGenotyper extends ReadWriteBase {
 				normalcnt++;
 				readslenn = sam.getReadLength();
 			}
-			
+
 			System.out.println(iv.getStr() + " normal reads " + normalcnt
 					+ " has been reads");
 
@@ -740,7 +747,7 @@ public class TumorGenotyper extends ReadWriteBase {
 					}
 					boolean dupli = sam.getDuplicateReadFlag();
 					if (onTarget && !dupli) {
-						
+
 						SamHolder sh = new SamHolder();
 						sh.setSam(sam);
 						sh.setOi(oi);
@@ -773,5 +780,7 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 	}
 
-
+	private boolean qualityCheck(SAMRecord sam) {
+		return true;
+	}
 }
