@@ -728,7 +728,7 @@ public class TumorGenotyper extends ReadWriteBase {
 				//extends softclip
 				SoftClipExtention.extendSoftclip(sam, tgr);
 				//count terminal mismatch
-				if (sam.getIntegerAttribute("NM")>=2) {
+				if (sam.getIntegerAttribute("NM") != null && sam.getIntegerAttribute("NM") >= 2) {
 
 					int terminalMismatch = TerminalMismatch.terminalMismatch(sam, tgr, KarkinosProp.extraReadTerminalCheckLen);
 					if(terminalMismatch>=2){
