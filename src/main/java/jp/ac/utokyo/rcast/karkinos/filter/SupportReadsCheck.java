@@ -31,6 +31,7 @@ import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.noStrandSpecific;
 import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.softClip;
 import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_ffpe;
 import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.INFO_oxoG;
+import static jp.ac.utokyo.rcast.karkinos.filter.FilterResult.TERMINAL_MISMATCH;
 
 import htsjdk.samtools.CigarElement;
 import htsjdk.samtools.CigarOperator;
@@ -119,6 +120,9 @@ public class SupportReadsCheck extends ReadWriteBase {
 		int f1r2else = 0;
 		int f2r1else = 0;
 
+		//add for terminal mismatch check 2020/12/18 H.Ueda
+		int teminalmismatchread = 0;
+
 		while (ite.hasNext()) {
 			SAMRecord sam = ite.next();
 			// System.out.println(sam.getReadString());
@@ -174,6 +178,15 @@ public class SupportReadsCheck extends ReadWriteBase {
 				// }
 				// }
 
+				//add for terminal mismatch check 2020/12/18 H.Ueda
+				Object tnm = sam.getAttribute("TM");
+				if(tnm!=null){
+					int tmnI = (Integer)tnm;
+					if(tmnI >= KarkinosProp.extraReadTerminalMismatchThres){
+						teminalmismatchread++;
+					}
+				}
+
 				SCounter cyclecounter = null;
 				if (cycleCheck.containsKey(mutationidx)) {
 					cyclecounter = cycleCheck.get(mutationidx);
@@ -213,6 +226,12 @@ public class SupportReadsCheck extends ReadWriteBase {
 			}
 		}
 		ite.close();
+
+		//add for terminal mismatch check 2020/12/18 H.Ueda
+		float terminalNGratio = (float)((double)teminalmismatchread/(double)supportreads.size());
+		if(terminalNGratio > KarkinosProp.TerminalMismatchNGThres){
+			filter.add(TERMINAL_MISMATCH);
+		}
 
 		// add near indel check around SNV 2012.08.03
 		if (!isindel) {
@@ -356,14 +375,14 @@ public class SupportReadsCheck extends ReadWriteBase {
 		if (mismatchRate > KarkinosProp.minMisMatchRate) {
 			filter.add(TooManyMismatchReads);
 		}
-		
+
 		//For todai top SNV
 		if (supportreads != null && supportreads.size() <= 5) {
 			float readratiothres = KarkinosProp.falseReadratio;
 			if ((oxoGCand)||(ffpeCand)) {
 				readratiothres = KarkinosProp.falseReadratio2;
 			}
-			
+
 			float falseReadRatio = getFalseReadRate(supportreads, pos, KarkinosProp.falseReadMismatchratio);
 			if (falseReadRatio >= readratiothres) {
 				filter.add(TooManyMismatchReads);

@@ -37,6 +37,8 @@ import jp.ac.utokyo.rcast.karkinos.annotation.loadsave.LoadSave;
 import jp.ac.utokyo.rcast.karkinos.annotation.loadsave.SaveBean;
 import jp.ac.utokyo.rcast.karkinos.filter.DefinedSites;
 import jp.ac.utokyo.rcast.karkinos.filter.FilterAnnotation;
+import jp.ac.utokyo.rcast.karkinos.filter.SoftClipExtention;
+import jp.ac.utokyo.rcast.karkinos.filter.TerminalMismatch;
 import jp.ac.utokyo.rcast.karkinos.graph.output.CNVVcf;
 import jp.ac.utokyo.rcast.karkinos.graph.output.FileOutPut;
 import jp.ac.utokyo.rcast.karkinos.graph.output.PdfReport;
@@ -673,6 +675,8 @@ public class TumorGenotyper extends ReadWriteBase {
 			ds = new DefinedSites(sites);
 			ds.load(sites,chrom);
 		}
+		//Ueda add 2020.12.18 load genome
+		tgr.readRef(chrom);
 
 		int n = 0;
 		for (Interval iv : ivlist) {
@@ -721,6 +725,18 @@ public class TumorGenotyper extends ReadWriteBase {
 				SAMRecord sam = tumorIte.next();
 				if (sam.getReadUnmappedFlag())
 					continue;
+				//add 2020/12/17 for FFPE anneling near repeat, H.Ueda
+				//extends softclip
+				SoftClipExtention.extendSoftclip(sam, tgr);
+				//count terminal mismatch
+				if (sam.getIntegerAttribute("NM")>=2) {
+
+					int terminalMismatch = TerminalMismatch.terminalMismatch(sam, tgr, KarkinosProp.extraReadTerminalCheckLen);
+					if(terminalMismatch>=2){
+						continue;
+					}
+
+				}
 				if (qualityCheck(sam)) {
 					boolean onTarget = false;
 					OntagetInfo oi = dataset.setTumorCoverageInfo(sam);
