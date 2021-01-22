@@ -53,6 +53,7 @@ import jp.ac.utokyo.rcast.karkinos.utils.Interval;
 import jp.ac.utokyo.rcast.karkinos.utils.ListUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.OptionComparator;
 import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
+import jp.ac.utokyo.rcast.karkinos.utils.SamUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 import jp.ac.utokyo.rcast.karkinos.wavelet.EMMethod;
 import jp.ac.utokyo.rcast.karkinos.wavelet.GCParcentAdjust;
@@ -135,7 +136,7 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		optionlist.add(getOption("startend", "startend", true,
 				"start-end position", false));
-		
+
 		optionlist.add(getOption("rs", "readsStats", true,
 				"optional,reads stats files(normal,tumor)", false));
 
@@ -147,8 +148,8 @@ public class TumorGenotyper extends ReadWriteBase {
 
 		optionlist.add(getOption("nopdf", "nopdf", false,
 				"no graphic summary pdf output", false));
-		
-		
+
+
 		optionlist.add(getOption("sites", "pileupsites", true,
 				"disgnated pileup sites", false));
 
@@ -327,7 +328,7 @@ public class TumorGenotyper extends ReadWriteBase {
 					// }
 				}
 			}
-			outputsave = outobjdir + targetChr + "_" + id + "_"+ startends 
+			outputsave = outobjdir + targetChr + "_" + id + "_"+ startends
 					+ "_saveobj.obj";
 		}
 
@@ -714,7 +715,7 @@ public class TumorGenotyper extends ReadWriteBase {
 				normalcnt++;
 				readslenn = sam.getReadLength();
 			}
-			
+
 			System.out.println(iv.getStr() + " normal reads " + normalcnt
 					+ " has been reads");
 
@@ -723,13 +724,11 @@ public class TumorGenotyper extends ReadWriteBase {
 			int readslent = 0;
 			while (tumorIte.hasNext()) {
 				SAMRecord sam = tumorIte.next();
-				if (sam.getReadUnmappedFlag())
-					continue;
 				//add 2020/12/17 for FFPE anneling near repeat, H.Ueda
 				//extends softclip
 				SoftClipExtention.extendSoftclip(sam, tgr);
 				//count terminal mismatch
-				if (sam.getIntegerAttribute("NM")>=2) {
+				if (sam.getIntegerAttribute("NM") != null && sam.getIntegerAttribute("NM") >= 2) {
 
 					int terminalMismatch = TerminalMismatch.terminalMismatch(sam, tgr, KarkinosProp.extraReadTerminalCheckLen);
 					if(terminalMismatch>=2){
@@ -745,7 +744,7 @@ public class TumorGenotyper extends ReadWriteBase {
 					}
 					boolean dupli = sam.getDuplicateReadFlag();
 					if (onTarget && !dupli) {
-						
+
 						SamHolder sh = new SamHolder();
 						sh.setSam(sam);
 						sh.setOi(oi);
@@ -779,7 +778,6 @@ public class TumorGenotyper extends ReadWriteBase {
 	}
 
 	private boolean qualityCheck(SAMRecord sam) {
-		// TODO Auto-generated method stub
-		return true;
+		return !SamUtils.lowmap(sam);
 	}
 }

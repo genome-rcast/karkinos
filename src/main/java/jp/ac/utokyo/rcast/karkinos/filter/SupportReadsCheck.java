@@ -60,6 +60,7 @@ import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult;
 import jp.ac.utokyo.rcast.karkinos.exec.PileUPResult.Counter;
 import jp.ac.utokyo.rcast.karkinos.utils.OddRatioCalculator;
 import jp.ac.utokyo.rcast.karkinos.utils.ReadWriteBase;
+import jp.ac.utokyo.rcast.karkinos.utils.SamUtils;
 import jp.ac.utokyo.rcast.karkinos.utils.TwoBitGenomeReader;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
@@ -125,6 +126,12 @@ public class SupportReadsCheck extends ReadWriteBase {
 
 		while (ite.hasNext()) {
 			SAMRecord sam = ite.next();
+			if(SamUtils.lowmap(sam)){
+				continue;
+			}
+			//add 2020/12/17 for FFPE anneling near repeat, H.Ueda
+			//extends softclip
+			SoftClipExtention.extendSoftclip(sam, tgr);
 			// System.out.println(sam.getReadString());
 			allreads.add(sam);
 			int[] reta = containTargetMutation(pos, pileUPResult, sam, pileupFlg);

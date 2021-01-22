@@ -61,7 +61,27 @@ public class TerminalMismatch {
                 }
             }
         }
-        return miscount;
+        //add Indel event
+        int n = 0;
+        int cntIndel = 0;
+        for(CigarElement cg:sam.getCigar().getCigarElements()){
+
+            if(cg.getOperator().equals(CigarOperator.S)){
+                continue;
+            }
+            if(cg.getOperator().equals(CigarOperator.M)){
+                n=n+cg.getLength();
+            }
+            if(n>=extraCheckLen){
+                break;
+            }
+            if(cg.getOperator().equals(CigarOperator.I) || cg.getOperator().equals(CigarOperator.D)){
+                cntIndel++;
+            }
+
+        }
+
+        return miscount+cntIndel;
     }
 
     private static int rightMismatch(SAMRecord sam, TwoBitGenomeReader tgr, int extraCheckLen) {
@@ -78,7 +98,28 @@ public class TerminalMismatch {
                 }
             }
         }
-        return miscount;
+        //add Indel event ueda 2021.1.14
+        int n = 0;
+        int cntIndel = 0;
+        List<CigarElement> cel = sam.getCigar().getCigarElements();
+        for(int m = cel.size()-1;m>=0;m--){
+
+            CigarElement cg = cel.get(m);
+            if(cg.getOperator().equals(CigarOperator.S)){
+                continue;
+            }
+            if(cg.getOperator().equals(CigarOperator.M)){
+                n=n+cg.getLength();
+            }
+            if(n>=extraCheckLen){
+                break;
+            }
+            if(cg.getOperator().equals(CigarOperator.I) || cg.getOperator().equals(CigarOperator.D)){
+                cntIndel++;
+            }
+
+        }
+        return miscount+cntIndel;
     }
 
     private static boolean equalnuc(char refNuc, char readNuc) {
