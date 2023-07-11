@@ -54,32 +54,32 @@ You don't need to install Gradle command.
 
 dbSNP file format is as follows:
 
-1 = bin (for indexing)
-2 = chromosome
-3 = start (0 based)
-4 = end (1 based)
-5 = rs#
-6 = score
-7 = strand
-8 = ref allele from NCBI
-9 = ref allele from UCSC
-10 = observed alleles
-11 = molType
-12 = class
-13 = valid
-14 = avHet
-15 = avHetSE
-16 = func
-17 = location type
-18 = weight
-19 = exceptions
-20 = submitterCount
-21 = submitters
-22 = allele frequency count
-23 = alleles
-24 = alleleNs
-25 = alleleFreqs
-26 = bitfields
+1. bin (for indexing)
+2. chromosome
+3. start (0 based)
+4. end (1 based)
+5. rs#
+6. score
+7. strand
+8. ref allele from NCBI
+9. ref allele from UCSC
+10. observed alleles
+11. molType
+12. class
+13. valid
+14. avHet
+15. avHetSE
+16. func
+17. location type
+18. weight
+19. exceptions
+20. submitterCount
+21. submitters
+22. allele frequency count
+23. alleles
+24. alleleNs
+25. alleleFreqs
+26. bitfields
 
 e.g.
 
