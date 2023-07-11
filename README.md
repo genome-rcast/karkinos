@@ -3,12 +3,12 @@
 
 # About
 
-karkinos is tumor genotyper which detects single nucleotide variation (SNV),
-integer copy number variation (CNV) and calculates tumor cellularity from tumor-normal paired sequencing data.
-Accurate CNV calling is achieved using continuous wavelet analysis and multi-state HMM,
-while SNV call is adjusted by tumor cellularity and filtered by heuristic filtering algorithm and Fisher Test.
-Also, Noise calls in low depth region are removed using EM algorithm.
+karkinos is a tumor genotyper that detects single nucleotide variation (SNV)
+and copy number variation (CNV) and calculates tumor cellularity from tumor-normal paired sequencing data.
 
+Accurate CNV calling is achieved using continuous wavelet analysis and multi-state HMM,
+while SNV call is adjusted by tumor cellularity and filtered by a heuristic filtering algorithm and Fisher Test.
+Also, Noise calls in low depth regions are removed using the EM algorithm.
 
 # Licence
 
@@ -25,7 +25,6 @@ Also, Noise calls in low depth region are removed using EM algorithm.
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
-
 
 # Prerequisites
 
@@ -46,17 +45,15 @@ You don't need to install Gradle command.
 
 # Required files
 
-- Bam files for normal reads Alignment.
-- Bam files for tumor reads Alignment.
-- CaptureTarget Information (bed format)
-- dbSNP (bin,chr,start,end)
-- cosmic(vcf)
-- karkinos.property
+- BAM files for normal read alignment
+- BAM files for tumor read alignment
+- Capture target (BED format)
+- dbSNP (See following for the file format)
+- COSMIC (VCF format)
+- `karkinos.property`
 
-dbSNP file can be download from
-https://usegalaxy.org/library_common/ldda_info?library_id=e660f0c750f4b341&show_deleted=False&cntrller=library&folder_id=b89fca8d2667b9c7&use_panels=False&id=c90f779d48eddc3d
+dbSNP file format is as follows:
 
-where format is following
 1 = bin (for indexing)
 2 = chromosome
 3 = start (0 based)
@@ -84,7 +81,7 @@ where format is following
 25 = alleleFreqs
 26 = bitfields
 
-example line
+e.g.
 
 ```
 585	chr1	10468	10469	rs117577454	0	+	C	C	C/G	genomic	single	by-1000genomes	0	0	unknown	exact	1		1	1000GENOMES,	2	G,C,	18.000000,102.000000,	0.150000,0.850000,
@@ -94,7 +91,7 @@ example line
 
 The current version of karkinos supports only one subcommand, `analysis`.
 
-This subcommand will pileup reads then analyze SNVs, CNVs, and Tumor purity.
+This subcommand will pileup reads and then analyze SNVs, CNVs, and Tumor purity.
 
 ```
 usage: java -jar karkinos.jar analysis -n <arg> -t <arg> -r <arg> -snp <arg> -ct
