@@ -285,7 +285,7 @@ public class TumorGenotyper extends ReadWriteBase {
 			sites = cl.getOptionValue("sites");
 		}
 
-		boolean allfileexsist = fileExsistanceCheck(files);
+		boolean allfileexsist = fileExistenceCheck(files);
 		if (!allfileexsist) {
 			return;
 		}
@@ -360,7 +360,7 @@ public class TumorGenotyper extends ReadWriteBase {
 		}
 	}
 
-	protected boolean fileExsistanceCheck(List<String> files) {
+	protected boolean fileExistenceCheck(List<String> files) {
 		for (String s : files) {
 			File f = new File(s);
 			if (!f.exists()) {
