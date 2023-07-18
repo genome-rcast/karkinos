@@ -21,8 +21,8 @@ import java.util.List;
 import jp.ac.utokyo.rcast.karkinos.filter.BaseandQData;
 
 public class OddRatioCalculator {
-	public static float getAdjuatedLogt(char genomeR, char alt,
-			List<BaseandQData> pileuplist, double tumorratio, double copynumber,double normalAF) {
+	public static float getAdjustedLogt(char genomeR, char alt,
+										List<BaseandQData> pileuplist, double tumorratio, double copynumber, double normalAF) {
 		//int copynumbern = getRound(copynumber);
 
 		List<BaseandQData> pileuplistToCheck = getTocheckList(genomeR, alt,

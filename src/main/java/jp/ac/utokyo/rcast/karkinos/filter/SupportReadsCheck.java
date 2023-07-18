@@ -263,7 +263,7 @@ public class SupportReadsCheck extends ReadWriteBase {
 		if (!isindel) {
 			// 20130319 use fixed copynunber 1
 			float fixedcn = 1.0f;
-			adjustedLogt = getAdjuatedLogt(pileUPResult.getGenomeR(), pileUPResult.getALT(), pileuplist, tumorratioss,
+			adjustedLogt = getAdjustedLogt(pileUPResult.getGenomeR(), pileUPResult.getALT(), pileuplist, tumorratioss,
 					fixedcn, normalAF);
 			ret.setLogtAdjusted(adjustedLogt);
 
@@ -941,9 +941,9 @@ public class SupportReadsCheck extends ReadWriteBase {
 	}
 
 	// culculate adjusted tumor ratio
-	private float getAdjuatedLogt(char genomeR, char alt, List<BaseandQData> pileuplist, double tumorratio,
-			double copynumber, double normalAF) {
-		return OddRatioCalculator.getAdjuatedLogt(genomeR, alt, pileuplist, tumorratio, copynumber, normalAF);
+	private float getAdjustedLogt(char genomeR, char alt, List<BaseandQData> pileuplist, double tumorratio,
+								  double copynumber, double normalAF) {
+		return OddRatioCalculator.getAdjustedLogt(genomeR, alt, pileuplist, tumorratio, copynumber, normalAF);
 	}
 
 	private float getSoftClipRate(List<SAMRecord> supportreads) {
