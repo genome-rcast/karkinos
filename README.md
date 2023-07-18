@@ -94,33 +94,25 @@ The current version of karkinos supports only one subcommand, `analysis`.
 This subcommand will pileup reads and then analyze SNVs, CNVs, and Tumor purity.
 
 ```
-usage: java -jar karkinos.jar analysis -n <arg> -t <arg> -r <arg> -snp <arg> -ct
+Usage: java -jar karkinos.jar analysis -n <arg> -t <arg> -r <arg> -snp <arg> -ct
        <arg> -o <arg> -id <arg> [-prop <arg>] [-mp <arg>] [-g1000 <arg>]
        [-cosmic <arg>] [-g1000freq <arg>] [-chr <arg>] [-rs <arg>] [-rg
        <arg>] [-exonSNP <arg>] [-nopdf]
- -n,--normalBam <arg>                normal bam file
- -t,--tumorBam <arg>                 tumor bam file
- -r,--reference <arg>                2 bit genome reference file
- -snp,--dbSNP <arg>                  dbSNP list from annover
-                                     sites,(bin,chr,start,end)
- -ct,--captureTarget <arg>           Capture target regions(bed format)
+ -n,--normalBam <arg>                normal BAM file
+ -t,--tumorBam <arg>                 tumor BAM file
+ -r,--reference <arg>                reference genome file of 2bit format
+ -snp,--dbSNP <arg>                  dbSNP list (e.g. bin, chr, start, end)
+ -ct,--captureTarget <arg>           BED file of capture target regions
  -o,--outdir <arg>                   output directory
  -id,--uniqueid <arg>                unique id for this sample
- -prop,--property <arg>              path to property file( otherwise
-                                     default val)
- -mp,--mappability <arg>             optional,mappability from ucsc (bw,
-                                     big wig format)
- -g1000,--1000genome <arg>           optional,1000 genome list from
-                                     annover
-                                     sites,(chr,pos,ref,alt,freq,id)
- -cosmic,--cosmicSNV <arg>           cosmic snv vcf format
- -g1000freq,--1000genomefreq <arg>   optional,1000 genome frequency
-                                     threshold to use
- -chr,--chrom <arg>                  chromosome to analyze
- -rs,--readsStats <arg>              optional,reads stats
-                                     files(normal,tumor)
- -rg,--refFlatGenes <arg>            optional,gene reference for depth
-                                     stats
- -exonSNP,--exonSNP <arg>            additional Exon SNP
- -nopdf,--nopdf                      no graphic summary pdf output
+ -prop,--property <arg>              karkinos.property file
+ -mp,--mappability <arg>             (optional) Big Wig format file of mappability from UCSC
+ -g1000,--1000genome <arg>           (optional) 1000 genome list (e.g.  chr, pos, ref, alt, freq, id)
+ -cosmic,--cosmicSNV <arg>           VCF format file of COSMIC's SNV
+ -g1000freq,--1000genomefreq <arg>   (optional) threshold of 1000 genome frequency
+ -chr,--chrom <arg>                  chromosome name
+ -rs,--readsStats <arg>              (optional) reads stats files (normal and tumor)
+ -rg,--refFlatGenes <arg>            (optional) gene references
+ -exonSNP,--exonSNP <arg>            (optional) additional exon SNPs
+ -nopdf,--nopdf                      if you don't need a graphical summary PDF
 ```
